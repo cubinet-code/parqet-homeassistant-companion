@@ -117,11 +117,7 @@ export class ParqetCompanionCard extends LitElement {
 
   static getConfigForm() {
     return [
-      {
-        name: 'portfolio_id',
-        label: 'Portfolio ID (leave empty to show picker)',
-        selector: { text: {} },
-      },
+      // portfolio_id is handled dynamically in the editor render (portfolio picker dropdown)
       {
         name: 'data_source',
         label: 'Data Source',
@@ -137,6 +133,7 @@ export class ParqetCompanionCard extends LitElement {
       {
         type: 'expandable',
         title: 'Layout',
+        flatten: true,
         schema: [
           {
             name: 'view_layout',
@@ -169,6 +166,7 @@ export class ParqetCompanionCard extends LitElement {
       {
         type: 'expandable',
         title: 'Performance',
+        flatten: true,
         schema: [
           {
             name: 'default_interval',
@@ -192,12 +190,12 @@ export class ParqetCompanionCard extends LitElement {
               },
             },
           },
-          { name: 'show_chart', label: 'Show chart', selector: { boolean: {} } },
         ],
       },
       {
         type: 'expandable',
         title: 'Holdings',
+        flatten: true,
         schema: [
           { name: 'show_logo', label: 'Show holding logos', selector: { boolean: {} } },
         ],
@@ -205,6 +203,7 @@ export class ParqetCompanionCard extends LitElement {
       {
         type: 'expandable',
         title: 'Activities',
+        flatten: true,
         schema: [
           {
             name: 'activities_limit',
@@ -236,6 +235,7 @@ export class ParqetCompanionCard extends LitElement {
       {
         type: 'expandable',
         title: 'Display',
+        flatten: true,
         schema: [
           { name: 'currency_symbol', label: 'Currency Symbol', selector: { text: {} } },
         ],
@@ -243,6 +243,7 @@ export class ParqetCompanionCard extends LitElement {
       {
         type: 'expandable',
         title: 'Advanced',
+        flatten: true,
         schema: [
           {
             name: 'client_id',
@@ -355,15 +356,6 @@ export class ParqetCompanionCard extends LitElement {
                 ></parqet-portfolio-selector>
               `
             : html`<span class="portfolio-name">${this._portfolios[0]?.name ?? ''}</span>`}
-
-          <button
-            class="disconnect-btn"
-            @click=${this._handleDisconnect}
-            title="Disconnect Parqet account"
-            aria-label="Disconnect Parqet account"
-          >
-            ⏏
-          </button>
         </div>
 
         <!-- Tabs -->
@@ -449,25 +441,6 @@ export class ParqetCompanionCard extends LitElement {
       font-size: 1rem;
       color: var(--primary-text-color);
     }
-    .disconnect-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--secondary-text-color);
-      padding: 4px 6px;
-      border-radius: 4px;
-      opacity: 0.5;
-      font-size: 1rem;
-      line-height: 1;
-      transition: opacity 0.15s;
-    }
-    .disconnect-btn:hover {
-      opacity: 1;
-    }
-    .disconnect-btn:focus-visible {
-      outline: 2px solid var(--primary-color);
-      outline-offset: 1px;
-    }
     .tabs {
       display: flex;
       border-bottom: 1px solid var(--divider-color, #e0e0e0);
@@ -529,10 +502,27 @@ class ParqetCompanionCardEditor extends LitElement {
   @property({ attribute: false }) hass!: Record<string, unknown>;
   @state() private _config?: ParqetCardConfig;
   @state() private _connected = false;
+  @state() private _portfolios: Portfolio[] = [];
+  @state() private _loadingPortfolios = false;
 
   setConfig(config: ParqetCardConfig): void {
     this._config = config;
     this._connected = oauthManager.isTokenValid(config.client_id);
+    if (this._connected && this._portfolios.length === 0) {
+      void this._fetchPortfolios();
+    }
+  }
+
+  private async _fetchPortfolios(): Promise<void> {
+    this._loadingPortfolios = true;
+    try {
+      const client = this._config?.data_source === 'mcp' ? mcpClient : connectClient;
+      this._portfolios = await client.listPortfolios();
+    } catch {
+      // silent — user can still clear portfolio_id to use in-card picker
+    } finally {
+      this._loadingPortfolios = false;
+    }
   }
 
   render() {
@@ -552,6 +542,36 @@ class ParqetCompanionCardEditor extends LitElement {
           : ''}
       </div>
 
+      <!-- Portfolio picker -->
+      <div class="portfolio-row">
+        <label class="portfolio-label">Portfolio</label>
+        ${this._loadingPortfolios
+          ? html`<div class="portfolio-hint">Loading portfolios…</div>`
+          : this._portfolios.length > 0
+            ? html`
+                <select class="portfolio-select" @change=${this._portfolioChanged}>
+                  <option value="" ?selected=${!this._config.portfolio_id}>
+                    Show portfolio picker in card
+                  </option>
+                  ${this._portfolios.map(
+                    (p) => html`
+                      <option
+                        value=${p.id}
+                        ?selected=${this._config?.portfolio_id === p.id}
+                      >
+                        ${p.name}
+                      </option>
+                    `,
+                  )}
+                </select>
+              `
+            : html`<div class="portfolio-hint">
+                ${this._connected
+                  ? 'No portfolios found'
+                  : 'Connect to Parqet first, then re-open the editor'}
+              </div>`}
+      </div>
+
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
@@ -560,6 +580,19 @@ class ParqetCompanionCardEditor extends LitElement {
         @value-changed=${this._valueChanged}
       ></ha-form>
     `;
+  }
+
+  private _portfolioChanged(e: Event): void {
+    const val = (e.target as HTMLSelectElement).value;
+    const config: ParqetCardConfig = { ...this._config! };
+    if (val) {
+      config.portfolio_id = val;
+    } else {
+      delete config.portfolio_id;
+    }
+    this.dispatchEvent(
+      new CustomEvent('config-changed', { detail: { config }, bubbles: true, composed: true }),
+    );
   }
 
   private _handleDisconnect(): void {
@@ -614,6 +647,37 @@ class ParqetCompanionCardEditor extends LitElement {
     }
     .disconnect-btn:hover {
       background: rgba(244, 67, 54, 0.08);
+    }
+    .portfolio-row {
+      padding: 8px 16px 4px;
+    }
+    .portfolio-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--secondary-text-color);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .portfolio-select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--divider-color, #e0e0e0);
+      border-radius: 4px;
+      background: var(--card-background-color, #fff);
+      color: var(--primary-text-color);
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .portfolio-select:focus {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 1px;
+    }
+    .portfolio-hint {
+      font-size: 0.8rem;
+      color: var(--secondary-text-color);
+      font-style: italic;
     }
   `;
 }

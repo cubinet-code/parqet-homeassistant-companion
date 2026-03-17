@@ -98,13 +98,15 @@ The card includes a built-in visual editor — no YAML required for basic setup.
 
 | Section | Settings |
 |---|---|
-| *(top level)* | Portfolio ID, Data Source |
+| *(top level)* | **Portfolio** (dropdown of your portfolios), Data Source |
 | **Layout** | View Layout, Default View, Compact mode |
-| **Performance** | Default Time Interval, Show chart |
+| **Performance** | Default Time Interval |
 | **Holdings** | Show holding logos |
 | **Activities** | Activities per page, Default activity filter |
 | **Display** | Currency Symbol |
 | **Advanced** | Custom Client ID, Custom Redirect URI |
+
+> **Disconnect** — to unlink your Parqet account, open the card editor. The disconnect button is in the editor only (not on the card itself).
 
 ---
 
@@ -126,7 +128,6 @@ compact: false               # denser row layout
 
 # Performance view
 default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
-show_chart: true             # show performance chart (if available)
 
 # Holdings view
 show_logo: true              # show holding logos
@@ -160,7 +161,6 @@ type: custom:parqet-companion-card
 portfolio_id: "abc-123-def"
 default_view: performance
 default_interval: ytd
-show_chart: true
 currency_symbol: "$"
 ```
 

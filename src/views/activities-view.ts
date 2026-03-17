@@ -68,7 +68,7 @@ export class ParqetActivitiesView extends LitElement {
     try {
       const resp = await this.client.getActivities(this.portfolioId, {
         activityType: this._filter !== 'all' ? this._filter : undefined,
-        limit: this.config?.activities_limit ?? 25,
+        limit: Math.max(10, this.config?.activities_limit ?? 25),
         cursor: reset ? null : this._cursor,
       });
 
