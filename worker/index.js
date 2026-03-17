@@ -1,50 +1,58 @@
 /**
- * Cloudflare Worker — Parqet token proxy
+ * Cloudflare Worker — Parqet Connect CORS proxy
  *
- * Proxies POST requests to connect.parqet.com/oauth2/token and adds
- * Access-Control-Allow-Origin headers so browser-based PKCE apps can
- * exchange authorization codes and refresh tokens without CORS errors.
+ * Transparently proxies all requests to connect.parqet.com and adds
+ * Access-Control-Allow-Origin headers so browser-based apps (like the
+ * Parqet HA card running on a Home Assistant origin) can call the API.
  *
- * This worker receives no credentials of its own — it is a transparent
- * pass-through. All OAuth parameters come from the caller.
+ * Covers both the OAuth token endpoint (/oauth2/token) and all REST API
+ * endpoints (/portfolios, etc.) which currently return no CORS headers.
+ *
+ * This worker stores no credentials — Authorization headers are forwarded
+ * as-is from the caller.
  */
 
-const TARGET = 'https://connect.parqet.com/oauth2/token';
+const UPSTREAM = 'https://connect.parqet.com';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 export default {
   async fetch(request) {
-    // Handle CORS preflight
+    // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
-    if (request.method !== 'POST') {
-      return new Response('Method Not Allowed', { status: 405, headers: CORS_HEADERS });
-    }
+    // Forward path + query string to upstream
+    const url = new URL(request.url);
+    const upstreamUrl = UPSTREAM + url.pathname + url.search;
 
-    const body = await request.text();
+    // Forward relevant headers; omit Host (CF sets it automatically)
+    const forwardHeaders = new Headers();
+    for (const [key, value] of request.headers) {
+      if (key.toLowerCase() === 'host') continue;
+      forwardHeaders.set(key, value);
+    }
 
     let upstream;
     try {
-      upstream = await fetch(TARGET, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body,
+      upstream = await fetch(upstreamUrl, {
+        method: request.method,
+        headers: forwardHeaders,
+        body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
       });
     } catch (err) {
-      return new Response(JSON.stringify({ error: 'upstream_error', error_description: String(err) }), {
-        status: 502,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'upstream_error', error_description: String(err) }),
+        { status: 502, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } },
+      );
     }
 
-    const responseBody = await upstream.text();
+    const responseBody = await upstream.arrayBuffer();
 
     return new Response(responseBody, {
       status: upstream.status,
