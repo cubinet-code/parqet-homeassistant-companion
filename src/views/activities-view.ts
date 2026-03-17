@@ -68,7 +68,8 @@ export class ParqetActivitiesView extends LitElement {
     try {
       const resp = await this.client.getActivities(this.portfolioId, {
         activityType: this._filter !== 'all' ? this._filter : undefined,
-        limit: Math.max(10, this.config?.activities_limit ?? 25),
+        // API minimum is 10; fetch enough to satisfy it even if display limit is smaller
+        limit: Math.max(10, this.config?.activities_limit ?? 10),
         cursor: reset ? null : this._cursor,
       });
 
@@ -132,7 +133,9 @@ export class ParqetActivitiesView extends LitElement {
       ${this._loading ? html`<parqet-loading-spinner></parqet-loading-spinner>` : ''}
 
       <div class="list">
-        ${this._activities.map((a) => this._renderActivity(a, compact))}
+        ${this._activities
+          .slice(0, this.config?.activities_limit ?? 10)
+          .map((a) => this._renderActivity(a, compact))}
         ${this._activities.length === 0 && !this._loading
           ? html`<div class="empty">No activities found.</div>`
           : ''}

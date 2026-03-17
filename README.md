@@ -133,7 +133,7 @@ default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y
 show_logo: true              # show holding logos
 
 # Activities view
-activities_limit: 25         # items per page, 10–500
+activities_limit: 10         # activities to show, 1–25 (API fetches minimum 10 regardless)
 default_activity_type: null  # null = "All" | buy | sell | dividend | interest |
                              #   transfer_in | transfer_out | fees_taxes | deposit | withdrawal
 

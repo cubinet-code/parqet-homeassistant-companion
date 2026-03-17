@@ -208,8 +208,8 @@ export class ParqetCompanionCard extends LitElement {
         schema: [
           {
             name: 'activities_limit',
-            label: 'Activities per page (10–500)',
-            selector: { number: { min: 10, max: 500, step: 10, mode: 'box' } },
+            label: 'Activities to show (1–25)',
+            selector: { number: { min: 1, max: 25, step: 1, mode: 'box' } },
           },
           {
             name: 'default_activity_type',
