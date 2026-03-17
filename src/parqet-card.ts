@@ -99,6 +99,10 @@ export class ParqetCompanionCard extends LitElement {
     return { columns: 12, rows: 6, min_columns: 6, min_rows: 4 };
   }
 
+  static getConfigElement(): HTMLElement {
+    return document.createElement('parqet-companion-card-editor');
+  }
+
   static getStubConfig(): Partial<ParqetCardConfig> {
     return {
       data_source: 'rest',
@@ -226,8 +230,10 @@ export class ParqetCompanionCard extends LitElement {
   private async _handleConnect() {
     this._authLoading = true;
     this._error = '';
+    // Open popup synchronously (before any await) so browsers don't block it
+    const popup = window.open('', 'parqet-auth', 'width=520,height=720,scrollbars=yes,resizable=yes');
     try {
-      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri);
+      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri, popup);
       this._authenticated = true;
       await this._loadPortfolios();
     } catch (e) {
@@ -453,5 +459,41 @@ export class ParqetCompanionCard extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     'parqet-companion-card': ParqetCompanionCard;
+    'parqet-companion-card-editor': ParqetCompanionCardEditor;
+  }
+}
+
+// ─── Visual config editor ──────────────────────────────────────────────────────
+
+@customElement('parqet-companion-card-editor')
+class ParqetCompanionCardEditor extends LitElement {
+  @property({ attribute: false }) hass!: Record<string, unknown>;
+  @state() private _config?: ParqetCardConfig;
+
+  setConfig(config: ParqetCardConfig): void {
+    this._config = config;
+  }
+
+  render() {
+    if (!this._config || !this.hass) return html``;
+    return html`
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${ParqetCompanionCard.getConfigForm()}
+        .computeLabel=${(s: { label?: string }) => s.label ?? ''}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `;
+  }
+
+  private _valueChanged(ev: CustomEvent): void {
+    this.dispatchEvent(
+      new CustomEvent('config-changed', {
+        detail: { config: ev.detail.value as ParqetCardConfig },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 }

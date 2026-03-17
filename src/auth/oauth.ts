@@ -44,8 +44,13 @@ export class OAuthManager {
 
   // ─── Auth flow ──────────────────────────────────────────────────────────────
 
-  /** Open the Parqet OAuth popup. Resolves when the user completes auth. */
-  async startAuth(clientId?: string, redirectUri?: string): Promise<TokenData> {
+  /**
+   * Open the Parqet OAuth popup. Resolves when the user completes auth.
+   * Pass a pre-opened popup window to avoid browser popup blocking
+   * (window.open must be called synchronously in the user-gesture handler,
+   * before any awaits).
+   */
+  async startAuth(clientId?: string, redirectUri?: string, preOpenedPopup?: Window | null): Promise<TokenData> {
     const resolvedClientId = clientId ?? CLIENT_ID;
     const resolvedRedirectUri = redirectUri ?? REDIRECT_URI;
 
@@ -64,11 +69,16 @@ export class OAuthManager {
       state,
     });
 
-    const popup = window.open(
-      `${AUTH_URL}?${params}`,
-      'parqet-auth',
-      'width=520,height=720,scrollbars=yes,resizable=yes',
-    );
+    const authUrl = `${AUTH_URL}?${params}`;
+
+    // Navigate the pre-opened popup, or open a new one as fallback
+    let popup: Window | null;
+    if (preOpenedPopup && !preOpenedPopup.closed) {
+      preOpenedPopup.location.href = authUrl;
+      popup = preOpenedPopup;
+    } else {
+      popup = window.open(authUrl, 'parqet-auth', 'width=520,height=720,scrollbars=yes,resizable=yes');
+    }
     this._popup = popup;
 
     return new Promise<TokenData>((resolve, reject) => {
