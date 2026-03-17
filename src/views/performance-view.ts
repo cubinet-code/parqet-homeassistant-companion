@@ -110,11 +110,12 @@ export class ParqetPerformanceView extends LitElement {
                 this._fmtCurrency(d.unrealizedGains?.inInterval?.gainGross),
                 d.unrealizedGains?.inInterval?.gainGross,
               )}
-              ${this._renderKpi(
-                'Return (gross)',
-                this._fmtPct(d.unrealizedGains?.inInterval?.returnGross),
-                d.unrealizedGains?.inInterval?.returnGross,
-              )}
+              ${(() => {
+                const start = d.valuation?.atIntervalStart ?? 0;
+                const end = d.valuation?.atIntervalEnd ?? 0;
+                const periodReturn = start > 0 ? (end - start) / start : null;
+                return this._renderKpi('Period Return', this._fmtPct(periodReturn), periodReturn);
+              })()}
               ${this._renderKpi(
                 'Realized Gain',
                 this._fmtCurrency(d.realizedGains?.inInterval?.gainGross),
