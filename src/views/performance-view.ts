@@ -90,7 +90,7 @@ export class ParqetPerformanceView extends LitElement {
 
       ${d
         ? html`
-            <div class="kpi-grid">
+            <div class="kpi-grid ${this.config?.compact ? 'compact' : ''}">
               ${this._renderKpi(
                 'Total Value',
                 this._fmtCurrency(d.valuation?.atIntervalEnd),
@@ -154,10 +154,19 @@ export class ParqetPerformanceView extends LitElement {
       gap: 8px;
       padding: 8px 16px 16px;
     }
+    .kpi-grid.compact {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 4px;
+      padding: 6px 10px 10px;
+    }
     .kpi-tile {
       background: var(--secondary-background-color, #f5f5f5);
       border-radius: 8px;
       padding: 10px 12px;
+    }
+    .kpi-grid.compact .kpi-tile {
+      padding: 6px 8px;
+      border-radius: 6px;
     }
     .kpi-label {
       font-size: 0.68rem;
@@ -166,10 +175,17 @@ export class ParqetPerformanceView extends LitElement {
       letter-spacing: 0.05em;
       margin-bottom: 4px;
     }
+    .kpi-grid.compact .kpi-label {
+      font-size: 0.6rem;
+      margin-bottom: 2px;
+    }
     .kpi-value {
       font-size: 0.95rem;
       font-weight: 600;
       color: var(--primary-text-color);
+    }
+    .kpi-grid.compact .kpi-value {
+      font-size: 0.8rem;
     }
     .kpi-value.positive {
       color: var(--success-color, #4caf50);

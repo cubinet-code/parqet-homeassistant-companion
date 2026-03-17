@@ -237,7 +237,29 @@ export class ParqetActivitiesView extends LitElement {
       border-bottom: 1px solid var(--divider-color, #eee);
     }
     .activity.compact {
-      padding: 6px 8px;
+      padding: 3px 6px;
+      font-size: 0.78rem;
+    }
+    .activity.compact .badge {
+      font-size: 0.62rem;
+      padding: 1px 5px;
+      min-width: 60px;
+    }
+    .activity.compact .asset {
+      font-size: 0.78rem;
+    }
+    .activity.compact .date {
+      font-size: 0.65rem;
+    }
+    .activity.compact .broker,
+    .activity.compact .taxfee {
+      display: none;
+    }
+    .activity.compact .amount {
+      font-size: 0.78rem;
+    }
+    .activity.compact .shares {
+      display: none;
     }
     .activity:last-child {
       border-bottom: none;

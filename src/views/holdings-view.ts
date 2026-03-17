@@ -289,7 +289,19 @@ export class ParqetHoldingsView extends LitElement {
       outline-offset: -2px;
     }
     .row.compact td {
-      padding: 6px 12px;
+      padding: 3px 8px;
+      font-size: 0.75rem;
+    }
+    .row.compact .holding-name {
+      font-size: 0.78rem;
+    }
+    .row.compact .ticker {
+      display: none;
+    }
+    .row.compact .logo,
+    .row.compact .logo-placeholder {
+      width: 18px;
+      height: 18px;
     }
     .logo-col {
       width: 32px;
