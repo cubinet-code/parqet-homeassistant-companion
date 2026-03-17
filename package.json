@@ -2,7 +2,13 @@
   "name": "parqet-homeassistant-companion",
   "version": "0.1.0",
   "description": "Home Assistant custom card for Parqet portfolio tracking",
-  "keywords": ["home-assistant", "hacs", "lovelace", "parqet", "portfolio"],
+  "keywords": [
+    "home-assistant",
+    "hacs",
+    "lovelace",
+    "parqet",
+    "portfolio"
+  ],
   "license": "MIT",
   "type": "module",
   "main": "dist/parqet-homeassistant-companion.js",
@@ -14,7 +20,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
