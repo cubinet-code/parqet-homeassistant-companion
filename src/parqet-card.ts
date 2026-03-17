@@ -161,6 +161,7 @@ export class ParqetCompanionCard extends LitElement {
             },
           },
           { name: 'compact', label: 'Compact mode', selector: { boolean: {} } },
+          { name: 'hide_header', label: 'Hide portfolio header (useful when portfolio is locked)', selector: { boolean: {} } },
         ],
       },
       {
@@ -346,17 +347,21 @@ export class ParqetCompanionCard extends LitElement {
     return html`
       <ha-card>
         <!-- Header row -->
-        <div class="card-header">
-          ${this._portfolios.length > 1
-            ? html`
-                <parqet-portfolio-selector
-                  .portfolios=${this._portfolios}
-                  .selected=${this._portfolioId}
-                  @portfolio-change=${this._handlePortfolioChange}
-                ></parqet-portfolio-selector>
-              `
-            : html`<span class="portfolio-name">${this._portfolios[0]?.name ?? ''}</span>`}
-        </div>
+        ${!this._config?.hide_header
+          ? html`
+              <div class="card-header">
+                ${this._portfolios.length > 1
+                  ? html`
+                      <parqet-portfolio-selector
+                        .portfolios=${this._portfolios}
+                        .selected=${this._portfolioId}
+                        @portfolio-change=${this._handlePortfolioChange}
+                      ></parqet-portfolio-selector>
+                    `
+                  : html`<span class="portfolio-name">${this._portfolios[0]?.name ?? ''}</span>`}
+              </div>
+            `
+          : ''}
 
         <!-- Tabs -->
         ${showTabs
