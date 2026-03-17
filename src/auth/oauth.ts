@@ -11,9 +11,29 @@ import type { TokenData } from '../types';
 const TOKEN_REFRESH_BUFFER_MS = 60_000; // refresh 1 min before expiry
 const AUTH_TIMEOUT_MS = 120_000; // 2 min for user to complete OAuth
 
+/**
+ * Encode a state payload as base64url JSON.
+ * We embed the code_verifier so that callback.html (running on the registered
+ * redirect URI origin) can perform the token exchange — bypassing the CORS
+ * restriction that blocks the exchange from the HA browser origin.
+ */
+function encodeStatePayload(csrf: string, verifier: string, clientId: string, redirectUri: string): string {
+  const json = JSON.stringify({ s: csrf, v: verifier, c: clientId, r: redirectUri });
+  return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function decodeStatePayload(state: string): { s: string; v?: string; c?: string; r?: string } | null {
+  try {
+    const padded = state.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(padded)) as { s: string };
+  } catch {
+    return null;
+  }
+}
+
 export class OAuthManager {
   private _messageListener: ((event: MessageEvent) => void) | null = null;
-  private _pendingState: string | null = null;
+  private _pendingCsrf: string | null = null;
   private _popup: Window | null = null;
 
   // ─── Storage key ────────────────────────────────────────────────────────────
@@ -46,6 +66,11 @@ export class OAuthManager {
 
   /**
    * Open the Parqet OAuth popup. Resolves when the user completes auth.
+   *
+   * The code_verifier is embedded in the state parameter so that
+   * callback.html (on cubinet-code.github.io) can perform the token exchange
+   * directly — avoiding CORS issues when calling from the HA browser origin.
+   *
    * Pass a pre-opened popup window to avoid browser popup blocking
    * (window.open must be called synchronously in the user-gesture handler,
    * before any awaits).
@@ -56,8 +81,11 @@ export class OAuthManager {
 
     const verifier = await generateCodeVerifier();
     const challenge = await generateCodeChallenge(verifier);
-    const state = generateState();
-    this._pendingState = state;
+    const csrf = generateState();
+    this._pendingCsrf = csrf;
+
+    // Embed verifier + credentials in state so callback.html can exchange the code
+    const stateParam = encodeStatePayload(csrf, verifier, resolvedClientId, resolvedRedirectUri);
 
     const params = new URLSearchParams({
       response_type: 'code',
@@ -66,7 +94,7 @@ export class OAuthManager {
       scope: SCOPES,
       code_challenge: challenge,
       code_challenge_method: 'S256',
-      state,
+      state: stateParam,
     });
 
     const authUrl = `${AUTH_URL}?${params}`;
@@ -88,17 +116,19 @@ export class OAuthManager {
         reject(new Error('Authorization timed out. Please try again.'));
       }, AUTH_TIMEOUT_MS);
 
-      this._messageListener = async (event: MessageEvent) => {
+      this._messageListener = (event: MessageEvent) => {
         if (event.data?.type !== 'parqet-oauth') return;
 
-        const { code, state: returnedState, error } = event.data as {
+        const msg = event.data as {
           type: string;
-          code?: string;
           state?: string;
+          token?: Record<string, unknown>;
           error?: string;
         };
 
-        if (returnedState !== this._pendingState) {
+        // Validate CSRF — callback.html sends back just the csrf portion
+        const returnedCsrf = msg.state;
+        if (returnedCsrf !== this._pendingCsrf) {
           this._cleanup();
           clearTimeout(timeout);
           popup?.close();
@@ -106,33 +136,23 @@ export class OAuthManager {
           return;
         }
 
-        if (error) {
-          this._cleanup();
-          clearTimeout(timeout);
-          popup?.close();
-          reject(new Error(`Authorization denied: ${error}`));
-          return;
-        }
-
-        if (!code) {
-          this._cleanup();
-          clearTimeout(timeout);
-          popup?.close();
-          reject(new Error('No authorization code received.'));
-          return;
-        }
-
         this._cleanup();
         clearTimeout(timeout);
         popup?.close();
 
-        try {
-          const token = await this._exchangeCode(code, verifier, resolvedClientId, resolvedRedirectUri);
-          this._storeToken(token, resolvedClientId);
-          resolve(token);
-        } catch (e) {
-          reject(e);
+        if (msg.error) {
+          reject(new Error(`Authorization failed: ${msg.error}`));
+          return;
         }
+
+        if (!msg.token) {
+          reject(new Error('No token received from authorization callback.'));
+          return;
+        }
+
+        const token = this._normalizeToken(msg.token);
+        this._storeToken(token, resolvedClientId);
+        resolve(token);
       };
 
       window.addEventListener('message', this._messageListener);
@@ -184,32 +204,6 @@ export class OAuthManager {
 
   // ─── Private ────────────────────────────────────────────────────────────────
 
-  private async _exchangeCode(
-    code: string,
-    verifier: string,
-    clientId: string,
-    redirectUri: string,
-  ): Promise<TokenData> {
-    const resp = await fetch(TOKEN_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        code,
-        code_verifier: verifier,
-        client_id: clientId,
-        redirect_uri: redirectUri,
-      }),
-    });
-
-    if (!resp.ok) {
-      const body = await resp.text().catch(() => '');
-      throw new Error(`Token exchange failed (${resp.status}): ${body}`);
-    }
-
-    return this._normalizeToken(await resp.json());
-  }
-
   private _normalizeToken(data: Record<string, unknown>): TokenData {
     const expiresIn = (data['expires_in'] as number) ?? 3600;
     return {
@@ -230,10 +224,13 @@ export class OAuthManager {
       window.removeEventListener('message', this._messageListener);
       this._messageListener = null;
     }
-    this._pendingState = null;
+    this._pendingCsrf = null;
     this._popup = null;
   }
 }
 
 /** Singleton OAuth manager — shared across all card instances. */
 export const oauthManager = new OAuthManager();
+
+// Export helpers for use in tests
+export { decodeStatePayload, encodeStatePayload };

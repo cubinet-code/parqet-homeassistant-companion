@@ -2,5 +2,6 @@
   "name": "Parqet Home Assistant Companion",
   "homeassistant": "2023.7.0",
   "render_readme": true,
-  "filename": "parqet-homeassistant-companion.js"
+  "filename": "parqet-homeassistant-companion.js",
+  "icon": "logo.png"
 }
