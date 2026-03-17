@@ -224,6 +224,7 @@ export interface ParqetCardConfig {
   view_layout?: ViewLayout;
   default_view?: ViewType;
   default_interval?: IntervalValue;
+  show_interval_selector?: boolean;
   show_chart?: boolean;
   activities_limit?: number;
   default_activity_type?: ActivityType | null;
@@ -243,6 +244,7 @@ export interface KpiCardConfig {
   portfolio_id?: string;
   kpi?: KpiMetric;
   default_interval?: IntervalValue;
+  show_interval_selector?: boolean;
   currency_symbol?: string;
   client_id?: string;
   redirect_uri?: string;

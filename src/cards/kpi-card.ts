@@ -27,7 +27,7 @@ export class ParqetKpiCard extends LitElement {
   @state() private _error = '';
 
   setConfig(config: KpiCardConfig): void {
-    this._config = { kpi: 'total_value', default_interval: '1y', currency_symbol: '€', ...config };
+    this._config = { kpi: 'total_value', default_interval: '1y', currency_symbol: '€', show_interval_selector: true, ...config };
     this._interval = this._config.default_interval as IntervalValue;
     connectClient.configure(this._config.client_id);
     mcpClient.configure(this._config.client_id);
@@ -169,10 +169,12 @@ export class ParqetKpiCard extends LitElement {
 
     return html`
       <ha-card>
-        <parqet-interval-selector
-          .selected=${this._interval}
-          @interval-change=${this._onIntervalChange}
-        ></parqet-interval-selector>
+        ${this._config.show_interval_selector !== false
+          ? html`<parqet-interval-selector
+              .selected=${this._interval}
+              @interval-change=${this._onIntervalChange}
+            ></parqet-interval-selector>`
+          : ''}
 
         ${this._error ? html`<div class="error">${this._error}</div>` : ''}
 
@@ -328,6 +330,7 @@ class ParqetKpiCardEditor extends LitElement {
           },
         },
       },
+      { name: 'show_interval_selector', label: 'Show interval selector on card', selector: { boolean: {} } },
       {
         name: 'data_source',
         label: 'Data Source',

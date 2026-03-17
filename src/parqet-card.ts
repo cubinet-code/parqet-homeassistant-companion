@@ -86,6 +86,7 @@ export class ParqetCompanionCard extends LitElement {
       view_layout: 'tabs',
       default_view: 'performance',
       default_interval: '1y',
+      show_interval_selector: true,
       show_chart: true,
       show_logo: true,
       compact: false,
@@ -177,6 +178,7 @@ export class ParqetCompanionCard extends LitElement {
         title: 'Performance',
         flatten: true,
         schema: [
+          { name: 'show_interval_selector', label: 'Show interval selector on card', selector: { boolean: {} } },
           {
             name: 'default_interval',
             label: 'Default Time Interval',

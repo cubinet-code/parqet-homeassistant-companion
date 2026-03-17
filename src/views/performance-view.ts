@@ -80,10 +80,12 @@ export class ParqetPerformanceView extends LitElement {
     const d = this._data;
 
     return html`
-      <parqet-interval-selector
-        .selected=${this._interval}
-        @interval-change=${this._onIntervalChange}
-      ></parqet-interval-selector>
+      ${this.config?.show_interval_selector !== false
+        ? html`<parqet-interval-selector
+            .selected=${this._interval}
+            @interval-change=${this._onIntervalChange}
+          ></parqet-interval-selector>`
+        : ''}
 
       ${this._error ? html`<div class="error" role="alert">${this._error}</div>` : ''}
       ${this._loading ? html`<parqet-loading-spinner></parqet-loading-spinner>` : ''}
