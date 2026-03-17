@@ -2,7 +2,7 @@
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg?style=flat-square)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/cubinet-code/parqet-homeassistant-companion?style=flat-square)](https://github.com/cubinet-code/parqet-homeassistant-companion/releases)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[MIT License](LICENSE)
 
 A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that connects to your [Parqet](https://parqet.com) portfolio — displaying real-time performance metrics, holdings, and transaction history directly on your dashboard.
 
@@ -70,7 +70,25 @@ The card will show a **Connect with Parqet** button. Clicking it opens a popup w
 
 ### Visual editor
 
-Click the card in edit mode to open the visual editor. All options are available via form fields — no YAML required.
+The card includes a built-in visual editor — no YAML required for basic setup.
+
+1. Add the card to your dashboard
+2. Click the **pencil icon** to open the card editor
+3. Select the **Config** tab — all settings are shown as dropdowns, toggles and text fields:
+
+| Setting | What it does |
+|---|---|
+| Data Source | REST API (recommended) or MCP server |
+| Portfolio ID | Lock to a specific portfolio, or leave blank for the in-card picker |
+| Default View | Which tab opens first (Performance / Holdings / Activities) |
+| View Layout | Show all tabs, or a single view |
+| Default Time Interval | Starting interval for the performance chart |
+| Currency Symbol | Symbol shown next to monetary values |
+| Show holding logos | Toggle logo images in the holdings table |
+| Compact mode | Denser row layout |
+| Activities per page | How many transactions to load at once (10–500) |
+| Parqet Connect Client ID | Advanced: use your own OAuth app registration |
+| OAuth Redirect URI | Advanced: required when using a custom Client ID |
 
 ### YAML reference
 
