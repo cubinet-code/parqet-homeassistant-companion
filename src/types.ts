@@ -206,6 +206,16 @@ export interface Activity {
 export type ViewType = 'performance' | 'holdings' | 'activities';
 export type DataSource = 'rest' | 'mcp';
 export type ViewLayout = 'tabs' | 'single';
+export type KpiMetric =
+  | 'total_value'
+  | 'period_return'
+  | 'xirr'
+  | 'ttwror'
+  | 'unrealized_gain'
+  | 'realized_gain'
+  | 'dividends'
+  | 'fees'
+  | 'taxes';
 
 export interface ParqetCardConfig {
   type: string;
@@ -224,6 +234,17 @@ export interface ParqetCardConfig {
   /** Override the shared Parqet Connect Client ID with your own app registration. */
   client_id?: string;
   /** Override the OAuth redirect URI (required when using a custom client_id). */
+  redirect_uri?: string;
+}
+
+export interface KpiCardConfig {
+  type: string;
+  data_source?: DataSource;
+  portfolio_id?: string;
+  kpi?: KpiMetric;
+  default_interval?: IntervalValue;
+  currency_symbol?: string;
+  client_id?: string;
   redirect_uri?: string;
 }
 

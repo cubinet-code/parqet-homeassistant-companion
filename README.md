@@ -20,11 +20,21 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ---
 
+## Card types
+
+| Card | Description |
+|---|---|
+| `custom:parqet-companion-card` | Full card with Performance, Holdings, and Activities tabs |
+| `custom:parqet-kpi-card` | Compact single-metric tile — ideal for dashboards |
+
+---
+
 ## Features
 
 - **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals
 - **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, and per-holding detail expansion
 - **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters, broker info, and pagination
+- **KPI tile** — Single-metric card for any portfolio metric, suitable for grid/sidebar dashboards
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
 - **Dual data source** — Connect REST API (default) or Parqet MCP server
@@ -66,15 +76,17 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ### 1. Add the card
 
-In any Lovelace dashboard, add a card and choose **Parqet Home Assistant Companion** (or use the YAML editor):
+In any Lovelace dashboard, add a card and choose **Parqet Home Assistant Companion** or **Parqet KPI Card** (or use the YAML editor):
 
 ```yaml
 type: custom:parqet-companion-card
+# or:
+type: custom:parqet-kpi-card
 ```
 
 ### 2. Connect your Parqet account
 
-The card will show a **Connect with Parqet** button. Clicking it opens a popup where you authorize access. Your access token is stored locally in your browser — nothing leaves your Home Assistant instance.
+Open the card editor (pencil icon) — a **Connect** button appears at the top when you're not yet authenticated. Clicking it opens a popup where you authorize access. Your access token is stored locally in your browser — nothing leaves your Home Assistant instance. Both card types share the same token, so you only need to connect once.
 
 > **Note:** The OAuth redirect page is hosted at
 > `https://cubinet-code.github.io/parqet-homeassistant-companion/callback.html`
@@ -181,9 +193,85 @@ type: custom:parqet-companion-card
 portfolio_id: "abc-123-def"
 view_layout: single
 default_view: activities
-activities_limit: 100
+activities_limit: 25
 default_activity_type: dividend
 compact: true
+```
+
+---
+
+## Parqet KPI Card
+
+A compact tile that shows a **single metric** from your portfolio. Great for placing multiple KPIs side-by-side on a grid dashboard.
+
+### Setup
+
+Open the card editor after adding the card — use the **Connect** button to authorize Parqet (same shared token as the companion card). Then pick a portfolio and metric.
+
+> **Note:** When you connect via either card editor (Companion or KPI), both cards share the same token — you only need to connect once.
+
+### Available metrics
+
+| Config value | What it shows |
+|---|---|
+| `total_value` | Current portfolio value |
+| `period_return` | Return over the selected interval (%) |
+| `xirr` | Internal rate of return (annualised %) |
+| `ttwror` | Time-weighted rate of return (%) |
+| `unrealized_gain` | Unrealised gain in the interval |
+| `realized_gain` | Realised gain in the interval |
+| `dividends` | Dividend income in the interval |
+| `fees` | Fees paid in the interval |
+| `taxes` | Taxes paid in the interval |
+
+### YAML reference
+
+```yaml
+type: custom:parqet-kpi-card
+
+# Optional — lock to a specific portfolio (omit to use first portfolio)
+portfolio_id: "your-portfolio-id"
+
+# Which metric to display (default: total_value)
+kpi: "total_value"
+
+# Default time interval shown when card loads
+default_interval: "1y"   # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
+
+# Display
+currency_symbol: "€"
+data_source: "rest"      # "rest" (default) | "mcp"
+
+# Advanced (optional — leave blank to use shared defaults)
+# client_id: "your-client-id"
+# redirect_uri: "https://your-callback-page/callback.html"
+```
+
+### Config examples
+
+**Total portfolio value:**
+```yaml
+type: custom:parqet-kpi-card
+kpi: total_value
+default_interval: 1y
+currency_symbol: "€"
+```
+
+**XIRR year-to-date:**
+```yaml
+type: custom:parqet-kpi-card
+portfolio_id: "abc-123-def"
+kpi: xirr
+default_interval: ytd
+```
+
+**Dividends this year:**
+```yaml
+type: custom:parqet-kpi-card
+portfolio_id: "abc-123-def"
+kpi: dividends
+default_interval: ytd
+currency_symbol: "€"
 ```
 
 ---

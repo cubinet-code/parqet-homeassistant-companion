@@ -20,6 +20,7 @@ import './components/loading-spinner';
 import './views/performance-view';
 import './views/holdings-view';
 import './views/activities-view';
+import './cards/kpi-card';
 
 // ─── Card registration ────────────────────────────────────────────────────────
 
@@ -30,6 +31,13 @@ w['customCards'].push({
   type: 'parqet-companion-card',
   name: 'Parqet Home Assistant Companion',
   description: 'Display your Parqet portfolio data — performance, holdings and activities.',
+  preview: true,
+  documentationURL: 'https://github.com/cubinet-code/parqet-homeassistant-companion',
+});
+w['customCards'].push({
+  type: 'parqet-kpi-card',
+  name: 'Parqet KPI Card',
+  description: 'Show a single Parqet portfolio metric — total value, XIRR, returns, dividends and more.',
   preview: true,
   documentationURL: 'https://github.com/cubinet-code/parqet-homeassistant-companion',
 });
@@ -507,6 +515,8 @@ class ParqetCompanionCardEditor extends LitElement {
   @property({ attribute: false }) hass!: Record<string, unknown>;
   @state() private _config?: ParqetCardConfig;
   @state() private _connected = false;
+  @state() private _authLoading = false;
+  @state() private _authError = '';
   @state() private _portfolios: Portfolio[] = [];
   @state() private _loadingPortfolios = false;
 
@@ -530,22 +540,36 @@ class ParqetCompanionCardEditor extends LitElement {
     }
   }
 
+  private async _handleConnect(): Promise<void> {
+    this._authLoading = true;
+    this._authError = '';
+    const popup = window.open('', 'parqet-auth', 'width=520,height=720,scrollbars=yes,resizable=yes');
+    try {
+      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri, popup);
+      this._connected = true;
+      void this._fetchPortfolios();
+    } catch (e) {
+      this._authError = e instanceof Error ? e.message : String(e);
+    } finally {
+      this._authLoading = false;
+    }
+  }
+
   render() {
     if (!this._config || !this.hass) return html``;
     return html`
       <div class="auth-row">
         <div class="auth-status">
           <span class="auth-dot ${this._connected ? 'connected' : 'disconnected'}"></span>
-          ${this._connected ? 'Connected to Parqet' : 'Not connected'}
+          ${this._connected ? 'Connected to Parqet' : 'Not connected to Parqet'}
         </div>
         ${this._connected
-          ? html`
-              <button class="disconnect-btn" @click=${this._handleDisconnect}>
-                Disconnect
-              </button>
-            `
-          : ''}
+          ? html`<button class="auth-btn disconnect" @click=${this._handleDisconnect}>Disconnect</button>`
+          : html`<button class="auth-btn connect" @click=${this._handleConnect} ?disabled=${this._authLoading}>
+              ${this._authLoading ? 'Connecting…' : 'Connect'}
+            </button>`}
       </div>
+      ${this._authError ? html`<div class="auth-error">${this._authError}</div>` : ''}
 
       <!-- Portfolio picker -->
       <div class="portfolio-row">
@@ -640,18 +664,33 @@ class ParqetCompanionCardEditor extends LitElement {
     }
     .auth-dot.connected    { background: #4caf50; }
     .auth-dot.disconnected { background: var(--secondary-text-color, #9e9e9e); }
-    .disconnect-btn {
-      background: none;
-      border: 1px solid var(--error-color, #f44336);
-      color: var(--error-color, #f44336);
+    .auth-btn {
       padding: 4px 12px;
       border-radius: 4px;
       cursor: pointer;
       font-size: 0.8rem;
       transition: background 0.15s;
     }
-    .disconnect-btn:hover {
-      background: rgba(244, 67, 54, 0.08);
+    .auth-btn.connect {
+      background: var(--primary-color, #03a9f4);
+      color: white;
+      border: none;
+    }
+    .auth-btn.connect:hover:not(:disabled) { opacity: 0.85; }
+    .auth-btn.connect:disabled { opacity: 0.5; cursor: not-allowed; }
+    .auth-btn.disconnect {
+      background: none;
+      border: 1px solid var(--error-color, #f44336);
+      color: var(--error-color, #f44336);
+    }
+    .auth-btn.disconnect:hover { background: rgba(244, 67, 54, 0.08); }
+    .auth-error {
+      margin: 4px 0 8px;
+      padding: 6px 12px;
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--error-color, #f44336);
+      border-radius: 6px;
+      font-size: 0.8rem;
     }
     .portfolio-row {
       padding: 8px 16px 4px;
