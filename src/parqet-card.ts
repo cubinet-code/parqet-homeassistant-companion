@@ -54,7 +54,7 @@ export class ParqetCompanionCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._authenticated = oauthManager.isTokenValid();
+    this._authenticated = oauthManager.isTokenValid(this._config?.client_id);
     if (this._authenticated) {
       void this._loadPortfolios();
     }
@@ -63,7 +63,7 @@ export class ParqetCompanionCard extends LitElement {
   updated(changed: PropertyValues) {
     // Re-check token validity when HA sends new hass state
     if (changed.has('hass') && !this._authenticated) {
-      if (oauthManager.isTokenValid()) {
+      if (oauthManager.isTokenValid(this._config?.client_id)) {
         this._authenticated = true;
         void this._loadPortfolios();
       }
@@ -86,6 +86,9 @@ export class ParqetCompanionCard extends LitElement {
       ...config,
     };
     this._activeView = this._config.default_view!;
+    // Propagate client_id override to API clients so they use the correct token
+    connectClient.configure(this._config.client_id);
+    mcpClient.configure(this._config.client_id);
   }
 
   getCardSize(): number {
@@ -180,6 +183,16 @@ export class ParqetCompanionCard extends LitElement {
         label: 'Activities per page (10–500)',
         selector: { number: { min: 10, max: 500, step: 10, mode: 'box' } },
       },
+      {
+        name: 'client_id',
+        label: 'Parqet Connect Client ID (optional — leave blank to use shared default)',
+        selector: { text: {} },
+      },
+      {
+        name: 'redirect_uri',
+        label: 'OAuth Redirect URI (optional — required when using your own Client ID)',
+        selector: { text: {} },
+      },
     ];
   }
 
@@ -200,7 +213,7 @@ export class ParqetCompanionCard extends LitElement {
       this._error = e instanceof Error ? e.message : String(e);
       // If we got a 401, invalidate the token
       if (String(e).includes('401')) {
-        oauthManager.clearToken();
+        oauthManager.clearToken(this._config?.client_id);
         this._authenticated = false;
       }
     } finally {
@@ -214,7 +227,7 @@ export class ParqetCompanionCard extends LitElement {
     this._authLoading = true;
     this._error = '';
     try {
-      await oauthManager.startAuth();
+      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri);
       this._authenticated = true;
       await this._loadPortfolios();
     } catch (e) {
@@ -225,7 +238,7 @@ export class ParqetCompanionCard extends LitElement {
   }
 
   private _handleDisconnect() {
-    oauthManager.clearToken();
+    oauthManager.clearToken(this._config?.client_id);
     this._authenticated = false;
     this._portfolios = [];
     this._portfolioId = null;

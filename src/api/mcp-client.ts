@@ -18,13 +18,18 @@ import type {
 import type { IntervalValue } from '../const';
 
 export class MCPClient {
+  clientId?: string;
   private _reqId = 0;
   private _initialized = false;
+
+  configure(clientId?: string): void {
+    this.clientId = clientId;
+  }
 
   // ─── Transport ──────────────────────────────────────────────────────────────
 
   private async _send(req: MCPRequest): Promise<MCPResponse> {
-    const token = await oauthManager.getValidToken();
+    const token = await oauthManager.getValidToken(this.clientId);
     const resp = await fetch(`${MCP_BASE}/mcp`, {
       method: 'POST',
       headers: {
@@ -61,7 +66,7 @@ export class MCPClient {
   }
 
   private async _initialize(): Promise<void> {
-    const token = await oauthManager.getValidToken();
+    const token = await oauthManager.getValidToken(this.clientId);
     await fetch(`${MCP_BASE}/mcp`, {
       method: 'POST',
       headers: {

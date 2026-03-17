@@ -4,7 +4,6 @@ import {
   TOKEN_URL,
   REDIRECT_URI,
   SCOPES,
-  STORAGE_KEY,
 } from '../const';
 import { generateCodeVerifier, generateCodeChallenge, generateState } from './pkce';
 import type { TokenData } from '../types';
@@ -17,30 +16,39 @@ export class OAuthManager {
   private _pendingState: string | null = null;
   private _popup: Window | null = null;
 
+  // ─── Storage key ────────────────────────────────────────────────────────────
+
+  private _storageKey(clientId?: string): string {
+    return `parqet_card_auth_${clientId ?? CLIENT_ID}`;
+  }
+
   // ─── Token storage ──────────────────────────────────────────────────────────
 
-  getStoredToken(): TokenData | null {
+  getStoredToken(clientId?: string): TokenData | null {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(this._storageKey(clientId));
       return raw ? (JSON.parse(raw) as TokenData) : null;
     } catch {
       return null;
     }
   }
 
-  isTokenValid(): boolean {
-    const token = this.getStoredToken();
+  isTokenValid(clientId?: string): boolean {
+    const token = this.getStoredToken(clientId);
     return !!token && token.expires_at > Date.now() + TOKEN_REFRESH_BUFFER_MS;
   }
 
-  clearToken(): void {
-    localStorage.removeItem(STORAGE_KEY);
+  clearToken(clientId?: string): void {
+    localStorage.removeItem(this._storageKey(clientId));
   }
 
   // ─── Auth flow ──────────────────────────────────────────────────────────────
 
   /** Open the Parqet OAuth popup. Resolves when the user completes auth. */
-  async startAuth(): Promise<TokenData> {
+  async startAuth(clientId?: string, redirectUri?: string): Promise<TokenData> {
+    const resolvedClientId = clientId ?? CLIENT_ID;
+    const resolvedRedirectUri = redirectUri ?? REDIRECT_URI;
+
     const verifier = await generateCodeVerifier();
     const challenge = await generateCodeChallenge(verifier);
     const state = generateState();
@@ -48,8 +56,8 @@ export class OAuthManager {
 
     const params = new URLSearchParams({
       response_type: 'code',
-      client_id: CLIENT_ID,
-      redirect_uri: REDIRECT_URI,
+      client_id: resolvedClientId,
+      redirect_uri: resolvedRedirectUri,
       scope: SCOPES,
       code_challenge: challenge,
       code_challenge_method: 'S256',
@@ -109,8 +117,8 @@ export class OAuthManager {
         popup?.close();
 
         try {
-          const token = await this._exchangeCode(code, verifier);
-          this._storeToken(token);
+          const token = await this._exchangeCode(code, verifier, resolvedClientId, resolvedRedirectUri);
+          this._storeToken(token, resolvedClientId);
           resolve(token);
         } catch (e) {
           reject(e);
@@ -123,10 +131,11 @@ export class OAuthManager {
 
   // ─── Token refresh ──────────────────────────────────────────────────────────
 
-  async refreshToken(): Promise<TokenData> {
-    const stored = this.getStoredToken();
+  async refreshToken(clientId?: string): Promise<TokenData> {
+    const resolvedClientId = clientId ?? CLIENT_ID;
+    const stored = this.getStoredToken(resolvedClientId);
     if (!stored?.refresh_token) {
-      this.clearToken();
+      this.clearToken(resolvedClientId);
       throw new Error('No refresh token available. Please reconnect.');
     }
 
@@ -136,18 +145,18 @@ export class OAuthManager {
       body: new URLSearchParams({
         grant_type: 'refresh_token',
         refresh_token: stored.refresh_token,
-        client_id: CLIENT_ID,
+        client_id: resolvedClientId,
       }),
     });
 
     if (!resp.ok) {
-      this.clearToken();
+      this.clearToken(resolvedClientId);
       throw new Error(`Token refresh failed (${resp.status}). Please reconnect.`);
     }
 
     const data = await resp.json();
     const token = this._normalizeToken(data);
-    this._storeToken(token);
+    this._storeToken(token, resolvedClientId);
     return token;
   }
 
@@ -155,17 +164,22 @@ export class OAuthManager {
    * Return a valid access token, refreshing if needed.
    * Throws if refresh fails (caller should show auth prompt).
    */
-  async getValidToken(): Promise<string> {
-    if (this.isTokenValid()) {
-      return this.getStoredToken()!.access_token;
+  async getValidToken(clientId?: string): Promise<string> {
+    if (this.isTokenValid(clientId)) {
+      return this.getStoredToken(clientId)!.access_token;
     }
-    const refreshed = await this.refreshToken();
+    const refreshed = await this.refreshToken(clientId);
     return refreshed.access_token;
   }
 
   // ─── Private ────────────────────────────────────────────────────────────────
 
-  private async _exchangeCode(code: string, verifier: string): Promise<TokenData> {
+  private async _exchangeCode(
+    code: string,
+    verifier: string,
+    clientId: string,
+    redirectUri: string,
+  ): Promise<TokenData> {
     const resp = await fetch(TOKEN_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -173,8 +187,8 @@ export class OAuthManager {
         grant_type: 'authorization_code',
         code,
         code_verifier: verifier,
-        client_id: CLIENT_ID,
-        redirect_uri: REDIRECT_URI,
+        client_id: clientId,
+        redirect_uri: redirectUri,
       }),
     });
 
@@ -197,8 +211,8 @@ export class OAuthManager {
     };
   }
 
-  private _storeToken(token: TokenData): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(token));
+  private _storeToken(token: TokenData, clientId?: string): void {
+    localStorage.setItem(this._storageKey(clientId), JSON.stringify(token));
   }
 
   private _cleanup(): void {

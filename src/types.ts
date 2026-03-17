@@ -209,6 +209,10 @@ export interface ParqetCardConfig {
   currency_symbol?: string;
   show_logo?: boolean;
   compact?: boolean;
+  /** Override the shared Parqet Connect Client ID with your own app registration. */
+  client_id?: string;
+  /** Override the OAuth redirect URI (required when using a custom client_id). */
+  redirect_uri?: string;
 }
 
 // ─── MCP ─────────────────────────────────────────────────────────────────────

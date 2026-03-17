@@ -19,8 +19,6 @@ export const REDIRECT_URI =
     ? DEV_REDIRECT_URI
     : PROD_REDIRECT_URI;
 
-export const STORAGE_KEY = `parqet_card_auth_${CLIENT_ID}`;
-
 export const PARQET_ICON_URL = 'https://developer.parqet.com/img/parqet-icon-trans.svg';
 export const PARQET_BRAND_COLOR = '#009991';
 export const PARQET_BRAND_HOVER = '#5bcec2';

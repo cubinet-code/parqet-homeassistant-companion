@@ -14,8 +14,14 @@ import type {
 import type { IntervalValue } from '../const';
 
 export class ConnectClient {
+  clientId?: string;
+
+  configure(clientId?: string): void {
+    this.clientId = clientId;
+  }
+
   private async _get<T>(path: string): Promise<T> {
-    const token = await oauthManager.getValidToken();
+    const token = await oauthManager.getValidToken(this.clientId);
     const resp = await fetch(`${CONNECT_API_BASE}${path}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -27,7 +33,7 @@ export class ConnectClient {
   }
 
   private async _post<T>(path: string, body: unknown): Promise<T> {
-    const token = await oauthManager.getValidToken();
+    const token = await oauthManager.getValidToken(this.clientId);
     const resp = await fetch(`${CONNECT_API_BASE}${path}`, {
       method: 'POST',
       headers: {
