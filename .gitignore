@@ -1,7 +1,6 @@
 node_modules/
 
-# Build output — JS bundle excluded; callback.html kept for GitHub Pages
-dist/*.js
+# Build output — source maps excluded, but dist JS is committed for HACS
 dist/*.js.map
 
 # Dev artefacts
