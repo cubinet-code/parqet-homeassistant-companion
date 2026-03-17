@@ -238,11 +238,15 @@ export interface ParqetCardConfig {
   redirect_uri?: string;
 }
 
+export type KpiLayout = 'vertical' | 'horizontal';
+
 export interface KpiCardConfig {
   type: string;
   data_source?: DataSource;
   portfolio_id?: string;
   kpi?: KpiMetric;
+  secondary_kpi?: KpiMetric | null;
+  layout?: KpiLayout;
   default_interval?: IntervalValue;
   show_interval_selector?: boolean;
   currency_symbol?: string;

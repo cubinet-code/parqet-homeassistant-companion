@@ -12,11 +12,9 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ## Screenshots
 
-| Performance | Holdings | Activities |
-|---|---|---|
-| ![Performance view](screenshots/performance.png) | ![Holdings view](screenshots/holdings.png) | ![Activities view](screenshots/activities.png) |
-
-> **Note:** Screenshots coming soon — add the card to your dashboard and take your own!
+| Companion card — Performance | KPI card |
+|---|---|
+| ![Performance view](screenshots/performance.png) | ![KPI card](screenshots/kpi-card.png) |
 
 ---
 
@@ -201,6 +199,8 @@ compact: true
 ---
 
 ## Parqet KPI Card
+
+![KPI card](screenshots/kpi-card.png)
 
 A compact tile that shows a **single metric** from your portfolio. Great for placing multiple KPIs side-by-side on a grid dashboard.
 

@@ -5,12 +5,23 @@ import { oauthManager } from '../auth/oauth';
 import { connectClient } from '../api/connect-client';
 import { mcpClient } from '../api/mcp-client';
 
-import type { KpiCardConfig, KpiMetric, PortfolioPerformance, Portfolio } from '../types';
+import type { KpiCardConfig, KpiMetric, KpiLayout, PortfolioPerformance, Portfolio } from '../types';
 import type { IntervalValue } from '../const';
 
 import '../components/interval-selector';
 import '../components/loading-spinner';
-import '../components/auth-prompt';
+
+const KPI_OPTIONS: { value: KpiMetric; label: string }[] = [
+  { value: 'total_value',     label: 'Total Value' },
+  { value: 'period_return',   label: 'Period Return' },
+  { value: 'xirr',            label: 'XIRR' },
+  { value: 'ttwror',          label: 'TTWROR' },
+  { value: 'unrealized_gain', label: 'Unrealized Gain' },
+  { value: 'realized_gain',   label: 'Realized Gain' },
+  { value: 'dividends',       label: 'Dividends' },
+  { value: 'fees',            label: 'Fees' },
+  { value: 'taxes',           label: 'Taxes' },
+];
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
@@ -27,7 +38,14 @@ export class ParqetKpiCard extends LitElement {
   @state() private _error = '';
 
   setConfig(config: KpiCardConfig): void {
-    this._config = { kpi: 'total_value', default_interval: '1y', currency_symbol: '€', show_interval_selector: true, ...config };
+    this._config = {
+      kpi: 'total_value',
+      default_interval: '1y',
+      currency_symbol: '€',
+      show_interval_selector: true,
+      layout: 'vertical',
+      ...config,
+    };
     this._interval = this._config.default_interval as IntervalValue;
     connectClient.configure(this._config.client_id);
     mcpClient.configure(this._config.client_id);
@@ -97,10 +115,10 @@ export class ParqetKpiCard extends LitElement {
     await this._loadData();
   }
 
-  // ─── Value extraction ───────────────────────────────────────────────────────
+  // ─── Value helpers ──────────────────────────────────────────────────────────
 
-  private _extractValue(d: PortfolioPerformance): number | null {
-    switch (this._config.kpi ?? 'total_value') {
+  private _extract(d: PortfolioPerformance, kpi: KpiMetric): number | null {
+    switch (kpi) {
       case 'total_value':      return d.valuation?.atIntervalEnd ?? null;
       case 'period_return': {
         const start = d.valuation?.atIntervalStart ?? 0;
@@ -122,22 +140,11 @@ export class ParqetKpiCard extends LitElement {
     return ['period_return', 'xirr', 'ttwror'].includes(kpi);
   }
 
-  private _kpiLabel(kpi: KpiMetric): string {
-    const labels: Record<KpiMetric, string> = {
-      total_value:      'Total Value',
-      period_return:    'Period Return',
-      xirr:             'XIRR',
-      ttwror:           'TTWROR',
-      unrealized_gain:  'Unrealized Gain',
-      realized_gain:    'Realized Gain',
-      dividends:        'Dividends',
-      fees:             'Fees',
-      taxes:            'Taxes',
-    };
-    return labels[kpi] ?? kpi;
+  private _label(kpi: KpiMetric): string {
+    return KPI_OPTIONS.find((o) => o.value === kpi)?.label ?? kpi;
   }
 
-  private _formatValue(v: number | null, kpi: KpiMetric): string {
+  private _format(v: number | null, kpi: KpiMetric): string {
     if (v == null) return '—';
     const sym = this._config?.currency_symbol ?? '€';
     if (this._isPercent(kpi)) {
@@ -145,6 +152,11 @@ export class ParqetKpiCard extends LitElement {
       return `${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
     }
     return `${sym}${v.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  private _colorClass(v: number | null, kpi: KpiMetric): string {
+    if (v == null || kpi === 'total_value') return '';
+    return v > 0 ? 'positive' : v < 0 ? 'negative' : '';
   }
 
   // ─── Render ─────────────────────────────────────────────────────────────────
@@ -161,11 +173,17 @@ export class ParqetKpiCard extends LitElement {
       `;
     }
 
-    const kpi    = this._config.kpi ?? 'total_value';
-    const raw    = this._data ? this._extractValue(this._data) : null;
-    const label  = this._kpiLabel(kpi);
-    const value  = this._data ? this._formatValue(raw, kpi) : '—';
-    const cls    = raw == null ? '' : raw > 0 ? 'positive' : raw < 0 ? 'negative' : '';
+    const primaryKpi = this._config.kpi ?? 'total_value';
+    const secondaryKpi = this._config.secondary_kpi ?? null;
+    const layout = this._config.layout ?? 'vertical';
+
+    const primaryRaw = this._data ? this._extract(this._data, primaryKpi) : null;
+    const primaryVal = this._data ? this._format(primaryRaw, primaryKpi) : '—';
+    const primaryCls = this._colorClass(primaryRaw, primaryKpi);
+
+    const secondaryRaw = secondaryKpi && this._data ? this._extract(this._data, secondaryKpi) : null;
+    const secondaryVal = secondaryKpi && this._data ? this._format(secondaryRaw, secondaryKpi) : null;
+    const secondaryCls = secondaryKpi ? this._colorClass(secondaryRaw, secondaryKpi) : '';
 
     return html`
       <ha-card>
@@ -178,13 +196,54 @@ export class ParqetKpiCard extends LitElement {
 
         ${this._error ? html`<div class="error">${this._error}</div>` : ''}
 
-        <div class="body">
-          <div class="label">${label}</div>
-          ${this._loading
-            ? html`<parqet-loading-spinner></parqet-loading-spinner>`
-            : html`<div class="value ${cls}">${value}</div>`}
+        <div class="body ${layout}">
+          ${layout === 'horizontal'
+            ? this._renderHorizontal(primaryKpi, primaryVal, primaryCls, secondaryKpi, secondaryVal, secondaryCls)
+            : this._renderVertical(primaryKpi, primaryVal, primaryCls, secondaryKpi, secondaryVal, secondaryCls)}
         </div>
       </ha-card>
+    `;
+  }
+
+  private _renderVertical(
+    primaryKpi: KpiMetric, primaryVal: string, primaryCls: string,
+    secondaryKpi: KpiMetric | null, secondaryVal: string | null, secondaryCls: string,
+  ) {
+    return html`
+      <div class="primary-block">
+        <div class="label">${this._label(primaryKpi)}</div>
+        ${this._loading
+          ? html`<parqet-loading-spinner></parqet-loading-spinner>`
+          : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
+      </div>
+      ${secondaryKpi && secondaryVal != null
+        ? html`<div class="secondary-block">
+            <span class="secondary-label">${this._label(secondaryKpi)}</span>
+            <span class="secondary-value ${secondaryCls}">${secondaryVal}</span>
+          </div>`
+        : ''}
+    `;
+  }
+
+  private _renderHorizontal(
+    primaryKpi: KpiMetric, primaryVal: string, primaryCls: string,
+    secondaryKpi: KpiMetric | null, secondaryVal: string | null, secondaryCls: string,
+  ) {
+    return html`
+      <div class="h-labels">
+        <div class="label">${this._label(primaryKpi)}</div>
+        ${secondaryKpi
+          ? html`<div class="secondary-label">${this._label(secondaryKpi)}</div>`
+          : ''}
+      </div>
+      <div class="h-values">
+        ${this._loading
+          ? html`<parqet-loading-spinner></parqet-loading-spinner>`
+          : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
+        ${secondaryKpi && secondaryVal != null
+          ? html`<div class="secondary-value ${secondaryCls}">${secondaryVal}</div>`
+          : ''}
+      </div>
     `;
   }
 
@@ -202,12 +261,52 @@ export class ParqetKpiCard extends LitElement {
       color: var(--secondary-text-color);
     }
     .hint { font-size: 0.75rem; opacity: 0.7; }
-    .body {
+    .error {
+      margin: 0 16px 8px;
+      padding: 6px 10px;
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--error-color, #f44336);
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* ── Vertical layout ── */
+    .body.vertical {
       padding: 8px 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 6px;
     }
+    .primary-block { display: flex; flex-direction: column; gap: 2px; }
+    .secondary-block {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    /* ── Horizontal layout ── */
+    .body.horizontal {
+      padding: 8px 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .h-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .h-values {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── Shared text styles ── */
     .label {
       font-size: 0.65rem;
       font-weight: 600;
@@ -221,16 +320,23 @@ export class ParqetKpiCard extends LitElement {
       color: var(--primary-text-color);
       line-height: 1.15;
     }
+    .body.horizontal .value { font-size: 1.5rem; }
     .value.positive { color: var(--success-color, #4caf50); }
     .value.negative { color: var(--error-color, #f44336); }
-    .error {
-      margin: 0 16px 8px;
-      padding: 6px 10px;
-      background: rgba(244, 67, 54, 0.1);
-      color: var(--error-color, #f44336);
-      border-radius: 6px;
-      font-size: 0.8rem;
+    .secondary-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--secondary-text-color);
     }
+    .secondary-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary-text-color);
+    }
+    .secondary-value.positive { color: var(--success-color, #4caf50); }
+    .secondary-value.negative { color: var(--error-color, #f44336); }
   `;
 }
 
@@ -245,6 +351,7 @@ class ParqetKpiCardEditor extends LitElement {
   @state() private _portfolios: Portfolio[] = [];
   @state() private _loadingPortfolios = false;
   @state() private _authError = '';
+  @state() private _addingSecondary = false;
 
   setConfig(config: KpiCardConfig): void {
     this._config = config;
@@ -289,25 +396,6 @@ class ParqetKpiCardEditor extends LitElement {
 
   static getConfigForm() {
     return [
-      {
-        name: 'kpi',
-        label: 'Metric to display',
-        selector: {
-          select: {
-            options: [
-              { value: 'total_value',     label: 'Total Value' },
-              { value: 'period_return',   label: 'Period Return' },
-              { value: 'xirr',            label: 'XIRR' },
-              { value: 'ttwror',          label: 'TTWROR' },
-              { value: 'unrealized_gain', label: 'Unrealized Gain' },
-              { value: 'realized_gain',   label: 'Realized Gain' },
-              { value: 'dividends',       label: 'Dividends' },
-              { value: 'fees',            label: 'Fees' },
-              { value: 'taxes',           label: 'Taxes' },
-            ],
-          },
-        },
-      },
       {
         name: 'default_interval',
         label: 'Time Interval',
@@ -373,6 +461,14 @@ class ParqetKpiCardEditor extends LitElement {
 
   render() {
     if (!this._config || !this.hass) return html``;
+
+    const primaryKpi = this._config.kpi ?? 'total_value';
+    const secondaryKpi = this._config.secondary_kpi ?? null;
+    const layout = this._config.layout ?? 'vertical';
+
+    // Options available to add as secondary (exclude current primary)
+    const availableForSecondary = KPI_OPTIONS.filter((o) => o.value !== primaryKpi);
+
     return html`
       <!-- Auth row -->
       <div class="auth-row">
@@ -389,10 +485,10 @@ class ParqetKpiCardEditor extends LitElement {
       ${this._authError ? html`<div class="auth-error">${this._authError}</div>` : ''}
 
       <!-- Portfolio picker -->
-      <div class="portfolio-row">
-        <label class="portfolio-label">Portfolio</label>
+      <div class="section-row">
+        <label class="section-label">Portfolio</label>
         ${this._loadingPortfolios
-          ? html`<div class="portfolio-hint">Loading portfolios…</div>`
+          ? html`<div class="hint-text">Loading portfolios…</div>`
           : this._portfolios.length > 0
             ? html`
                 <select class="portfolio-select" @change=${this._portfolioChanged}>
@@ -408,9 +504,88 @@ class ParqetKpiCardEditor extends LitElement {
                   )}
                 </select>
               `
-            : html`<div class="portfolio-hint">
+            : html`<div class="hint-text">
                 ${this._connected ? 'No portfolios found' : 'Connect to load portfolios'}
               </div>`}
+      </div>
+
+      <!-- Content section (chip-style) -->
+      <div class="section-row">
+        <label class="section-label">Content</label>
+        <div class="chip-row">
+          <!-- Primary metric chip — always present, click to change via select -->
+          <div class="chip primary-chip">
+            <span class="chip-icon">≡</span>
+            <select
+              class="chip-select"
+              @change=${this._primaryChanged}
+            >
+              ${KPI_OPTIONS.map(
+                (o) => html`<option value=${o.value} ?selected=${o.value === primaryKpi}>${o.label}</option>`,
+              )}
+            </select>
+          </div>
+
+          <!-- Secondary metric chip -->
+          ${secondaryKpi
+            ? html`
+                <div class="chip secondary-chip">
+                  <span class="chip-icon">≡</span>
+                  <select class="chip-select" @change=${this._secondaryChanged}>
+                    ${availableForSecondary.map(
+                      (o) => html`<option value=${o.value} ?selected=${o.value === secondaryKpi}>${o.label}</option>`,
+                    )}
+                  </select>
+                  <button class="chip-remove" @click=${this._removeSecondary} aria-label="Remove">×</button>
+                </div>
+              `
+            : this._addingSecondary
+              ? html`
+                  <div class="chip secondary-chip adding">
+                    <select class="chip-select" @change=${this._pickSecondary} @blur=${this._cancelAddSecondary}>
+                      <option value="">— pick a metric —</option>
+                      ${availableForSecondary.map(
+                        (o) => html`<option value=${o.value}>${o.label}</option>`,
+                      )}
+                    </select>
+                    <button class="chip-remove" @click=${this._cancelAddSecondary} aria-label="Cancel">×</button>
+                  </div>
+                `
+              : html`
+                  <button class="add-chip" @click=${() => (this._addingSecondary = true)}>+ Add</button>
+                `}
+        </div>
+      </div>
+
+      <!-- Layout picker -->
+      <div class="section-row">
+        <label class="section-label">Content layout</label>
+        <div class="layout-row">
+          <button
+            class="layout-option ${layout === 'vertical' ? 'selected' : ''}"
+            @click=${() => this._setLayout('vertical')}
+          >
+            <div class="layout-thumb vertical-thumb">
+              <div class="lt-label"></div>
+              <div class="lt-value"></div>
+              <div class="lt-secondary"></div>
+            </div>
+            <span>Vertical</span>
+          </button>
+          <button
+            class="layout-option ${layout === 'horizontal' ? 'selected' : ''}"
+            @click=${() => this._setLayout('horizontal')}
+          >
+            <div class="layout-thumb horizontal-thumb">
+              <div class="lt-left">
+                <div class="lt-label"></div>
+                <div class="lt-secondary"></div>
+              </div>
+              <div class="lt-value-right"></div>
+            </div>
+            <span>Horizontal</span>
+          </button>
+        </div>
       </div>
 
       <ha-form
@@ -421,6 +596,41 @@ class ParqetKpiCardEditor extends LitElement {
         @value-changed=${this._valueChanged}
       ></ha-form>
     `;
+  }
+
+  private _primaryChanged(e: Event): void {
+    const kpi = (e.target as HTMLSelectElement).value as KpiMetric;
+    // If new primary conflicts with secondary, clear secondary
+    const config: KpiCardConfig = { ...this._config!, kpi };
+    if (config.secondary_kpi === kpi) delete config.secondary_kpi;
+    this._fire(config);
+  }
+
+  private _secondaryChanged(e: Event): void {
+    const kpi = (e.target as HTMLSelectElement).value as KpiMetric;
+    this._fire({ ...this._config!, secondary_kpi: kpi });
+  }
+
+  private _removeSecondary(): void {
+    const config = { ...this._config! };
+    delete config.secondary_kpi;
+    this._fire(config);
+  }
+
+  private _pickSecondary(e: Event): void {
+    const val = (e.target as HTMLSelectElement).value as KpiMetric;
+    if (!val) return;
+    this._addingSecondary = false;
+    this._fire({ ...this._config!, secondary_kpi: val });
+  }
+
+  private _cancelAddSecondary(): void {
+    // small delay so click on × fires before blur hides it
+    setTimeout(() => { this._addingSecondary = false; }, 150);
+  }
+
+  private _setLayout(layout: KpiLayout): void {
+    this._fire({ ...this._config!, layout });
   }
 
   private _portfolioChanged(e: Event): void {
@@ -441,6 +651,7 @@ class ParqetKpiCardEditor extends LitElement {
   }
 
   static styles = css`
+    /* ── Auth row ── */
     .auth-row {
       display: flex;
       align-items: center;
@@ -457,51 +668,38 @@ class ParqetKpiCardEditor extends LitElement {
       font-size: 0.875rem;
       color: var(--primary-text-color);
     }
-    .auth-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .auth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .auth-dot.connected    { background: #4caf50; }
     .auth-dot.disconnected { background: var(--secondary-text-color, #9e9e9e); }
     .auth-btn {
-      padding: 4px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background 0.15s;
+      padding: 4px 12px; border-radius: 4px; cursor: pointer;
+      font-size: 0.8rem; transition: background 0.15s;
     }
-    .auth-btn.connect {
-      background: var(--primary-color, #03a9f4);
-      color: white;
-      border: none;
-    }
+    .auth-btn.connect { background: var(--primary-color, #03a9f4); color: white; border: none; }
     .auth-btn.connect:hover:not(:disabled) { opacity: 0.85; }
     .auth-btn.connect:disabled { opacity: 0.5; cursor: not-allowed; }
-    .auth-btn.disconnect {
-      background: none;
-      border: 1px solid var(--error-color, #f44336);
-      color: var(--error-color, #f44336);
-    }
+    .auth-btn.disconnect { background: none; border: 1px solid var(--error-color, #f44336); color: var(--error-color, #f44336); }
     .auth-btn.disconnect:hover { background: rgba(244, 67, 54, 0.08); }
     .auth-error {
-      margin: 4px 0 8px;
-      padding: 6px 12px;
-      background: rgba(244, 67, 54, 0.1);
-      color: var(--error-color, #f44336);
-      border-radius: 6px;
-      font-size: 0.8rem;
+      margin: 4px 0 8px; padding: 6px 12px;
+      background: rgba(244, 67, 54, 0.1); color: var(--error-color, #f44336);
+      border-radius: 6px; font-size: 0.8rem;
     }
-    .portfolio-row { padding: 8px 16px 4px; }
-    .portfolio-label {
+
+    /* ── Shared section layout ── */
+    .section-row { padding: 10px 16px 6px; }
+    .section-label {
       display: block;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--secondary-text-color);
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
+    .hint-text { font-size: 0.8rem; color: var(--secondary-text-color); font-style: italic; }
+
+    /* ── Portfolio select ── */
     .portfolio-select {
       width: 100%;
       padding: 8px 10px;
@@ -513,7 +711,98 @@ class ParqetKpiCardEditor extends LitElement {
       cursor: pointer;
     }
     .portfolio-select:focus { outline: 2px solid var(--primary-color); outline-offset: 1px; }
-    .portfolio-hint { font-size: 0.8rem; color: var(--secondary-text-color); font-style: italic; }
+
+    /* ── Chip row ── */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border: 1px solid var(--divider-color, #e0e0e0);
+      border-radius: 16px;
+      background: var(--secondary-background-color, #f5f5f5);
+      font-size: 0.8rem;
+    }
+    .chip-icon { font-size: 0.75rem; color: var(--secondary-text-color); }
+    .chip-select {
+      border: none;
+      background: transparent;
+      color: var(--primary-text-color);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      outline: none;
+    }
+    .chip-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--secondary-text-color);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.1s;
+    }
+    .chip-remove:hover { color: var(--error-color, #f44336); }
+    .add-chip {
+      padding: 4px 10px;
+      border: 1px dashed var(--divider-color, #bdbdbd);
+      border-radius: 16px;
+      background: none;
+      color: var(--secondary-text-color);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .add-chip:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+    /* ── Layout picker ── */
+    .layout-row { display: flex; gap: 12px; }
+    .layout-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 8px;
+      border: 2px solid var(--divider-color, #e0e0e0);
+      border-radius: 8px;
+      background: none;
+      cursor: pointer;
+      color: var(--secondary-text-color);
+      font-size: 0.78rem;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .layout-option.selected {
+      border-color: var(--primary-color, #03a9f4);
+      color: var(--primary-color, #03a9f4);
+      background: rgba(3, 169, 244, 0.06);
+    }
+    .layout-option:hover:not(.selected) { border-color: var(--secondary-text-color); color: var(--primary-text-color); }
+
+    /* Thumbnail sketches */
+    .layout-thumb {
+      width: 64px; height: 44px;
+      border-radius: 4px;
+      background: var(--card-background-color, #fff);
+      border: 1px solid var(--divider-color, #e0e0e0);
+      padding: 6px 8px;
+      box-sizing: border-box;
+    }
+    .vertical-thumb { display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+    .lt-label  { height: 5px; width: 60%; border-radius: 2px; background: var(--secondary-text-color, #9e9e9e); opacity: 0.5; }
+    .lt-value  { height: 10px; width: 85%; border-radius: 2px; background: var(--primary-text-color, #333); opacity: 0.6; }
+    .lt-secondary { height: 5px; width: 45%; border-radius: 2px; background: var(--secondary-text-color, #9e9e9e); opacity: 0.4; }
+
+    .horizontal-thumb { display: flex; align-items: center; justify-content: space-between; }
+    .lt-left { display: flex; flex-direction: column; gap: 4px; }
+    .lt-value-right { height: 10px; width: 36%; border-radius: 2px; background: var(--primary-text-color, #333); opacity: 0.6; }
   `;
 }
 
