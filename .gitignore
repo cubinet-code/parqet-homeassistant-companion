@@ -1,0 +1,19 @@
+node_modules/
+
+# Build output — source maps excluded, but dist JS is committed for HACS
+dist/*.js.map
+
+# Dev artefacts
+*.log
+.DS_Store
+.env
+
+# API spec (dev reference, not for public repo)
+parqet-connect-openapi.json
+
+# HACS default repo (separate git repo)
+default/
+
+# Claude Code (local dev tooling)
+.claude/
+CLAUDE.md

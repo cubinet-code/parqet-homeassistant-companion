@@ -1,0 +1,5 @@
+name            = "parqet-token-proxy"
+main            = "index.js"
+compatibility_date = "2024-09-23"
+
+# Workers free tier: 100,000 req/day — more than enough for a personal HA plugin

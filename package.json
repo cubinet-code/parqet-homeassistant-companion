@@ -1,0 +1,42 @@
+{
+  "name": "parqet-homeassistant-companion",
+  "version": "0.4.0",
+  "description": "Home Assistant custom card for Parqet portfolio tracking",
+  "keywords": [
+    "home-assistant",
+    "hacs",
+    "lovelace",
+    "parqet",
+    "portfolio"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/parqet-homeassistant-companion.js",
+  "scripts": {
+    "dev": "rollup -c --watch",
+    "build": "rollup -c --environment BUILD:production",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^8.57.0",
+    "jsdom": "^25.0.1",
+    "rollup": "^4.9.6",
+    "rollup-plugin-serve": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.3.3",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "apexcharts": "^3.54.0",
+    "lit": "^3.3.1"
+  }
+}
