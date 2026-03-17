@@ -154,14 +154,31 @@ export class ParqetActivitiesView extends LitElement {
     `;
   }
 
+  private _assetLabel(a: Activity): string {
+    if (a.asset?.name) return a.asset.name;
+    if (a.asset?.symbol) return a.asset.symbol;
+    if (a.asset?.isin) return a.asset.isin;
+    return `…${a.holdingId.slice(-8)}`;
+  }
+
   private _renderActivity(a: Activity, compact: boolean) {
     const color = TYPE_COLOR[a.type] ?? '#888';
+    const hasTaxFee = (a.tax != null && a.tax !== 0) || (a.fee != null && a.fee !== 0);
     return html`
       <div class="activity ${compact ? 'compact' : ''}">
         <span class="badge" style="background: ${color}">${this._typeLabel(a.type)}</span>
         <div class="info">
-          <span class="asset">${a.asset?.name ?? a.holdingId}</span>
-          <span class="date">${this._fmtDate(a.datetime)}</span>
+          <span class="asset">${this._assetLabel(a)}</span>
+          <span class="date">
+            ${this._fmtDate(a.datetime)}${a.broker
+              ? html` · <span class="broker">${a.broker.replace(/_/g, ' ')}</span>`
+              : ''}
+          </span>
+          ${hasTaxFee
+            ? html`<span class="taxfee">
+                ${a.tax ? `Tax: ${this._fmtC(a.tax)}` : ''}${a.tax && a.fee ? ' · ' : ''}${a.fee ? `Fee: ${this._fmtC(a.fee)}` : ''}
+              </span>`
+            : ''}
         </div>
         <div class="amounts">
           ${a.shares != null
@@ -248,6 +265,14 @@ export class ParqetActivitiesView extends LitElement {
     .date {
       display: block;
       font-size: 0.7rem;
+      color: var(--secondary-text-color);
+    }
+    .broker {
+      text-transform: capitalize;
+    }
+    .taxfee {
+      display: block;
+      font-size: 0.68rem;
       color: var(--secondary-text-color);
     }
     .amounts {

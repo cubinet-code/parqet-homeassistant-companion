@@ -118,6 +118,11 @@ export class ParqetCompanionCard extends LitElement {
   static getConfigForm() {
     return [
       {
+        name: 'portfolio_id',
+        label: 'Portfolio ID (leave empty to show picker)',
+        selector: { text: {} },
+      },
+      {
         name: 'data_source',
         label: 'Data Source',
         selector: {
@@ -130,72 +135,126 @@ export class ParqetCompanionCard extends LitElement {
         },
       },
       {
-        name: 'portfolio_id',
-        label: 'Portfolio ID (leave empty to show picker)',
-        selector: { text: {} },
-      },
-      {
-        name: 'default_view',
-        label: 'Default View',
-        selector: {
-          select: {
-            options: [
-              { value: 'performance', label: 'Performance' },
-              { value: 'holdings', label: 'Holdings' },
-              { value: 'activities', label: 'Activities' },
-            ],
+        type: 'expandable',
+        title: 'Layout',
+        schema: [
+          {
+            name: 'view_layout',
+            label: 'View Layout',
+            selector: {
+              select: {
+                options: [
+                  { value: 'tabs', label: 'Tabs (all views)' },
+                  { value: 'single', label: 'Single view only' },
+                ],
+              },
+            },
           },
-        },
-      },
-      {
-        name: 'view_layout',
-        label: 'View Layout',
-        selector: {
-          select: {
-            options: [
-              { value: 'tabs', label: 'Tabs (all views)' },
-              { value: 'single', label: 'Single view only' },
-            ],
+          {
+            name: 'default_view',
+            label: 'Default View',
+            selector: {
+              select: {
+                options: [
+                  { value: 'performance', label: 'Performance' },
+                  { value: 'holdings', label: 'Holdings' },
+                  { value: 'activities', label: 'Activities' },
+                ],
+              },
+            },
           },
-        },
+          { name: 'compact', label: 'Compact mode', selector: { boolean: {} } },
+        ],
       },
       {
-        name: 'default_interval',
-        label: 'Default Time Interval',
-        selector: {
-          select: {
-            options: [
-              { value: '1d', label: '1 Day' },
-              { value: '1w', label: '1 Week' },
-              { value: '1m', label: '1 Month' },
-              { value: '3m', label: '3 Months' },
-              { value: '6m', label: '6 Months' },
-              { value: '1y', label: '1 Year' },
-              { value: 'ytd', label: 'Year to Date' },
-              { value: '3y', label: '3 Years' },
-              { value: '5y', label: '5 Years' },
-              { value: 'max', label: 'All Time' },
-            ],
+        type: 'expandable',
+        title: 'Performance',
+        schema: [
+          {
+            name: 'default_interval',
+            label: 'Default Time Interval',
+            selector: {
+              select: {
+                options: [
+                  { value: '1d', label: '1 Day' },
+                  { value: '1w', label: '1 Week' },
+                  { value: 'mtd', label: 'Month to Date' },
+                  { value: '1m', label: '1 Month' },
+                  { value: '3m', label: '3 Months' },
+                  { value: '6m', label: '6 Months' },
+                  { value: '1y', label: '1 Year' },
+                  { value: 'ytd', label: 'Year to Date' },
+                  { value: '3y', label: '3 Years' },
+                  { value: '5y', label: '5 Years' },
+                  { value: '10y', label: '10 Years' },
+                  { value: 'max', label: 'All Time' },
+                ],
+              },
+            },
           },
-        },
-      },
-      { name: 'currency_symbol', label: 'Currency Symbol', selector: { text: {} } },
-      { name: 'show_logo', label: 'Show holding logos', selector: { boolean: {} } },
-      { name: 'compact', label: 'Compact mode', selector: { boolean: {} } },
-      {
-        name: 'activities_limit',
-        label: 'Activities per page (10–500)',
-        selector: { number: { min: 10, max: 500, step: 10, mode: 'box' } },
+          { name: 'show_chart', label: 'Show chart', selector: { boolean: {} } },
+        ],
       },
       {
-        name: 'client_id',
-        label: 'Parqet Connect Client ID (optional — leave blank to use shared default)',
-        selector: { text: {} },
+        type: 'expandable',
+        title: 'Holdings',
+        schema: [
+          { name: 'show_logo', label: 'Show holding logos', selector: { boolean: {} } },
+        ],
       },
       {
-        name: 'redirect_uri',
-        label: 'OAuth Redirect URI (optional — required when using your own Client ID)',
-        selector: { text: {} },
+        type: 'expandable',
+        title: 'Activities',
+        schema: [
+          {
+            name: 'activities_limit',
+            label: 'Activities per page (10–500)',
+            selector: { number: { min: 10, max: 500, step: 10, mode: 'box' } },
+          },
+          {
+            name: 'default_activity_type',
+            label: 'Default activity filter',
+            selector: {
+              select: {
+                options: [
+                  { value: 'all', label: 'All' },
+                  { value: 'buy', label: 'Buy' },
+                  { value: 'sell', label: 'Sell' },
+                  { value: 'dividend', label: 'Dividend' },
+                  { value: 'interest', label: 'Interest' },
+                  { value: 'transfer_in', label: 'Transfer In' },
+                  { value: 'transfer_out', label: 'Transfer Out' },
+                  { value: 'fees_taxes', label: 'Fees / Taxes' },
+                  { value: 'deposit', label: 'Deposit' },
+                  { value: 'withdrawal', label: 'Withdrawal' },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
+        type: 'expandable',
+        title: 'Display',
+        schema: [
+          { name: 'currency_symbol', label: 'Currency Symbol', selector: { text: {} } },
+        ],
+      },
+      {
+        type: 'expandable',
+        title: 'Advanced',
+        schema: [
+          {
+            name: 'client_id',
+            label: 'Parqet Connect Client ID (optional — leave blank to use shared default)',
+            selector: { text: {} },
+          },
+          {
+            name: 'redirect_uri',
+            label: 'OAuth Redirect URI (optional — required when using your own Client ID)',
+            selector: { text: {} },
+          },
+        ],
       },
     ];
   }

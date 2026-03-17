@@ -58,6 +58,7 @@ export interface AbsoluteInterval {
 
 export interface PerformanceResponse {
   performance: PortfolioPerformance;
+  holdings: Holding[];   // top-level, NOT nested inside performance
 }
 
 export interface PortfolioPerformance {
@@ -80,15 +81,14 @@ export interface PortfolioPerformance {
   };
   dividends: {
     inInterval: {
-      amountGross: number;
-      amountNet: number;
+      gainGross: number;
+      gainNet: number;
     };
-  };
+  } | null;
   valuation: {
+    atIntervalStart: number;
     atIntervalEnd: number;
-    currency: string;
   };
-  holdings: Holding[];
 }
 
 export interface PortfolioKpis {
@@ -99,21 +99,32 @@ export interface PortfolioKpis {
 }
 
 export interface Holding {
-  holdingId: string;
-  nickname?: string;
-  logo?: string;
+  id: string;
+  nickname: string | null;
+  logo: string | null;
   asset: Asset;
   position: Position;
-  kpis: HoldingKpis | null;
-  gains: {
-    inInterval: { gainGross: number; gainNet: number; returnGross: number; returnNet: number };
-  };
-  dividends: { inInterval: { amountGross: number; amountNet: number } };
-  fees: { inInterval: { fees: number } };
-  taxes: { inInterval: { taxes: number } };
-  valuation: { atIntervalEnd: number; currency: string };
+  performance: HoldingPerformance;
   quote?: Quote;
   startQuote?: Quote;
+  activityCount: number;
+  earliestActivityDate: string;
+}
+
+export interface HoldingPerformance {
+  kpis: HoldingKpis | null;
+  fees: { inInterval: { fees: number } };
+  taxes: { inInterval: { taxes: number } };
+  unrealizedGains: {
+    inInterval: { gainGross: number; gainNet: number; returnGross: number; returnNet: number };
+  };
+  realizedGains: {
+    inInterval: { gainGross: number; gainNet: number; returnGross: number; returnNet: number };
+  };
+  dividends: {
+    inInterval: { gainGross: number; gainNet: number; taxes: number; fees: number };
+  } | null;
+  valuation: { atIntervalStart: number; atIntervalEnd: number };
 }
 
 export interface Asset {

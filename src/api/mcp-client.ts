@@ -132,15 +132,16 @@ export class MCPClient {
     interval?: { type: 'relative'; value: IntervalValue },
   ): Promise<PerformanceResponse> {
     const ids = Array.isArray(portfolioIds) ? portfolioIds : [portfolioIds];
-    const result = await this._callTool<PerformanceResponse['performance']>(
+    const result = await this._callTool<PerformanceResponse>(
       'parqet_get_performance',
       {
         portfolioIds: ids,
         ...(interval ? { intervalType: interval.type, intervalValue: interval.value } : {}),
       },
     );
-    // MCP returns the inner performance object directly; wrap it for API compatibility
-    return { performance: result };
+    // MCP may return the full response or just the inner performance object — normalise both
+    if ('holdings' in result) return result;
+    return { performance: (result as unknown as PerformanceResponse['performance']), holdings: [] };
   }
 
   async getActivities(

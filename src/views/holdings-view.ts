@@ -2,9 +2,7 @@ import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ConnectClient } from '../api/connect-client';
 import type { MCPClient } from '../api/mcp-client';
-import type { ParqetCardConfig, Holding, PortfolioPerformance } from '../types';
-import type { IntervalValue } from '../const';
-import '../components/interval-selector';
+import type { ParqetCardConfig, Holding } from '../types';
 import '../components/loading-spinner';
 
 type AnyClient = ConnectClient | MCPClient;
@@ -16,9 +14,8 @@ export class ParqetHoldingsView extends LitElement {
   @property({ attribute: false }) client!: AnyClient;
   @property({ attribute: false }) config!: ParqetCardConfig;
 
-  @state() private _data: PortfolioPerformance | null = null;
+  @state() private _holdings: Holding[] = [];
   @state() private _loading = false;
-  @state() private _interval: IntervalValue = '1y';
   @state() private _error = '';
   @state() private _sortKey: SortKey = 'value';
   @state() private _sortAsc = false;
@@ -26,7 +23,6 @@ export class ParqetHoldingsView extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._interval = (this.config?.default_interval as IntervalValue) ?? '1y';
     void this._load();
   }
 
@@ -39,21 +35,17 @@ export class ParqetHoldingsView extends LitElement {
     this._loading = true;
     this._error = '';
     try {
+      // Use 'max' interval so all holdings appear regardless of acquisition date
       const resp = await this.client.getPerformance(this.portfolioId, {
         type: 'relative',
-        value: this._interval,
+        value: 'max',
       });
-      this._data = resp.performance;
+      this._holdings = resp.holdings ?? [];
     } catch (e) {
       this._error = e instanceof Error ? e.message : String(e);
     } finally {
       this._loading = false;
     }
-  }
-
-  private async _onIntervalChange(e: CustomEvent) {
-    this._interval = e.detail.interval as IntervalValue;
-    await this._load();
   }
 
   private _handleSort(key: SortKey) {
@@ -65,6 +57,14 @@ export class ParqetHoldingsView extends LitElement {
     }
   }
 
+  private _assetLabel(h: Holding): string {
+    if (h.nickname) return h.nickname;
+    const a = h.asset as unknown as Record<string, unknown>;
+    if (a['name']) return a['name'] as string;
+    if (a['symbol']) return a['symbol'] as string;
+    return `…${h.id.slice(-8)}`;
+  }
+
   private _sortHoldings(holdings: Holding[]): Holding[] {
     const total = holdings.reduce((s, h) => s + h.position.currentValue, 0);
     return [...holdings].sort((a, b) => {
@@ -74,8 +74,8 @@ export class ParqetHoldingsView extends LitElement {
       switch (this._sortKey) {
         case 'name':
           return this._sortAsc
-            ? a.asset.name.localeCompare(b.asset.name)
-            : b.asset.name.localeCompare(a.asset.name);
+            ? this._assetLabel(a).localeCompare(this._assetLabel(b))
+            : this._assetLabel(b).localeCompare(this._assetLabel(a));
         case 'value':
           va = a.position.currentValue;
           vb = b.position.currentValue;
@@ -122,23 +122,17 @@ export class ParqetHoldingsView extends LitElement {
   }
 
   render() {
-    if (this._loading && !this._data) {
+    if (this._loading && this._holdings.length === 0) {
       return html`<parqet-loading-spinner></parqet-loading-spinner>`;
     }
 
-    const holdings = this._data?.holdings ?? [];
-    const active = holdings.filter((h) => !h.position.isSold);
+    const active = this._holdings.filter((h) => !h.position.isSold);
     const sorted = this._sortHoldings(active);
     const total = active.reduce((s, h) => s + h.position.currentValue, 0);
     const showLogo = this.config?.show_logo !== false;
     const compact = !!this.config?.compact;
 
     return html`
-      <parqet-interval-selector
-        .selected=${this._interval}
-        @interval-change=${this._onIntervalChange}
-      ></parqet-interval-selector>
-
       ${this._error ? html`<div class="error" role="alert">${this._error}</div>` : ''}
       ${this._loading ? html`<parqet-loading-spinner></parqet-loading-spinner>` : ''}
 
@@ -169,20 +163,19 @@ export class ParqetHoldingsView extends LitElement {
                 h.position.purchaseValue > 0 ? pl / h.position.purchaseValue : 0;
               const weight = total > 0 ? h.position.currentValue / total : 0;
               const plClass = pl > 0 ? 'positive' : pl < 0 ? 'negative' : '';
-              const isExpanded = this._expandedId === h.holdingId;
+              const isExpanded = this._expandedId === h.id;
               const ticker = h.asset.isin ?? h.asset.symbol ?? '';
 
               return html`
                 <tr
                   class="row ${compact ? 'compact' : ''}"
-                  @click=${() =>
-                    (this._expandedId = isExpanded ? null : h.holdingId)}
+                  @click=${() => (this._expandedId = isExpanded ? null : h.id)}
                   role="button"
                   tabindex="0"
                   aria-expanded=${isExpanded}
                   @keydown=${(e: KeyboardEvent) => {
                     if (e.key === 'Enter' || e.key === ' ')
-                      this._expandedId = isExpanded ? null : h.holdingId;
+                      this._expandedId = isExpanded ? null : h.id;
                   }}
                 >
                   ${showLogo
@@ -193,7 +186,7 @@ export class ParqetHoldingsView extends LitElement {
                       </td>`
                     : ''}
                   <td class="name-col">
-                    <span class="holding-name">${h.nickname ?? h.asset.name}</span>
+                    <span class="holding-name">${this._assetLabel(h)}</span>
                     ${ticker ? html`<span class="ticker">${ticker}</span>` : ''}
                   </td>
                   <td class="num">${this._fmtC(h.position.currentValue)}</td>
@@ -213,14 +206,17 @@ export class ParqetHoldingsView extends LitElement {
                             <span>Curr Price: ${this._fmtC(h.position.currentPrice)}</span>
                             <span>
                               XIRR:
-                              ${h.kpis?.inInterval?.xirr != null
-                                ? `${(h.kpis.inInterval.xirr * 100).toFixed(2)}%`
+                              ${h.performance.kpis?.inInterval?.xirr != null
+                                ? `${(h.performance.kpis.inInterval.xirr * 100).toFixed(2)}%`
                                 : '—'}
                             </span>
                             <span>
-                              Dividends: ${this._fmtC(h.dividends?.inInterval?.amountGross)}
+                              Dividends: ${this._fmtC(h.performance.dividends?.inInterval?.gainGross)}
                             </span>
-                            <span>Fees: ${this._fmtC(h.fees?.inInterval?.fees)}</span>
+                            <span>Fees: ${this._fmtC(h.performance.fees?.inInterval?.fees)}</span>
+                            ${h.quote?.exchange
+                              ? html`<span>Exchange: ${h.quote.exchange}</span>`
+                              : ''}
                           </div>
                         </td>
                       </tr>

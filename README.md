@@ -23,8 +23,8 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 ## Features
 
 - **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals
-- **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, and per-holding detail expansion
-- **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters and pagination
+- **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, and per-holding detail expansion
+- **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters, broker info, and pagination
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
 - **Dual data source** — Connect REST API (default) or Parqet MCP server
@@ -80,6 +80,10 @@ The card will show a **Connect with Parqet** button. Clicking it opens a popup w
 > `https://cubinet-code.github.io/parqet-homeassistant-companion/callback.html`
 > and is only used to relay the authorization code back to the card.
 
+### 3. Select a portfolio
+
+After connecting, the card either loads your portfolio automatically (if you only have one) or shows a portfolio picker. To lock to a specific portfolio, set `portfolio_id` in the config.
+
 ---
 
 ## Configuration
@@ -90,52 +94,96 @@ The card includes a built-in visual editor — no YAML required for basic setup.
 
 1. Add the card to your dashboard
 2. Click the **pencil icon** to open the card editor
-3. Select the **Config** tab — all settings are shown as dropdowns, toggles and text fields:
+3. All settings are grouped into collapsible sections:
 
-| Setting | What it does |
+| Section | Settings |
 |---|---|
-| Data Source | REST API (recommended) or MCP server |
-| Portfolio ID | Lock to a specific portfolio, or leave blank for the in-card picker |
-| Default View | Which tab opens first (Performance / Holdings / Activities) |
-| View Layout | Show all tabs, or a single view |
-| Default Time Interval | Starting interval for the performance chart |
-| Currency Symbol | Symbol shown next to monetary values |
-| Show holding logos | Toggle logo images in the holdings table |
-| Compact mode | Denser row layout |
-| Activities per page | How many transactions to load at once (10–500) |
-| Parqet Connect Client ID | Advanced: use your own OAuth app registration |
-| OAuth Redirect URI | Advanced: required when using a custom Client ID |
+| *(top level)* | Portfolio ID, Data Source |
+| **Layout** | View Layout, Default View, Compact mode |
+| **Performance** | Default Time Interval, Show chart |
+| **Holdings** | Show holding logos |
+| **Activities** | Activities per page, Default activity filter |
+| **Display** | Currency Symbol |
+| **Advanced** | Custom Client ID, Custom Redirect URI |
+
+---
 
 ### YAML reference
 
 ```yaml
 type: custom:parqet-companion-card
 
-# Optional — which data source to use
-data_source: "rest"          # "rest" (default) | "mcp"
-
-# Optional — lock to a specific portfolio (omit to show a picker)
+# Optional — lock to a specific portfolio (omit to show in-card picker)
 portfolio_id: "your-portfolio-id"
 
-# Optional — view layout
+# Optional — data source
+data_source: "rest"          # "rest" (default) | "mcp"
+
+# Layout
 view_layout: "tabs"          # "tabs" (default) | "single"
 default_view: "performance"  # "performance" | "holdings" | "activities"
+compact: false               # denser row layout
 
-# Optional — performance view
+# Performance view
 default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
+show_chart: true             # show performance chart (if available)
 
-# Optional — activities view
-activities_limit: 25         # items per page, 10–500
-
-# Optional — display
-currency_symbol: "€"
+# Holdings view
 show_logo: true              # show holding logos
-compact: false               # compact row density
+
+# Activities view
+activities_limit: 25         # items per page, 10–500
+default_activity_type: null  # null = "All" | buy | sell | dividend | interest |
+                             #   transfer_in | transfer_out | fees_taxes | deposit | withdrawal
+
+# Display
+currency_symbol: "€"         # symbol shown next to monetary values
 
 # Advanced — use your own Parqet Connect app registration
-# (leave blank to use the shared default, which works for most users)
+# Leave blank to use the shared default, which works for most users
 # client_id: "your-client-id"
 # redirect_uri: "https://your-callback-page/callback.html"
+```
+
+---
+
+### Config examples
+
+**Minimal — just works, shows portfolio picker:**
+```yaml
+type: custom:parqet-companion-card
+```
+
+**Locked to one portfolio, performance-first:**
+```yaml
+type: custom:parqet-companion-card
+portfolio_id: "abc-123-def"
+default_view: performance
+default_interval: ytd
+show_chart: true
+currency_symbol: "$"
+```
+
+**Holdings dashboard panel (compact, no tabs):**
+```yaml
+type: custom:parqet-companion-card
+portfolio_id: "abc-123-def"
+view_layout: single
+default_view: holdings
+show_logo: true
+compact: true
+currency_symbol: "€"
+```
+
+**Activities feed — dividend tracking:**
+```yaml
+type: custom:parqet-companion-card
+portfolio_id: "abc-123-def"
+view_layout: single
+default_view: activities
+activities_limit: 100
+default_activity_type: dividend
+compact: true
 ```
 
 ---
@@ -156,7 +204,7 @@ Both sources expose identical portfolio data. The REST API is recommended for mo
 - Authentication uses **OAuth 2.0 with PKCE** — no client secret is involved
 - Your access token is stored in your browser's `localStorage` and never sent anywhere except to Parqet's API
 - You can revoke access at any time in your [Parqet account settings](https://app.parqet.com)
-- The card makes no requests to any server other than `connect.parqet.com` and (optionally) `mcp.parqet.com`
+- The card communicates only with `connect.parqet.com` (via a CORS proxy at `parqet-token-proxy.oliver-f26.workers.dev`) and optionally `mcp.parqet.com`
 
 ---
 

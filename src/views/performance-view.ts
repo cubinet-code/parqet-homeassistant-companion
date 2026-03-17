@@ -122,7 +122,7 @@ export class ParqetPerformanceView extends LitElement {
               )}
               ${this._renderKpi(
                 'Dividends',
-                this._fmtCurrency(d.dividends?.inInterval?.amountGross),
+                this._fmtCurrency(d.dividends?.inInterval?.gainGross),
               )}
               ${this._renderKpi('Fees', this._fmtCurrency(d.fees?.inInterval?.fees))}
               ${this._renderKpi('Taxes', this._fmtCurrency(d.taxes?.inInterval?.taxes))}
