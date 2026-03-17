@@ -1,8 +1,8 @@
 # Parqet Home Assistant Companion
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/cubinet-code/parqet-homeassistant-companion.svg)](https://github.com/cubinet-code/parqet-homeassistant-companion/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg?style=flat-square)](https://github.com/hacs/integration)
+[![GitHub Release](https://img.shields.io/github/v/release/cubinet-code/parqet-homeassistant-companion?style=flat-square)](https://github.com/cubinet-code/parqet-homeassistant-companion/releases)
+[![License: MIT](https://img.shields.io/github/license/cubinet-code/parqet-homeassistant-companion?style=flat-square)](LICENSE)
 
 A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that connects to your [Parqet](https://parqet.com) portfolio — displaying real-time performance metrics, holdings, and transaction history directly on your dashboard.
 
@@ -68,7 +68,11 @@ The card will show a **Connect with Parqet** button. Clicking it opens a popup w
 
 ## Configuration
 
-All options are available in the visual card editor. YAML reference:
+### Visual editor
+
+Click the card in edit mode to open the visual editor. All options are available via form fields — no YAML required.
+
+### YAML reference
 
 ```yaml
 type: custom:parqet-companion-card
@@ -88,13 +92,16 @@ default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y
 
 # Optional — activities view
 activities_limit: 25         # items per page, 10–500
-default_activity_type: null  # null = all | buy | sell | dividend | interest |
-                             # transfer_in | transfer_out | fees_taxes | deposit | withdrawal
 
 # Optional — display
 currency_symbol: "€"
 show_logo: true              # show holding logos
 compact: false               # compact row density
+
+# Advanced — use your own Parqet Connect app registration
+# (leave blank to use the shared default, which works for most users)
+# client_id: "your-client-id"
+# redirect_uri: "https://your-callback-page/callback.html"
 ```
 
 ---
