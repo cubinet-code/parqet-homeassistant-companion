@@ -12,9 +12,9 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ## Screenshots
 
-| Companion card — Performance | KPI card |
-|---|---|
-| ![Performance view](screenshots/performance.png) | ![KPI card](screenshots/kpi-card.png) |
+| Performance | Holdings | Activities | KPI card |
+|---|---|---|---|
+| ![Performance view](screenshots/performance.png) | ![Holdings view](screenshots/holdings.png) | ![Activities view](screenshots/activities.png) | ![KPI card](screenshots/kpi-card.png) |
 
 ---
 
