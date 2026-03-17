@@ -2,7 +2,7 @@
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg?style=flat-square)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/cubinet-code/parqet-homeassistant-companion?style=flat-square)](https://github.com/cubinet-code/parqet-homeassistant-companion/releases)
-[MIT License](LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
 A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that connects to your [Parqet](https://parqet.com) portfolio — displaying real-time performance metrics, holdings, and transaction history directly on your dashboard.
 
