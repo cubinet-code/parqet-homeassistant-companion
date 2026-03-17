@@ -42,11 +42,11 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ### Via HACS (recommended)
 
-> **Important:** If you previously added this repo with a wrong category (Dashboard, Template, etc.), remove it first and re-add it as **Frontend**.
+> **Important:** If you previously added this repo with the wrong type (Template, Integration, etc.), remove it first and re-add it as **Dashboard**.
 
 1. Open HACS → **⋮** (top-right menu) → **Custom repositories**
 2. Paste `https://github.com/cubinet-code/parqet-homeassistant-companion`
-3. Set **Category** to **Frontend** ← must be exactly this, not Template/Integration/Theme
+3. Set **Type** to **Dashboard** ← must be exactly this (Lovelace frontend card)
 4. Click **Add**
 5. Search for **Parqet Home Assistant Companion** and install it
 6. Reload Home Assistant
