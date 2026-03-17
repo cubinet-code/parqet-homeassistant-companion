@@ -56,7 +56,8 @@
 
   <script>
     (function () {
-      var TOKEN_URL = 'https://connect.parqet.com/oauth2/token';
+      // Cloudflare Worker proxy — adds CORS headers (Parqet token endpoint has no CORS support)
+      var TOKEN_URL = 'https://parqet-token-proxy.oliver-f26.workers.dev';
 
       var params  = new URLSearchParams(window.location.search);
       var code    = params.get('code');

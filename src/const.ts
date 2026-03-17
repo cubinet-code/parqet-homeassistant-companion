@@ -1,7 +1,9 @@
 export const CLIENT_ID = '019cf96b-44f0-73c4-81f2-e8827d5c1e65';
 
 export const AUTH_URL = 'https://connect.parqet.com/oauth2/authorize';
-export const TOKEN_URL = 'https://connect.parqet.com/oauth2/token';
+// Cloudflare Worker proxy — adds CORS headers so the browser can call the token
+// endpoint directly. Workaround until Parqet adds CORS to their OAuth server.
+export const TOKEN_URL = 'https://parqet-token-proxy.oliver-f26.workers.dev';
 export const METADATA_URL = 'https://connect.parqet.com/.well-known/oauth-authorization-server';
 
 export const CONNECT_API_BASE = 'https://connect.parqet.com';
