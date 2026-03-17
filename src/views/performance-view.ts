@@ -1,0 +1,200 @@
+import { LitElement, html, css, PropertyValues } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import type { ConnectClient } from '../api/connect-client';
+import type { MCPClient } from '../api/mcp-client';
+import type { ParqetCardConfig, PortfolioPerformance } from '../types';
+import type { IntervalValue } from '../const';
+import '../components/interval-selector';
+import '../components/loading-spinner';
+
+type AnyClient = ConnectClient | MCPClient;
+
+@customElement('parqet-performance-view')
+export class ParqetPerformanceView extends LitElement {
+  @property() portfolioId = '';
+  @property({ attribute: false }) client!: AnyClient;
+  @property({ attribute: false }) config!: ParqetCardConfig;
+
+  @state() private _data: PortfolioPerformance | null = null;
+  @state() private _loading = false;
+  @state() private _interval: IntervalValue = '1y';
+  @state() private _error = '';
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._interval = (this.config?.default_interval as IntervalValue) ?? '1y';
+    void this._load();
+  }
+
+  updated(changed: PropertyValues) {
+    if (changed.has('portfolioId') && this.portfolioId) {
+      void this._load();
+    }
+  }
+
+  private async _load() {
+    if (!this.portfolioId || !this.client) return;
+    this._loading = true;
+    this._error = '';
+    try {
+      const resp = await this.client.getPerformance(this.portfolioId, {
+        type: 'relative',
+        value: this._interval,
+      });
+      this._data = resp.performance;
+    } catch (e) {
+      this._error = e instanceof Error ? e.message : String(e);
+    } finally {
+      this._loading = false;
+    }
+  }
+
+  private async _onIntervalChange(e: CustomEvent) {
+    this._interval = e.detail.interval as IntervalValue;
+    await this._load();
+  }
+
+  // ─── Formatting helpers ──────────────────────────────────────────────────────
+
+  private _sym(): string {
+    return this.config?.currency_symbol ?? '€';
+  }
+
+  private _fmtCurrency(v: number | null | undefined): string {
+    if (v == null) return '—';
+    return `${this._sym()}${v.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  private _fmtPct(v: number | null | undefined): string {
+    if (v == null) return '—';
+    const pct = v * 100;
+    return `${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
+  }
+
+  private _kpiClass(v: number | null | undefined): string {
+    if (v == null) return '';
+    return v > 0 ? 'positive' : v < 0 ? 'negative' : '';
+  }
+
+  render() {
+    const d = this._data;
+
+    return html`
+      <parqet-interval-selector
+        .selected=${this._interval}
+        @interval-change=${this._onIntervalChange}
+      ></parqet-interval-selector>
+
+      ${this._error ? html`<div class="error" role="alert">${this._error}</div>` : ''}
+      ${this._loading ? html`<parqet-loading-spinner></parqet-loading-spinner>` : ''}
+
+      ${d
+        ? html`
+            <div class="kpi-grid">
+              ${this._renderKpi(
+                'Total Value',
+                this._fmtCurrency(d.valuation?.atIntervalEnd),
+              )}
+              ${this._renderKpi(
+                'XIRR',
+                this._fmtPct(d.kpis?.inInterval?.xirr),
+                d.kpis?.inInterval?.xirr,
+              )}
+              ${this._renderKpi(
+                'TTWROR',
+                this._fmtPct(d.kpis?.inInterval?.ttwror),
+                d.kpis?.inInterval?.ttwror,
+              )}
+              ${this._renderKpi(
+                'Unrealized Gain',
+                this._fmtCurrency(d.unrealizedGains?.inInterval?.gainGross),
+                d.unrealizedGains?.inInterval?.gainGross,
+              )}
+              ${this._renderKpi(
+                'Return (gross)',
+                this._fmtPct(d.unrealizedGains?.inInterval?.returnGross),
+                d.unrealizedGains?.inInterval?.returnGross,
+              )}
+              ${this._renderKpi(
+                'Realized Gain',
+                this._fmtCurrency(d.realizedGains?.inInterval?.gainGross),
+                d.realizedGains?.inInterval?.gainGross,
+              )}
+              ${this._renderKpi(
+                'Dividends',
+                this._fmtCurrency(d.dividends?.inInterval?.amountGross),
+              )}
+              ${this._renderKpi('Fees', this._fmtCurrency(d.fees?.inInterval?.fees))}
+              ${this._renderKpi('Taxes', this._fmtCurrency(d.taxes?.inInterval?.taxes))}
+            </div>
+          `
+        : !this._loading
+          ? html`<div class="empty">No data available.</div>`
+          : ''}
+    `;
+  }
+
+  private _renderKpi(label: string, value: string, rawValue?: number | null) {
+    return html`
+      <div class="kpi-tile">
+        <div class="kpi-label">${label}</div>
+        <div class="kpi-value ${this._kpiClass(rawValue)}">${value}</div>
+      </div>
+    `;
+  }
+
+  static styles = css`
+    :host {
+      display: block;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      padding: 8px 16px 16px;
+    }
+    .kpi-tile {
+      background: var(--secondary-background-color, #f5f5f5);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .kpi-label {
+      font-size: 0.68rem;
+      color: var(--secondary-text-color);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .kpi-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary-text-color);
+    }
+    .kpi-value.positive {
+      color: var(--success-color, #4caf50);
+    }
+    .kpi-value.negative {
+      color: var(--error-color, #f44336);
+    }
+    .error {
+      margin: 8px 16px;
+      padding: 8px 12px;
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--error-color, #f44336);
+      border-radius: 6px;
+      font-size: 0.82rem;
+    }
+    .empty {
+      padding: 24px;
+      text-align: center;
+      color: var(--secondary-text-color);
+      font-size: 0.875rem;
+    }
+  `;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'parqet-performance-view': ParqetPerformanceView;
+  }
+}
