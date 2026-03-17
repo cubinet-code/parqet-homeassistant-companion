@@ -469,14 +469,30 @@ declare global {
 class ParqetCompanionCardEditor extends LitElement {
   @property({ attribute: false }) hass!: Record<string, unknown>;
   @state() private _config?: ParqetCardConfig;
+  @state() private _connected = false;
 
   setConfig(config: ParqetCardConfig): void {
     this._config = config;
+    this._connected = oauthManager.isTokenValid(config.client_id);
   }
 
   render() {
     if (!this._config || !this.hass) return html``;
     return html`
+      <div class="auth-row">
+        <div class="auth-status">
+          <span class="auth-dot ${this._connected ? 'connected' : 'disconnected'}"></span>
+          ${this._connected ? 'Connected to Parqet' : 'Not connected'}
+        </div>
+        ${this._connected
+          ? html`
+              <button class="disconnect-btn" @click=${this._handleDisconnect}>
+                Disconnect
+              </button>
+            `
+          : ''}
+      </div>
+
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
@@ -485,6 +501,11 @@ class ParqetCompanionCardEditor extends LitElement {
         @value-changed=${this._valueChanged}
       ></ha-form>
     `;
+  }
+
+  private _handleDisconnect(): void {
+    oauthManager.clearToken(this._config?.client_id);
+    this._connected = false;
   }
 
   private _valueChanged(ev: CustomEvent): void {
@@ -496,4 +517,44 @@ class ParqetCompanionCardEditor extends LitElement {
       }),
     );
   }
+
+  static styles = css`
+    .auth-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      background: var(--secondary-background-color, #f5f5f5);
+      border-radius: 8px;
+    }
+    .auth-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--primary-text-color);
+    }
+    .auth-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .auth-dot.connected    { background: #4caf50; }
+    .auth-dot.disconnected { background: var(--secondary-text-color, #9e9e9e); }
+    .disconnect-btn {
+      background: none;
+      border: 1px solid var(--error-color, #f44336);
+      color: var(--error-color, #f44336);
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.15s;
+    }
+    .disconnect-btn:hover {
+      background: rgba(244, 67, 54, 0.08);
+    }
+  `;
 }
