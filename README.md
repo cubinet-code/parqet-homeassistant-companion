@@ -5,7 +5,7 @@
 [MIT License](LICENSE)
 
 <p align="center">
-  <img src="logo.png" alt="Parqet Home Assistant Companion" width="80" />
+  <img src="https://raw.githubusercontent.com/cubinet-code/parqet-homeassistant-companion/main/logo.png" alt="Parqet Home Assistant Companion" width="80" />
 </p>
 
 A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that connects to your [Parqet](https://parqet.com) portfolio — displaying real-time performance metrics, holdings, and transaction history directly on your dashboard.
