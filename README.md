@@ -4,7 +4,19 @@
 [![GitHub Release](https://img.shields.io/github/v/release/cubinet-code/parqet-homeassistant-companion?style=flat-square)](https://github.com/cubinet-code/parqet-homeassistant-companion/releases)
 [MIT License](LICENSE)
 
+<p align="center">
+  <img src="logo.png" alt="Parqet Home Assistant Companion" width="80" />
+</p>
+
 A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that connects to your [Parqet](https://parqet.com) portfolio — displaying real-time performance metrics, holdings, and transaction history directly on your dashboard.
+
+## Screenshots
+
+| Performance | Holdings | Activities |
+|---|---|---|
+| ![Performance view](screenshots/performance.png) | ![Holdings view](screenshots/holdings.png) | ![Activities view](screenshots/activities.png) |
+
+> **Note:** Screenshots coming soon — add the card to your dashboard and take your own!
 
 ---
 
@@ -31,7 +43,7 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 ### Via HACS (recommended)
 
 1. Open HACS → **Frontend** → **⋮** → **Custom repositories**
-2. Add `https://github.com/cubinet-code/parqet-homeassistant-companion` as category **Dashboard**
+2. Add `https://github.com/cubinet-code/parqet-homeassistant-companion` as category **Frontend** (Lovelace plugin)
 3. Install **Parqet Home Assistant Companion**
 4. Reload Home Assistant
 
