@@ -8,13 +8,16 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ## Screenshots
 
-| Performance | Holdings |
-|---|---|
-| ![Performance view](screenshots/performance.png) | ![Holdings view](screenshots/holdings.png) |
-
-| Activities | KPI card |
-|---|---|
-| ![Activities view](screenshots/activities.png) | ![KPI card](screenshots/kpi-card.png) |
+<table>
+<tr>
+<td width="50%"><b>Performance</b><br/><img src="https://raw.githubusercontent.com/cubinet-code/parqet-homeassistant-companion/main/screenshots/performance.png"/></td>
+<td width="50%"><b>Holdings</b><br/><img src="https://raw.githubusercontent.com/cubinet-code/parqet-homeassistant-companion/main/screenshots/holdings.png"/></td>
+</tr>
+<tr>
+<td width="50%"><b>Activities</b><br/><img src="https://raw.githubusercontent.com/cubinet-code/parqet-homeassistant-companion/main/screenshots/activities.png"/></td>
+<td width="50%"><b>KPI card</b><br/><img src="https://raw.githubusercontent.com/cubinet-code/parqet-homeassistant-companion/main/screenshots/kpi-card.png"/></td>
+</tr>
+</table>
 
 ---
 
