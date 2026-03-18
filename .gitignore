@@ -10,3 +10,6 @@ dist/*.js.map
 
 # API spec (dev reference, not for public repo)
 parqet-connect-openapi.json
+
+# HACS default repo (separate git repo)
+default/

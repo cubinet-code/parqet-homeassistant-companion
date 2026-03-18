@@ -14,7 +14,6 @@ import { mcpClient } from './api/mcp-client';
 
 import type { ParqetCardConfig, Portfolio, ViewType } from './types';
 
-import './components/auth-prompt';
 import './components/portfolio-selector';
 import './components/loading-spinner';
 import './views/performance-view';
@@ -55,7 +54,6 @@ export class ParqetCompanionCard extends LitElement {
   @state() private _portfolioId: string | null = null;
   @state() private _activeView: ViewType = 'performance';
   @state() private _loading = false;
-  @state() private _authLoading = false;
   @state() private _error = '';
 
   // ─── Lifecycle ────────────────────────────────────────────────────────────
@@ -298,30 +296,6 @@ export class ParqetCompanionCard extends LitElement {
 
   // ─── Event handlers ────────────────────────────────────────────────────────
 
-  private async _handleConnect() {
-    this._authLoading = true;
-    this._error = '';
-    // Open popup synchronously (before any await) so browsers don't block it
-    const popup = window.open('', 'parqet-auth', 'width=520,height=720,scrollbars=yes,resizable=yes');
-    try {
-      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri, popup);
-      this._authenticated = true;
-      await this._loadPortfolios();
-    } catch (e) {
-      this._error = e instanceof Error ? e.message : String(e);
-    } finally {
-      this._authLoading = false;
-    }
-  }
-
-  private _handleDisconnect() {
-    oauthManager.clearToken(this._config?.client_id);
-    this._authenticated = false;
-    this._portfolios = [];
-    this._portfolioId = null;
-    this._error = '';
-  }
-
   private _handlePortfolioChange(e: CustomEvent) {
     this._portfolioId = e.detail.portfolioId as string;
   }
@@ -329,15 +303,14 @@ export class ParqetCompanionCard extends LitElement {
   // ─── Render ────────────────────────────────────────────────────────────────
 
   render() {
-    // Not authenticated → show connect screen
+    // Not authenticated → hint user to open the editor
     if (!this._authenticated) {
       return html`
         <ha-card>
-          <parqet-auth-prompt
-            .loading=${this._authLoading}
-            .error=${this._error}
-            @connect=${this._handleConnect}
-          ></parqet-auth-prompt>
+          <div class="not-connected">
+            <span>Not connected to Parqet</span>
+            <span class="hint">Open the card editor to connect</span>
+          </div>
         </ha-card>
       `;
     }
@@ -499,6 +472,20 @@ export class ParqetCompanionCard extends LitElement {
       text-align: center;
       color: var(--secondary-text-color);
       font-size: 0.875rem;
+    }
+    .not-connected {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 20px;
+      font-size: 0.875rem;
+      color: var(--secondary-text-color);
+    }
+    .hint {
+      font-size: 0.75rem;
+      opacity: 0.7;
     }
   `;
 }

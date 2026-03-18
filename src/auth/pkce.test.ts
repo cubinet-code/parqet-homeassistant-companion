@@ -47,6 +47,35 @@ describe('generateCodeChallenge', () => {
   });
 });
 
+describe('generateCodeChallenge — SHA-256 fallback', () => {
+  it('produces the same result as the native crypto.subtle', async () => {
+    const v = await generateCodeVerifier();
+    const nativeChallenge = await generateCodeChallenge(v);
+
+    const originalSubtle = crypto.subtle;
+    Object.defineProperty(crypto, 'subtle', { value: undefined, configurable: true });
+    try {
+      const fallbackChallenge = await generateCodeChallenge(v);
+      expect(fallbackChallenge).toBe(nativeChallenge);
+    } finally {
+      Object.defineProperty(crypto, 'subtle', { value: originalSubtle, configurable: true });
+    }
+  });
+
+  it('returns a 43-character base64url string via fallback', async () => {
+    const originalSubtle = crypto.subtle;
+    Object.defineProperty(crypto, 'subtle', { value: undefined, configurable: true });
+    try {
+      const v = await generateCodeVerifier();
+      const c = await generateCodeChallenge(v);
+      expect(c).toMatch(BASE64URL_RE);
+      expect(c).toHaveLength(43);
+    } finally {
+      Object.defineProperty(crypto, 'subtle', { value: originalSubtle, configurable: true });
+    }
+  });
+});
+
 describe('generateState', () => {
   it('returns a base64url string', () => {
     expect(generateState()).toMatch(BASE64URL_RE);
