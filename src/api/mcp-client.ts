@@ -67,7 +67,7 @@ export class MCPClient {
 
   private async _initialize(): Promise<void> {
     const token = await oauthManager.getValidToken(this.clientId);
-    await fetch(`${MCP_BASE}/mcp`, {
+    const resp = await fetch(`${MCP_BASE}/mcp`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -84,6 +84,11 @@ export class MCPClient {
         },
       }),
     });
+
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => '');
+      throw new Error(`MCP initialize failed (${resp.status}): ${text}`);
+    }
     this._initialized = true;
   }
 

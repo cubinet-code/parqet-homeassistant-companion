@@ -5,8 +5,14 @@ import { oauthManager } from '../auth/oauth';
 import { connectClient } from '../api/connect-client';
 import { mcpClient } from '../api/mcp-client';
 
+import { MCP_CLIENT_ID } from '../const';
 import type { KpiCardConfig, KpiMetric, KpiLayout, PortfolioPerformance, Portfolio } from '../types';
 import type { IntervalValue } from '../const';
+
+/** Returns the OAuth client_id to use for the given config's data source. */
+function effectiveClientId(config?: KpiCardConfig): string | undefined {
+  return config?.data_source === 'mcp' ? MCP_CLIENT_ID : config?.client_id;
+}
 
 import '../components/interval-selector';
 import '../components/loading-spinner';
@@ -38,7 +44,7 @@ export class ParqetKpiCard extends LitElement {
   @state() private _error = '';
 
   setConfig(config: KpiCardConfig): void {
-    this._config = {
+    const c: KpiCardConfig = {
       kpi: 'total_value',
       default_interval: '1y',
       currency_symbol: '€',
@@ -46,9 +52,19 @@ export class ParqetKpiCard extends LitElement {
       layout: 'vertical',
       ...config,
     };
+    // Migrate legacy single secondary_kpi → secondary_kpis array
+    if (c.secondary_kpi && !c.secondary_kpis?.length) {
+      c.secondary_kpis = [c.secondary_kpi];
+    }
+    delete c.secondary_kpi;
+    if (c.secondary_kpis) {
+      c.secondary_kpis = [...new Set(c.secondary_kpis)];
+    }
+    this._config = c;
     this._interval = this._config.default_interval as IntervalValue;
+    const cid = effectiveClientId(this._config);
     connectClient.configure(this._config.client_id);
-    mcpClient.configure(this._config.client_id);
+    mcpClient.configure(cid);
   }
 
   getCardSize(): number { return 2; }
@@ -63,13 +79,13 @@ export class ParqetKpiCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._authenticated = oauthManager.isTokenValid(this._config?.client_id);
+    this._authenticated = oauthManager.isTokenValid(effectiveClientId(this._config));
     if (this._authenticated) void this._loadData();
   }
 
   updated(changed: PropertyValues) {
     if (changed.has('hass') && !this._authenticated) {
-      if (oauthManager.isTokenValid(this._config?.client_id)) {
+      if (oauthManager.isTokenValid(effectiveClientId(this._config))) {
         this._authenticated = true;
         void this._loadData();
       }
@@ -102,7 +118,7 @@ export class ParqetKpiCard extends LitElement {
     } catch (e) {
       this._error = e instanceof Error ? e.message : String(e);
       if (String(e).includes('401')) {
-        oauthManager.clearToken(this._config?.client_id);
+        oauthManager.clearToken(effectiveClientId(this._config));
         this._authenticated = false;
       }
     } finally {
@@ -174,16 +190,19 @@ export class ParqetKpiCard extends LitElement {
     }
 
     const primaryKpi = this._config.kpi ?? 'total_value';
-    const secondaryKpi = this._config.secondary_kpi ?? null;
+    const secondaryKpis = this._config.secondary_kpis ?? [];
     const layout = this._config.layout ?? 'vertical';
 
     const primaryRaw = this._data ? this._extract(this._data, primaryKpi) : null;
     const primaryVal = this._data ? this._format(primaryRaw, primaryKpi) : '—';
     const primaryCls = this._colorClass(primaryRaw, primaryKpi);
 
-    const secondaryRaw = secondaryKpi && this._data ? this._extract(this._data, secondaryKpi) : null;
-    const secondaryVal = secondaryKpi && this._data ? this._format(secondaryRaw, secondaryKpi) : null;
-    const secondaryCls = secondaryKpi ? this._colorClass(secondaryRaw, secondaryKpi) : '';
+    const secondaries = secondaryKpis.map((kpi) => {
+      const raw = this._data ? this._extract(this._data, kpi) : null;
+      const val = this._data ? this._format(raw, kpi) : null;
+      const cls = this._colorClass(raw, kpi);
+      return { kpi, val, cls };
+    });
 
     return html`
       <ha-card>
@@ -198,8 +217,8 @@ export class ParqetKpiCard extends LitElement {
 
         <div class="body ${layout}">
           ${layout === 'horizontal'
-            ? this._renderHorizontal(primaryKpi, primaryVal, primaryCls, secondaryKpi, secondaryVal, secondaryCls)
-            : this._renderVertical(primaryKpi, primaryVal, primaryCls, secondaryKpi, secondaryVal, secondaryCls)}
+            ? this._renderHorizontal(primaryKpi, primaryVal, primaryCls, secondaries)
+            : this._renderVertical(primaryKpi, primaryVal, primaryCls, secondaries)}
         </div>
       </ha-card>
     `;
@@ -207,7 +226,7 @@ export class ParqetKpiCard extends LitElement {
 
   private _renderVertical(
     primaryKpi: KpiMetric, primaryVal: string, primaryCls: string,
-    secondaryKpi: KpiMetric | null, secondaryVal: string | null, secondaryCls: string,
+    secondaries: Array<{ kpi: KpiMetric; val: string | null; cls: string }>,
   ) {
     return html`
       <div class="primary-block">
@@ -216,33 +235,37 @@ export class ParqetKpiCard extends LitElement {
           ? html`<parqet-loading-spinner></parqet-loading-spinner>`
           : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
       </div>
-      ${secondaryKpi && secondaryVal != null
-        ? html`<div class="secondary-block">
-            <span class="secondary-label">${this._label(secondaryKpi)}</span>
-            <span class="secondary-value ${secondaryCls}">${secondaryVal}</span>
-          </div>`
-        : ''}
+      ${secondaries.map((s) =>
+        s.val != null
+          ? html`<div class="secondary-block">
+              <span class="secondary-label">${this._label(s.kpi)}</span>
+              <span class="secondary-value ${s.cls}">${s.val}</span>
+            </div>`
+          : ''
+      )}
     `;
   }
 
   private _renderHorizontal(
     primaryKpi: KpiMetric, primaryVal: string, primaryCls: string,
-    secondaryKpi: KpiMetric | null, secondaryVal: string | null, secondaryCls: string,
+    secondaries: Array<{ kpi: KpiMetric; val: string | null; cls: string }>,
   ) {
     return html`
       <div class="h-labels">
         <div class="label">${this._label(primaryKpi)}</div>
-        ${secondaryKpi
-          ? html`<div class="secondary-label">${this._label(secondaryKpi)}</div>`
-          : ''}
+        ${secondaries.map((s) =>
+          html`<div class="secondary-label">${this._label(s.kpi)}</div>`
+        )}
       </div>
       <div class="h-values">
         ${this._loading
           ? html`<parqet-loading-spinner></parqet-loading-spinner>`
           : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
-        ${secondaryKpi && secondaryVal != null
-          ? html`<div class="secondary-value ${secondaryCls}">${secondaryVal}</div>`
-          : ''}
+        ${secondaries.map((s) =>
+          s.val != null
+            ? html`<div class="secondary-value ${s.cls}">${s.val}</div>`
+            : ''
+        )}
       </div>
     `;
   }
@@ -354,8 +377,17 @@ class ParqetKpiCardEditor extends LitElement {
   @state() private _addingSecondary = false;
 
   setConfig(config: KpiCardConfig): void {
-    this._config = config;
-    this._connected = oauthManager.isTokenValid(config.client_id);
+    const c = { ...config };
+    // Migrate legacy single secondary_kpi → secondary_kpis array
+    if (c.secondary_kpi && !c.secondary_kpis?.length) {
+      c.secondary_kpis = [c.secondary_kpi];
+    }
+    delete c.secondary_kpi;
+    if (c.secondary_kpis) {
+      c.secondary_kpis = [...new Set(c.secondary_kpis)];
+    }
+    this._config = c;
+    this._connected = oauthManager.isTokenValid(effectiveClientId(c));
     if (this._connected && this._portfolios.length === 0) {
       void this._fetchPortfolios();
     }
@@ -365,6 +397,7 @@ class ParqetKpiCardEditor extends LitElement {
     this._loadingPortfolios = true;
     try {
       const client = this._config?.data_source === 'mcp' ? mcpClient : connectClient;
+      client.configure(effectiveClientId(this._config));
       this._portfolios = await client.listPortfolios();
     } catch {
       // silent
@@ -376,9 +409,11 @@ class ParqetKpiCardEditor extends LitElement {
   private async _handleConnect(): Promise<void> {
     this._authLoading = true;
     this._authError = '';
+    const cid = effectiveClientId(this._config);
+    const redirect = this._config?.data_source === 'mcp' ? undefined : this._config?.redirect_uri;
     const popup = window.open('', 'parqet-auth', 'width=520,height=720,scrollbars=yes,resizable=yes');
     try {
-      await oauthManager.startAuth(this._config?.client_id, this._config?.redirect_uri, popup);
+      await oauthManager.startAuth(cid, redirect, popup);
       this._connected = true;
       void this._fetchPortfolios();
     } catch (e) {
@@ -389,7 +424,7 @@ class ParqetKpiCardEditor extends LitElement {
   }
 
   private _handleDisconnect(): void {
-    oauthManager.clearToken(this._config?.client_id);
+    oauthManager.clearToken(effectiveClientId(this._config));
     this._connected = false;
     this._portfolios = [];
   }
@@ -426,7 +461,7 @@ class ParqetKpiCardEditor extends LitElement {
           select: {
             options: [
               { value: 'rest', label: 'Connect REST API (recommended)' },
-              { value: 'mcp',  label: 'MCP Server — unavailable (Parqet API limitation)', disabled: true },
+              { value: 'mcp',  label: 'MCP Server (experimental)' },
             ],
           },
         },
@@ -463,11 +498,13 @@ class ParqetKpiCardEditor extends LitElement {
     if (!this._config || !this.hass) return html``;
 
     const primaryKpi = this._config.kpi ?? 'total_value';
-    const secondaryKpi = this._config.secondary_kpi ?? null;
+    const secondaryKpis = this._config.secondary_kpis ?? [];
     const layout = this._config.layout ?? 'vertical';
 
-    // Options available to add as secondary (exclude current primary)
-    const availableForSecondary = KPI_OPTIONS.filter((o) => o.value !== primaryKpi);
+    // KPIs already in use (primary + all secondaries)
+    const usedKpis = new Set<KpiMetric>([primaryKpi, ...secondaryKpis]);
+    // Options available to add as a new secondary
+    const availableForSecondary = KPI_OPTIONS.filter((o) => !usedKpis.has(o.value));
 
     return html`
       <!-- Auth row -->
@@ -526,34 +563,35 @@ class ParqetKpiCardEditor extends LitElement {
             </select>
           </div>
 
-          <!-- Secondary metric chip -->
-          ${secondaryKpi
+          <!-- Secondary metric chips -->
+          ${secondaryKpis.map((sec, idx) => html`
+            <div class="chip secondary-chip">
+              <span class="chip-icon">≡</span>
+              <select class="chip-select" @change=${(e: Event) => this._secondaryChanged(e, idx)}>
+                ${KPI_OPTIONS
+                  .filter((o) => o.value === sec || !usedKpis.has(o.value))
+                  .map((o) => html`<option value=${o.value} ?selected=${o.value === sec}>${o.label}</option>`)}
+              </select>
+              <button class="chip-remove" @click=${() => this._removeSecondary(idx)} aria-label="Remove">×</button>
+            </div>
+          `)}
+
+          <!-- Add button -->
+          ${this._addingSecondary
             ? html`
-                <div class="chip secondary-chip">
-                  <span class="chip-icon">≡</span>
-                  <select class="chip-select" @change=${this._secondaryChanged}>
+                <div class="chip secondary-chip adding">
+                  <select class="chip-select" @change=${this._pickSecondary} @blur=${this._cancelAddSecondary}>
+                    <option value="">— pick a metric —</option>
                     ${availableForSecondary.map(
-                      (o) => html`<option value=${o.value} ?selected=${o.value === secondaryKpi}>${o.label}</option>`,
+                      (o) => html`<option value=${o.value}>${o.label}</option>`,
                     )}
                   </select>
-                  <button class="chip-remove" @click=${this._removeSecondary} aria-label="Remove">×</button>
+                  <button class="chip-remove" @click=${this._cancelAddSecondary} aria-label="Cancel">×</button>
                 </div>
               `
-            : this._addingSecondary
-              ? html`
-                  <div class="chip secondary-chip adding">
-                    <select class="chip-select" @change=${this._pickSecondary} @blur=${this._cancelAddSecondary}>
-                      <option value="">— pick a metric —</option>
-                      ${availableForSecondary.map(
-                        (o) => html`<option value=${o.value}>${o.label}</option>`,
-                      )}
-                    </select>
-                    <button class="chip-remove" @click=${this._cancelAddSecondary} aria-label="Cancel">×</button>
-                  </div>
-                `
-              : html`
-                  <button class="add-chip" @click=${() => (this._addingSecondary = true)}>+ Add</button>
-                `}
+            : availableForSecondary.length > 0
+              ? html`<button class="add-chip" @click=${() => (this._addingSecondary = true)}>+ Add</button>`
+              : ''}
         </div>
       </div>
 
@@ -600,28 +638,31 @@ class ParqetKpiCardEditor extends LitElement {
 
   private _primaryChanged(e: Event): void {
     const kpi = (e.target as HTMLSelectElement).value as KpiMetric;
-    // If new primary conflicts with secondary, clear secondary
     const config: KpiCardConfig = { ...this._config!, kpi };
-    if (config.secondary_kpi === kpi) delete config.secondary_kpi;
+    // Remove new primary from secondaries if it conflicts
+    config.secondary_kpis = (config.secondary_kpis ?? []).filter((s) => s !== kpi);
     this._fire(config);
   }
 
-  private _secondaryChanged(e: Event): void {
+  private _secondaryChanged(e: Event, index: number): void {
     const kpi = (e.target as HTMLSelectElement).value as KpiMetric;
-    this._fire({ ...this._config!, secondary_kpi: kpi });
+    const kpis = [...(this._config!.secondary_kpis ?? [])];
+    kpis[index] = kpi;
+    this._fire({ ...this._config!, secondary_kpis: kpis });
   }
 
-  private _removeSecondary(): void {
-    const config = { ...this._config! };
-    delete config.secondary_kpi;
-    this._fire(config);
+  private _removeSecondary(index: number): void {
+    const kpis = [...(this._config!.secondary_kpis ?? [])];
+    kpis.splice(index, 1);
+    this._fire({ ...this._config!, secondary_kpis: kpis });
   }
 
   private _pickSecondary(e: Event): void {
     const val = (e.target as HTMLSelectElement).value as KpiMetric;
     if (!val) return;
     this._addingSecondary = false;
-    this._fire({ ...this._config!, secondary_kpi: val });
+    const kpis = [...(this._config!.secondary_kpis ?? []), val];
+    this._fire({ ...this._config!, secondary_kpis: kpis });
   }
 
   private _cancelAddSecondary(): void {

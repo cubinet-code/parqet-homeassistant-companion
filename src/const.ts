@@ -1,4 +1,5 @@
 export const CLIENT_ID = '019cf96b-44f0-73c4-81f2-e8827d5c1e65';
+export const MCP_CLIENT_ID = '019c28d5-e0a0-703f-a790-10c15c2310ee';
 
 export const AUTH_URL = 'https://connect.parqet.com/oauth2/authorize';
 export const METADATA_URL = 'https://connect.parqet.com/.well-known/oauth-authorization-server';
