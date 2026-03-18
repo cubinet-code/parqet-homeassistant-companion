@@ -245,6 +245,8 @@ export interface KpiCardConfig {
   data_source?: DataSource;
   portfolio_id?: string;
   kpi?: KpiMetric;
+  secondary_kpis?: KpiMetric[];
+  /** @deprecated Use secondary_kpis. Kept for backward-compatible migration. */
   secondary_kpi?: KpiMetric | null;
   layout?: KpiLayout;
   default_interval?: IntervalValue;
