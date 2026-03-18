@@ -132,7 +132,7 @@ export class ParqetCompanionCard extends LitElement {
           select: {
             options: [
               { value: 'rest', label: 'Connect REST API (recommended)' },
-              { value: 'mcp', label: 'MCP Server (mcp.parqet.com)' },
+              { value: 'mcp', label: 'MCP Server — unavailable (Parqet API limitation)', disabled: true },
             ],
           },
         },
