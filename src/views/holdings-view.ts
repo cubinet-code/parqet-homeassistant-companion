@@ -3,7 +3,10 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { ConnectClient } from '../api/connect-client';
 import type { MCPClient } from '../api/mcp-client';
 import type { ParqetCardConfig, Holding } from '../types';
+import type { DonutSegment } from '../components/donut-chart';
+import { colorAtIndex } from '../utils/chart-colors';
 import '../components/loading-spinner';
+import '../components/donut-chart';
 
 type AnyClient = ConnectClient | MCPClient;
 type SortKey = 'name' | 'value' | 'pl' | 'plPct' | 'weight';
@@ -136,6 +139,8 @@ export class ParqetHoldingsView extends LitElement {
       ${this._error ? html`<div class="error" role="alert">${this._error}</div>` : ''}
       ${this._loading ? html`<parqet-loading-spinner></parqet-loading-spinner>` : ''}
 
+      ${this.config?.show_chart !== false ? this._renderDonut(active, total) : ''}
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -230,6 +235,44 @@ export class ParqetHoldingsView extends LitElement {
           ? html`<div class="empty">No holdings found.</div>`
           : ''}
       </div>
+    `;
+  }
+
+  private _renderDonut(active: Holding[], total: number) {
+    if (active.length === 0) return '';
+
+    const MAX_SEGMENTS = 8;
+    const sorted = [...active].sort(
+      (a, b) => b.position.currentValue - a.position.currentValue,
+    );
+
+    const segments: DonutSegment[] = [];
+    let otherValue = 0;
+
+    for (let i = 0; i < sorted.length; i++) {
+      if (i < MAX_SEGMENTS) {
+        segments.push({
+          label: this._assetLabel(sorted[i]),
+          value: sorted[i].position.currentValue,
+          color: colorAtIndex(i),
+        });
+      } else {
+        otherValue += sorted[i].position.currentValue;
+      }
+    }
+
+    if (otherValue > 0) {
+      segments.push({ label: 'Other', value: otherValue, color: '#9e9e9e' });
+    }
+
+    const centerLabel = `${this._sym()}${total.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+    return html`
+      <parqet-donut-chart
+        .segments=${segments}
+        .centerLabel=${centerLabel}
+        .centerSub=${'Total Value'}
+      ></parqet-donut-chart>
     `;
   }
 

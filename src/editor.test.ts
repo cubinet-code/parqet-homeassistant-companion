@@ -2,7 +2,7 @@
  * Regression tests for card editor schema bugs:
  * - All expandable sections must have flatten:true so nested values propagate
  * - portfolio_id must NOT be in the static schema (it's a dynamic picker)
- * - show_chart must NOT be in the schema (feature not implemented)
+ * - show_chart must be in the Performance section
  */
 import { describe, it, expect } from 'vitest';
 import { ParqetCompanionCard } from './parqet-card';
@@ -22,14 +22,13 @@ describe('ParqetCompanionCard.getConfigForm()', () => {
     expect(allNames).not.toContain('portfolio_id');
   });
 
-  it('does not include show_chart (feature not implemented)', () => {
-    function collectNames(items: SchemaItem[]): string[] {
-      return items.flatMap((s) => [
-        ...(s.name ? [s.name] : []),
-        ...(s.schema ? collectNames(s.schema) : []),
-      ]);
-    }
-    expect(collectNames(schema)).not.toContain('show_chart');
+  it('includes show_chart in the Performance section', () => {
+    const perf = schema.find(
+      (s) => s.type === 'expandable' && (s as { title?: string }).title === 'Performance',
+    ) as SchemaItem & { title?: string };
+    expect(perf).toBeDefined();
+    const names = perf!.schema!.map((s) => s.name);
+    expect(names).toContain('show_chart');
   });
 
   it('all expandable sections have flatten:true', () => {

@@ -10,6 +10,7 @@ import type { IntervalValue } from '../const';
 
 import '../components/interval-selector';
 import '../components/loading-spinner';
+import '../components/sparkline';
 
 const KPI_OPTIONS: { value: KpiMetric; label: string }[] = [
   { value: 'total_value',     label: 'Total Value' },
@@ -217,6 +218,13 @@ export class ParqetKpiCard extends LitElement {
     `;
   }
 
+  private get _sparklineValues(): number[] {
+    if (!this._data) return [];
+    const start = this._data.valuation?.atIntervalStart ?? 0;
+    const end = this._data.valuation?.atIntervalEnd ?? 0;
+    return [start, end];
+  }
+
   private _renderVertical(
     primaryKpi: KpiMetric, primaryVal: string, primaryCls: string,
     secondaries: Array<{ kpi: KpiMetric; val: string | null; cls: string }>,
@@ -226,7 +234,12 @@ export class ParqetKpiCard extends LitElement {
         <div class="label">${this._label(primaryKpi)}</div>
         ${this._loading
           ? html`<parqet-loading-spinner></parqet-loading-spinner>`
-          : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
+          : html`<div class="value-row">
+              <div class="value ${primaryCls}">${primaryVal}</div>
+              ${this._config.show_sparkline
+                ? html`<parqet-sparkline .values=${this._sparklineValues}></parqet-sparkline>`
+                : ''}
+            </div>`}
       </div>
       ${secondaries.map((s) =>
         s.val != null
@@ -253,7 +266,12 @@ export class ParqetKpiCard extends LitElement {
       <div class="h-values">
         ${this._loading
           ? html`<parqet-loading-spinner></parqet-loading-spinner>`
-          : html`<div class="value ${primaryCls}">${primaryVal}</div>`}
+          : html`<div class="value-row">
+              <div class="value ${primaryCls}">${primaryVal}</div>
+              ${this._config.show_sparkline
+                ? html`<parqet-sparkline .values=${this._sparklineValues}></parqet-sparkline>`
+                : ''}
+            </div>`}
         ${secondaries.map((s) =>
           s.val != null
             ? html`<div class="secondary-value ${s.cls}">${s.val}</div>`
@@ -329,6 +347,11 @@ export class ParqetKpiCard extends LitElement {
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--secondary-text-color);
+    }
+    .value-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .value {
       font-size: 1.8rem;
@@ -462,6 +485,7 @@ class ParqetKpiCardEditor extends LitElement {
         flatten: true,
         schema: [
           { name: 'currency_symbol', label: 'Currency Symbol', selector: { text: {} } },
+          { name: 'show_sparkline', label: 'Show sparkline trend', selector: { boolean: {} } },
         ],
       },
       {

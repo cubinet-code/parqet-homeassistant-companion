@@ -1,14 +1,14 @@
-var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.length,s=a<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,o):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,o,i);else for(var n=t.length-1;n>=0;n--)(r=t[n])&&(s=(a<3?r(s):a>3?r(e,o,s):r(e,o))||s);return a>3&&s&&Object.defineProperty(e,o,s),s}"function"==typeof SuppressedError&&SuppressedError;const o=globalThis,i=o.ShadowRoot&&(void 0===o.ShadyCSS||o.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,r=Symbol(),a=new WeakMap;let s=class{constructor(t,e,o){if(this._$cssResult$=!0,o!==r)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const o=void 0!==e&&1===e.length;o&&(t=a.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),o&&a.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const o=1===t.length?t[0]:e.reduce((e,o,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(o)+t[i+1],t[0]);return new s(o,t,r)},l=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const o of t.cssRules)e+=o.cssText;return(t=>new s("string"==typeof t?t:t+"",void 0,r))(e)})(t):t,{is:c,defineProperty:d,getOwnPropertyDescriptor:p,getOwnPropertyNames:h,getOwnPropertySymbols:u,getPrototypeOf:v}=Object,f=globalThis,_=f.trustedTypes,g=_?_.emptyScript:"",m=f.reactiveElementPolyfillSupport,y=(t,e)=>t,b={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let o=t;switch(e){case Boolean:o=null!==t;break;case Number:o=null===t?null:Number(t);break;case Object:case Array:try{o=JSON.parse(t)}catch(t){o=null}}return o}},x=(t,e)=>!c(t,e),$={attribute:!0,type:String,converter:b,reflect:!1,useDefault:!1,hasChanged:x};Symbol.metadata??=Symbol("metadata"),f.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=$){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const o=Symbol(),i=this.getPropertyDescriptor(t,o,e);void 0!==i&&d(this.prototype,t,i)}}static getPropertyDescriptor(t,e,o){const{get:i,set:r}=p(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const a=i?.call(this);r?.call(this,e),this.requestUpdate(t,a,o)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??$}static _$Ei(){if(this.hasOwnProperty(y("elementProperties")))return;const t=v(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(y("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(y("properties"))){const t=this.properties,e=[...h(t),...u(t)];for(const o of e)this.createProperty(o,t[o])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,o]of e)this.elementProperties.set(t,o)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const o=this._$Eu(t,e);void 0!==o&&this._$Eh.set(o,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const o=new Set(t.flat(1/0).reverse());for(const t of o)e.unshift(l(t))}else void 0!==t&&e.push(l(t));return e}static _$Eu(t,e){const o=e.attribute;return!1===o?void 0:"string"==typeof o?o:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const o of e.keys())this.hasOwnProperty(o)&&(t.set(o,this[o]),delete this[o]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,e)=>{if(i)t.adoptedStyleSheets=e.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of e){const e=document.createElement("style"),r=o.litNonce;void 0!==r&&e.setAttribute("nonce",r),e.textContent=i.cssText,t.appendChild(e)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,o){this._$AK(t,o)}_$ET(t,e){const o=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,o);if(void 0!==i&&!0===o.reflect){const r=(void 0!==o.converter?.toAttribute?o.converter:b).toAttribute(e,o.type);this._$Em=t,null==r?this.removeAttribute(i):this.setAttribute(i,r),this._$Em=null}}_$AK(t,e){const o=this.constructor,i=o._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=o.getPropertyOptions(i),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:b;this._$Em=i;const a=r.fromAttribute(e,t.type);this[i]=a??this._$Ej?.get(i)??a,this._$Em=null}}requestUpdate(t,e,o,i=!1,r){if(void 0!==t){const a=this.constructor;if(!1===i&&(r=this[t]),o??=a.getPropertyOptions(t),!((o.hasChanged??x)(r,e)||o.useDefault&&o.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(a._$Eu(t,o))))return;this.C(t,e,o)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:o,reflect:i,wrapped:r},a){o&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,a??e??this[t]),!0!==r||void 0!==a)||(this._$AL.has(t)||(this.hasUpdated||o||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,o]of t){const{wrapped:t}=o,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,o,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[y("elementProperties")]=new Map,w[y("finalized")]=new Map,m?.({ReactiveElement:w}),(f.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,C=t=>t,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,P="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,I="?"+E,z=`<${I}>`,T=document,q=()=>T.createComment(""),O=t=>null===t||"object"!=typeof t&&"function"!=typeof t,U=Array.isArray,D="[ \t\n\f\r]",L=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,M=/-->/g,V=/>/g,R=RegExp(`>|${D}(?:([^\\s"'>=/]+)(${D}*=${D}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),j=/'/g,N=/"/g,H=/^(?:script|style|textarea|title)$/i,F=(t=>(e,...o)=>({_$litType$:t,strings:e,values:o}))(1),K=Symbol.for("lit-noChange"),G=Symbol.for("lit-nothing"),B=new WeakMap,W=T.createTreeWalker(T,129);function Y(t,e){if(!U(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(e):e}const J=(t,e)=>{const o=t.length-1,i=[];let r,a=2===e?"<svg>":3===e?"<math>":"",s=L;for(let e=0;e<o;e++){const o=t[e];let n,l,c=-1,d=0;for(;d<o.length&&(s.lastIndex=d,l=s.exec(o),null!==l);)d=s.lastIndex,s===L?"!--"===l[1]?s=M:void 0!==l[1]?s=V:void 0!==l[2]?(H.test(l[2])&&(r=RegExp("</"+l[2],"g")),s=R):void 0!==l[3]&&(s=R):s===R?">"===l[0]?(s=r??L,c=-1):void 0===l[1]?c=-2:(c=s.lastIndex-l[2].length,n=l[1],s=void 0===l[3]?R:'"'===l[3]?N:j):s===N||s===j?s=R:s===M||s===V?s=L:(s=R,r=void 0);const p=s===R&&t[e+1].startsWith("/>")?" ":"";a+=s===L?o+z:c>=0?(i.push(n),o.slice(0,c)+P+o.slice(c)+E+p):o+E+(-2===c?e:p)}return[Y(t,a+(t[o]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]};class X{constructor({strings:t,_$litType$:e},o){let i;this.parts=[];let r=0,a=0;const s=t.length-1,n=this.parts,[l,c]=J(t,e);if(this.el=X.createElement(l,o),W.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=W.nextNode())&&n.length<s;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(P)){const e=c[a++],o=i.getAttribute(t).split(E),s=/([.?@])?(.*)/.exec(e);n.push({type:1,index:r,name:s[2],strings:o,ctor:"."===s[1]?ot:"?"===s[1]?it:"@"===s[1]?rt:et}),i.removeAttribute(t)}else t.startsWith(E)&&(n.push({type:6,index:r}),i.removeAttribute(t));if(H.test(i.tagName)){const t=i.textContent.split(E),e=t.length-1;if(e>0){i.textContent=A?A.emptyScript:"";for(let o=0;o<e;o++)i.append(t[o],q()),W.nextNode(),n.push({type:2,index:++r});i.append(t[e],q())}}}else if(8===i.nodeType)if(i.data===I)n.push({type:2,index:r});else{let t=-1;for(;-1!==(t=i.data.indexOf(E,t+1));)n.push({type:7,index:r}),t+=E.length-1}r++}}static createElement(t,e){const o=T.createElement("template");return o.innerHTML=t,o}}function Z(t,e,o=t,i){if(e===K)return e;let r=void 0!==i?o._$Co?.[i]:o._$Cl;const a=O(e)?void 0:e._$litDirective$;return r?.constructor!==a&&(r?._$AO?.(!1),void 0===a?r=void 0:(r=new a(t),r._$AT(t,o,i)),void 0!==i?(o._$Co??=[])[i]=r:o._$Cl=r),void 0!==r&&(e=Z(t,r._$AS(t,e.values),r,i)),e}class Q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:o}=this._$AD,i=(t?.creationScope??T).importNode(e,!0);W.currentNode=i;let r=W.nextNode(),a=0,s=0,n=o[0];for(;void 0!==n;){if(a===n.index){let e;2===n.type?e=new tt(r,r.nextSibling,this,t):1===n.type?e=new n.ctor(r,n.name,n.strings,this,t):6===n.type&&(e=new at(r,this,t)),this._$AV.push(e),n=o[++s]}a!==n?.index&&(r=W.nextNode(),a++)}return W.currentNode=T,i}p(t){let e=0;for(const o of this._$AV)void 0!==o&&(void 0!==o.strings?(o._$AI(t,o,e),e+=o.strings.length-2):o._$AI(t[e])),e++}}class tt{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,o,i){this.type=2,this._$AH=G,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=o,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Z(this,t,e),O(t)?t===G||null==t||""===t?(this._$AH!==G&&this._$AR(),this._$AH=G):t!==this._$AH&&t!==K&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>U(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==G&&O(this._$AH)?this._$AA.nextSibling.data=t:this.T(T.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:o}=t,i="number"==typeof o?this._$AC(t):(void 0===o.el&&(o.el=X.createElement(Y(o.h,o.h[0]),this.options)),o);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new Q(i,this),o=t.u(this.options);t.p(e),this.T(o),this._$AH=t}}_$AC(t){let e=B.get(t.strings);return void 0===e&&B.set(t.strings,e=new X(t)),e}k(t){U(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let o,i=0;for(const r of t)i===e.length?e.push(o=new tt(this.O(q()),this.O(q()),this,this.options)):o=e[i],o._$AI(r),i++;i<e.length&&(this._$AR(o&&o._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=C(t).nextSibling;C(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class et{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,o,i,r){this.type=1,this._$AH=G,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=r,o.length>2||""!==o[0]||""!==o[1]?(this._$AH=Array(o.length-1).fill(new String),this.strings=o):this._$AH=G}_$AI(t,e=this,o,i){const r=this.strings;let a=!1;if(void 0===r)t=Z(this,t,e,0),a=!O(t)||t!==this._$AH&&t!==K,a&&(this._$AH=t);else{const i=t;let s,n;for(t=r[0],s=0;s<r.length-1;s++)n=Z(this,i[o+s],e,s),n===K&&(n=this._$AH[s]),a||=!O(n)||n!==this._$AH[s],n===G?t=G:t!==G&&(t+=(n??"")+r[s+1]),this._$AH[s]=n}a&&!i&&this.j(t)}j(t){t===G?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class ot extends et{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===G?void 0:t}}class it extends et{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==G)}}class rt extends et{constructor(t,e,o,i,r){super(t,e,o,i,r),this.type=5}_$AI(t,e=this){if((t=Z(this,t,e,0)??G)===K)return;const o=this._$AH,i=t===G&&o!==G||t.capture!==o.capture||t.once!==o.once||t.passive!==o.passive,r=t!==G&&(o===G||i);i&&this.element.removeEventListener(this.name,this,o),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class at{constructor(t,e,o){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=o}get _$AU(){return this._$AM._$AU}_$AI(t){Z(this,t)}}const st=k.litHtmlPolyfillSupport;st?.(X,tt),(k.litHtmlVersions??=[]).push("3.3.2");const nt=globalThis;class lt extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,o)=>{const i=o?.renderBefore??e;let r=i._$litPart$;if(void 0===r){const t=o?.renderBefore??null;i._$litPart$=r=new tt(e.insertBefore(q(),t),t,void 0,o??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return K}}lt._$litElement$=!0,lt.finalized=!0,nt.litElementHydrateSupport?.({LitElement:lt});const ct=nt.litElementPolyfillSupport;ct?.({LitElement:lt}),(nt.litElementVersions??=[]).push("4.2.2");const dt=t=>(e,o)=>{void 0!==o?o.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},pt={attribute:!0,type:String,converter:b,reflect:!1,hasChanged:x},ht=(t=pt,e,o)=>{const{kind:i,metadata:r}=o;let a=globalThis.litPropertyMetadata.get(r);if(void 0===a&&globalThis.litPropertyMetadata.set(r,a=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),a.set(o.name,t),"accessor"===i){const{name:i}=o;return{set(o){const r=e.get.call(this);e.set.call(this,o),this.requestUpdate(i,r,t,!0,o)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=o;return function(o){const r=this[i];e.call(this,o),this.requestUpdate(i,r,t,!0,o)}}throw Error("Unsupported decorator location: "+i)};function ut(t){return(e,o)=>"object"==typeof o?ht(t,e,o):((t,e,o)=>{const i=e.hasOwnProperty(o);return e.constructor.createProperty(o,t),i?Object.getOwnPropertyDescriptor(e,o):void 0})(t,e,o)}function vt(t){return ut({...t,state:!0,attribute:!1})}const ft="019cf96b-44f0-73c4-81f2-e8827d5c1e65",_t="https://parqet-token-proxy.oliver-f26.workers.dev",gt=`${_t}/oauth2/token`,mt=_t,yt="https://mcp.parqet.com",bt="undefined"!=typeof window&&"localhost"===window.location.hostname?"http://localhost:3000/callback.html":"https://cubinet-code.github.io/parqet-homeassistant-companion/callback.html",xt=[{value:"1d",label:"1D"},{value:"1w",label:"1W"},{value:"mtd",label:"MTD"},{value:"1m",label:"1M"},{value:"3m",label:"3M"},{value:"6m",label:"6M"},{value:"1y",label:"1Y"},{value:"ytd",label:"YTD"},{value:"3y",label:"3Y"},{value:"5y",label:"5Y"},{value:"10y",label:"10Y"},{value:"max",label:"Max"}];function $t(t){return btoa(String.fromCharCode(...t)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"")}const wt=new Uint32Array([1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298]);function kt(t,e){return e>>>t|e<<32-t}async function Ct(t){const e=(new TextEncoder).encode(t);let o;return o="undefined"!=typeof crypto&&crypto.subtle?await crypto.subtle.digest("SHA-256",e):function(t){let e=1779033703,o=3144134277,i=1013904242,r=2773480762,a=1359893119,s=2600822924,n=528734635,l=1541459225;const c=8*t.length,d=64*Math.ceil((t.length+9)/64),p=new Uint8Array(d);p.set(t),p[t.length]=128;const h=new DataView(p.buffer);h.setUint32(d-4,c,!1);const u=new Uint32Array(64);for(let t=0;t<d;t+=64){for(let e=0;e<16;e++)u[e]=h.getUint32(t+4*e,!1);for(let t=16;t<64;t++){const e=kt(7,u[t-15])^kt(18,u[t-15])^u[t-15]>>>3,o=kt(17,u[t-2])^kt(19,u[t-2])^u[t-2]>>>10;u[t]=u[t-16]+e+u[t-7]+o|0}let c=e,d=o,p=i,v=r,f=a,_=s,g=n,m=l;for(let t=0;t<64;t++){const e=m+(kt(6,f)^kt(11,f)^kt(25,f))+(f&_^~f&g)+wt[t]+u[t]|0,o=c&d^c&p^d&p;m=g,g=_,_=f,f=v+e|0,v=p,p=d,d=c,c=e+((kt(2,c)^kt(13,c)^kt(22,c))+o|0)|0}e=e+c|0,o=o+d|0,i=i+p|0,r=r+v|0,a=a+f|0,s=s+_|0,n=n+g|0,l=l+m|0}const v=new Uint8Array(32),f=new DataView(v.buffer);return f.setUint32(0,e,!1),f.setUint32(4,o,!1),f.setUint32(8,i,!1),f.setUint32(12,r,!1),f.setUint32(16,a,!1),f.setUint32(20,s,!1),f.setUint32(24,n,!1),f.setUint32(28,l,!1),v}(e),$t(new Uint8Array(o))}const At=new class{constructor(){this._messageListener=null,this._pendingCsrf=null,this._popup=null}_storageKey(t){return`parqet_card_auth_${null!=t?t:ft}`}getStoredToken(t){try{const e=localStorage.getItem(this._storageKey(t));return e?JSON.parse(e):null}catch(t){return null}}isTokenValid(t){const e=this.getStoredToken(t);return!!e&&e.expires_at>Date.now()+6e4}clearToken(t){localStorage.removeItem(this._storageKey(t))}async startAuth(t,e,o){const i=null!=t?t:ft,r=null!=e?e:bt,a=await async function(){const t=new Uint8Array(96);return crypto.getRandomValues(t),$t(t)}(),s=await Ct(a),n=function(){const t=new Uint8Array(16);return crypto.getRandomValues(t),$t(t)}();this._pendingCsrf=n;const l=function(t,e,o,i){const r=JSON.stringify({s:t,v:e,c:o,r:i});return btoa(r).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"")}(n,a,i,r),c=`https://connect.parqet.com/oauth2/authorize?${new URLSearchParams({response_type:"code",client_id:i,redirect_uri:r,scope:"portfolio:read portfolio:write",code_challenge:s,code_challenge_method:"S256",state:l})}`;let d;return o&&!o.closed?(o.location.href=c,d=o):d=window.open(c,"parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes"),this._popup=d,new Promise((t,e)=>{const o=setTimeout(()=>{this._cleanup(),null==d||d.close(),e(new Error("Authorization timed out. Please try again."))},12e4);this._messageListener=r=>{var a;if("parqet-oauth"!==(null===(a=r.data)||void 0===a?void 0:a.type))return;const s=r.data;if(s.state!==this._pendingCsrf)return this._cleanup(),clearTimeout(o),null==d||d.close(),void e(new Error("OAuth state mismatch — possible CSRF attack."));if(this._cleanup(),clearTimeout(o),null==d||d.close(),s.error)return void e(new Error(`Authorization failed: ${s.error}`));if(!s.token)return void e(new Error("No token received from authorization callback."));const n=this._normalizeToken(s.token);this._storeToken(n,i),t(n)},window.addEventListener("message",this._messageListener)})}async refreshToken(t){const e=null!=t?t:ft,o=this.getStoredToken(e);if(!(null==o?void 0:o.refresh_token))throw this.clearToken(e),new Error("No refresh token available. Please reconnect.");const i=await fetch(gt,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({grant_type:"refresh_token",refresh_token:o.refresh_token,client_id:e})});if(!i.ok)throw this.clearToken(e),new Error(`Token refresh failed (${i.status}). Please reconnect.`);const r=await i.json(),a=this._normalizeToken(r);return this._storeToken(a,e),a}async getValidToken(t){if(this.isTokenValid(t))return this.getStoredToken(t).access_token;return(await this.refreshToken(t)).access_token}_normalizeToken(t){var e,o;const i=null!==(e=t.expires_in)&&void 0!==e?e:3600;return{access_token:t.access_token,refresh_token:t.refresh_token,token_type:null!==(o=t.token_type)&&void 0!==o?o:"Bearer",expires_in:i,expires_at:Date.now()+1e3*i}}_storeToken(t,e){localStorage.setItem(this._storageKey(e),JSON.stringify(t))}_cleanup(){this._messageListener&&(window.removeEventListener("message",this._messageListener),this._messageListener=null),this._pendingCsrf=null,this._popup=null}};const St=new class{configure(t){this.clientId=t}async _get(t){const e=await At.getValidToken(this.clientId),o=await fetch(`${mt}${t}`,{headers:{Authorization:`Bearer ${e}`}});if(!o.ok){const e=await o.text().catch(()=>"");throw new Error(`Parqet API error ${o.status} at ${t}: ${e}`)}return o.json()}async _post(t,e){const o=await At.getValidToken(this.clientId),i=await fetch(`${mt}${t}`,{method:"POST",headers:{Authorization:`Bearer ${o}`,"Content-Type":"application/json"},body:JSON.stringify(e)});if(!i.ok){const e=await i.text().catch(()=>"");throw new Error(`Parqet API error ${i.status} at ${t}: ${e}`)}return i.json()}async getUser(){return this._get("/user")}async listPortfolios(){return(await this._get("/portfolios")).items}async getPerformance(t,e){const o={portfolioIds:Array.isArray(t)?t:[t],interval:null!=e?e:{type:"relative",value:"max"}};return this._post("/performance",o)}async getActivities(t,e={}){const o=new URLSearchParams;if(e.activityType){(Array.isArray(e.activityType)?e.activityType:[e.activityType]).forEach(t=>o.append("activityType",t))}if(e.assetType){(Array.isArray(e.assetType)?e.assetType:[e.assetType]).forEach(t=>o.append("assetType",t))}if(e.holdingId){(Array.isArray(e.holdingId)?e.holdingId:[e.holdingId]).forEach(t=>o.append("holdingId",t))}null!=e.limit&&o.set("limit",String(e.limit)),e.cursor&&o.set("cursor",e.cursor);const i=o.toString();return this._get(`/portfolios/${t}/activities${i?`?${i}`:""}`)}};const Pt=new class{constructor(){this._reqId=0,this._initialized=!1}configure(t){this.clientId=t}async _send(t){var e;const o=await At.getValidToken(this.clientId),i=await fetch(`${yt}/mcp`,{method:"POST",headers:{Authorization:`Bearer ${o}`,"Content-Type":"application/json",Accept:"application/json, text/event-stream"},body:JSON.stringify(t)});if(!i.ok){const t=await i.text().catch(()=>"");throw new Error(`MCP server error ${i.status}: ${t}`)}return(null!==(e=i.headers.get("content-type"))&&void 0!==e?e:"").includes("text/event-stream")?this._parseSSE(await i.text()):i.json()}_parseSSE(t){for(const e of t.split("\n"))if(e.startsWith("data: "))try{return JSON.parse(e.slice(6))}catch(t){}throw new Error("No valid JSON found in MCP SSE response.")}async _initialize(){const t=await At.getValidToken(this.clientId);await fetch(`${yt}/mcp`,{method:"POST",headers:{Authorization:`Bearer ${t}`,"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:++this._reqId,method:"initialize",params:{protocolVersion:"2024-11-05",capabilities:{},clientInfo:{name:"parqet-ha-companion",version:"0.1.0"}}})}),this._initialized=!0}async _callTool(t,e={}){var o,i,r,a;this._initialized||await this._initialize();const s={jsonrpc:"2.0",id:++this._reqId,method:"tools/call",params:{name:t,arguments:e}},n=await this._send(s);if(n.error)throw new Error(`MCP tool error (${t}): ${n.error.message}`);if(null===(o=n.result)||void 0===o?void 0:o.isError)throw new Error(`MCP tool returned error for ${t}`);const l=null===(a=null===(r=null===(i=n.result)||void 0===i?void 0:i.content)||void 0===r?void 0:r[0])||void 0===a?void 0:a.text;if(!l)throw new Error(`Empty MCP response for tool ${t}`);return JSON.parse(l)}async getUser(){return this._callTool("parqet_get_user")}async listPortfolios(){return(await this._callTool("parqet_list_portfolios")).items}async getPerformance(t,e){const o=Array.isArray(t)?t:[t],i=await this._callTool("parqet_get_performance",Object.assign({portfolioIds:o},e?{intervalType:e.type,intervalValue:e.value}:{}));return"holdings"in i?i:{performance:i,holdings:[]}}async getActivities(t,e={}){return this._callTool("parqet_get_activities",Object.assign(Object.assign(Object.assign({portfolioId:t},null!=e.activityType?{activityType:e.activityType}:{}),null!=e.limit?{limit:e.limit}:{}),e.cursor?{cursor:e.cursor}:{}))}};let Et=class extends lt{constructor(){super(...arguments),this.portfolios=[],this.selected=null}_handleChange(t){const e=t.target;this.dispatchEvent(new CustomEvent("portfolio-change",{detail:{portfolioId:e.value},bubbles:!0,composed:!0}))}render(){return 0===this.portfolios.length?F``:F`
+var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.length,s=a<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,o):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,o,i);else for(var n=t.length-1;n>=0;n--)(r=t[n])&&(s=(a<3?r(s):a>3?r(e,o,s):r(e,o))||s);return a>3&&s&&Object.defineProperty(e,o,s),s}"function"==typeof SuppressedError&&SuppressedError;const o=globalThis,i=o.ShadowRoot&&(void 0===o.ShadyCSS||o.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,r=Symbol(),a=new WeakMap;let s=class{constructor(t,e,o){if(this._$cssResult$=!0,o!==r)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const o=void 0!==e&&1===e.length;o&&(t=a.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),o&&a.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const o=1===t.length?t[0]:e.reduce((e,o,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(o)+t[i+1],t[0]);return new s(o,t,r)},l=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const o of t.cssRules)e+=o.cssText;return(t=>new s("string"==typeof t?t:t+"",void 0,r))(e)})(t):t,{is:c,defineProperty:d,getOwnPropertyDescriptor:p,getOwnPropertyNames:h,getOwnPropertySymbols:u,getPrototypeOf:v}=Object,f=globalThis,_=f.trustedTypes,g=_?_.emptyScript:"",m=f.reactiveElementPolyfillSupport,y=(t,e)=>t,b={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let o=t;switch(e){case Boolean:o=null!==t;break;case Number:o=null===t?null:Number(t);break;case Object:case Array:try{o=JSON.parse(t)}catch(t){o=null}}return o}},x=(t,e)=>!c(t,e),$={attribute:!0,type:String,converter:b,reflect:!1,useDefault:!1,hasChanged:x};Symbol.metadata??=Symbol("metadata"),f.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=$){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const o=Symbol(),i=this.getPropertyDescriptor(t,o,e);void 0!==i&&d(this.prototype,t,i)}}static getPropertyDescriptor(t,e,o){const{get:i,set:r}=p(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const a=i?.call(this);r?.call(this,e),this.requestUpdate(t,a,o)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??$}static _$Ei(){if(this.hasOwnProperty(y("elementProperties")))return;const t=v(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(y("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(y("properties"))){const t=this.properties,e=[...h(t),...u(t)];for(const o of e)this.createProperty(o,t[o])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,o]of e)this.elementProperties.set(t,o)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const o=this._$Eu(t,e);void 0!==o&&this._$Eh.set(o,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const o=new Set(t.flat(1/0).reverse());for(const t of o)e.unshift(l(t))}else void 0!==t&&e.push(l(t));return e}static _$Eu(t,e){const o=e.attribute;return!1===o?void 0:"string"==typeof o?o:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const o of e.keys())this.hasOwnProperty(o)&&(t.set(o,this[o]),delete this[o]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,e)=>{if(i)t.adoptedStyleSheets=e.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of e){const e=document.createElement("style"),r=o.litNonce;void 0!==r&&e.setAttribute("nonce",r),e.textContent=i.cssText,t.appendChild(e)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,o){this._$AK(t,o)}_$ET(t,e){const o=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,o);if(void 0!==i&&!0===o.reflect){const r=(void 0!==o.converter?.toAttribute?o.converter:b).toAttribute(e,o.type);this._$Em=t,null==r?this.removeAttribute(i):this.setAttribute(i,r),this._$Em=null}}_$AK(t,e){const o=this.constructor,i=o._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=o.getPropertyOptions(i),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:b;this._$Em=i;const a=r.fromAttribute(e,t.type);this[i]=a??this._$Ej?.get(i)??a,this._$Em=null}}requestUpdate(t,e,o,i=!1,r){if(void 0!==t){const a=this.constructor;if(!1===i&&(r=this[t]),o??=a.getPropertyOptions(t),!((o.hasChanged??x)(r,e)||o.useDefault&&o.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(a._$Eu(t,o))))return;this.C(t,e,o)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:o,reflect:i,wrapped:r},a){o&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,a??e??this[t]),!0!==r||void 0!==a)||(this._$AL.has(t)||(this.hasUpdated||o||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,o]of t){const{wrapped:t}=o,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,o,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[y("elementProperties")]=new Map,w[y("finalized")]=new Map,m?.({ReactiveElement:w}),(f.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,C=t=>t,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,P="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,I="?"+E,z=`<${I}>`,T=document,q=()=>T.createComment(""),O=t=>null===t||"object"!=typeof t&&"function"!=typeof t,L=Array.isArray,D="[ \t\n\f\r]",M=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,V=/>/g,R=RegExp(`>|${D}(?:([^\\s"'>=/]+)(${D}*=${D}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),j=/'/g,N=/"/g,H=/^(?:script|style|textarea|title)$/i,F=t=>(e,...o)=>({_$litType$:t,strings:e,values:o}),G=F(1),B=F(2),K=Symbol.for("lit-noChange"),W=Symbol.for("lit-nothing"),Y=new WeakMap,J=T.createTreeWalker(T,129);function X(t,e){if(!L(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(e):e}const Z=(t,e)=>{const o=t.length-1,i=[];let r,a=2===e?"<svg>":3===e?"<math>":"",s=M;for(let e=0;e<o;e++){const o=t[e];let n,l,c=-1,d=0;for(;d<o.length&&(s.lastIndex=d,l=s.exec(o),null!==l);)d=s.lastIndex,s===M?"!--"===l[1]?s=U:void 0!==l[1]?s=V:void 0!==l[2]?(H.test(l[2])&&(r=RegExp("</"+l[2],"g")),s=R):void 0!==l[3]&&(s=R):s===R?">"===l[0]?(s=r??M,c=-1):void 0===l[1]?c=-2:(c=s.lastIndex-l[2].length,n=l[1],s=void 0===l[3]?R:'"'===l[3]?N:j):s===N||s===j?s=R:s===U||s===V?s=M:(s=R,r=void 0);const p=s===R&&t[e+1].startsWith("/>")?" ":"";a+=s===M?o+z:c>=0?(i.push(n),o.slice(0,c)+P+o.slice(c)+E+p):o+E+(-2===c?e:p)}return[X(t,a+(t[o]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]};class Q{constructor({strings:t,_$litType$:e},o){let i;this.parts=[];let r=0,a=0;const s=t.length-1,n=this.parts,[l,c]=Z(t,e);if(this.el=Q.createElement(l,o),J.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=J.nextNode())&&n.length<s;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(P)){const e=c[a++],o=i.getAttribute(t).split(E),s=/([.?@])?(.*)/.exec(e);n.push({type:1,index:r,name:s[2],strings:o,ctor:"."===s[1]?rt:"?"===s[1]?at:"@"===s[1]?st:it}),i.removeAttribute(t)}else t.startsWith(E)&&(n.push({type:6,index:r}),i.removeAttribute(t));if(H.test(i.tagName)){const t=i.textContent.split(E),e=t.length-1;if(e>0){i.textContent=A?A.emptyScript:"";for(let o=0;o<e;o++)i.append(t[o],q()),J.nextNode(),n.push({type:2,index:++r});i.append(t[e],q())}}}else if(8===i.nodeType)if(i.data===I)n.push({type:2,index:r});else{let t=-1;for(;-1!==(t=i.data.indexOf(E,t+1));)n.push({type:7,index:r}),t+=E.length-1}r++}}static createElement(t,e){const o=T.createElement("template");return o.innerHTML=t,o}}function tt(t,e,o=t,i){if(e===K)return e;let r=void 0!==i?o._$Co?.[i]:o._$Cl;const a=O(e)?void 0:e._$litDirective$;return r?.constructor!==a&&(r?._$AO?.(!1),void 0===a?r=void 0:(r=new a(t),r._$AT(t,o,i)),void 0!==i?(o._$Co??=[])[i]=r:o._$Cl=r),void 0!==r&&(e=tt(t,r._$AS(t,e.values),r,i)),e}class et{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:o}=this._$AD,i=(t?.creationScope??T).importNode(e,!0);J.currentNode=i;let r=J.nextNode(),a=0,s=0,n=o[0];for(;void 0!==n;){if(a===n.index){let e;2===n.type?e=new ot(r,r.nextSibling,this,t):1===n.type?e=new n.ctor(r,n.name,n.strings,this,t):6===n.type&&(e=new nt(r,this,t)),this._$AV.push(e),n=o[++s]}a!==n?.index&&(r=J.nextNode(),a++)}return J.currentNode=T,i}p(t){let e=0;for(const o of this._$AV)void 0!==o&&(void 0!==o.strings?(o._$AI(t,o,e),e+=o.strings.length-2):o._$AI(t[e])),e++}}class ot{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,o,i){this.type=2,this._$AH=W,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=o,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=tt(this,t,e),O(t)?t===W||null==t||""===t?(this._$AH!==W&&this._$AR(),this._$AH=W):t!==this._$AH&&t!==K&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>L(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==W&&O(this._$AH)?this._$AA.nextSibling.data=t:this.T(T.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:o}=t,i="number"==typeof o?this._$AC(t):(void 0===o.el&&(o.el=Q.createElement(X(o.h,o.h[0]),this.options)),o);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new et(i,this),o=t.u(this.options);t.p(e),this.T(o),this._$AH=t}}_$AC(t){let e=Y.get(t.strings);return void 0===e&&Y.set(t.strings,e=new Q(t)),e}k(t){L(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let o,i=0;for(const r of t)i===e.length?e.push(o=new ot(this.O(q()),this.O(q()),this,this.options)):o=e[i],o._$AI(r),i++;i<e.length&&(this._$AR(o&&o._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=C(t).nextSibling;C(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class it{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,o,i,r){this.type=1,this._$AH=W,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=r,o.length>2||""!==o[0]||""!==o[1]?(this._$AH=Array(o.length-1).fill(new String),this.strings=o):this._$AH=W}_$AI(t,e=this,o,i){const r=this.strings;let a=!1;if(void 0===r)t=tt(this,t,e,0),a=!O(t)||t!==this._$AH&&t!==K,a&&(this._$AH=t);else{const i=t;let s,n;for(t=r[0],s=0;s<r.length-1;s++)n=tt(this,i[o+s],e,s),n===K&&(n=this._$AH[s]),a||=!O(n)||n!==this._$AH[s],n===W?t=W:t!==W&&(t+=(n??"")+r[s+1]),this._$AH[s]=n}a&&!i&&this.j(t)}j(t){t===W?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class rt extends it{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===W?void 0:t}}class at extends it{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==W)}}class st extends it{constructor(t,e,o,i,r){super(t,e,o,i,r),this.type=5}_$AI(t,e=this){if((t=tt(this,t,e,0)??W)===K)return;const o=this._$AH,i=t===W&&o!==W||t.capture!==o.capture||t.once!==o.once||t.passive!==o.passive,r=t!==W&&(o===W||i);i&&this.element.removeEventListener(this.name,this,o),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,o){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=o}get _$AU(){return this._$AM._$AU}_$AI(t){tt(this,t)}}const lt=k.litHtmlPolyfillSupport;lt?.(Q,ot),(k.litHtmlVersions??=[]).push("3.3.2");const ct=globalThis;class dt extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,o)=>{const i=o?.renderBefore??e;let r=i._$litPart$;if(void 0===r){const t=o?.renderBefore??null;i._$litPart$=r=new ot(e.insertBefore(q(),t),t,void 0,o??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return K}}dt._$litElement$=!0,dt.finalized=!0,ct.litElementHydrateSupport?.({LitElement:dt});const pt=ct.litElementPolyfillSupport;pt?.({LitElement:dt}),(ct.litElementVersions??=[]).push("4.2.2");const ht=t=>(e,o)=>{void 0!==o?o.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},ut={attribute:!0,type:String,converter:b,reflect:!1,hasChanged:x},vt=(t=ut,e,o)=>{const{kind:i,metadata:r}=o;let a=globalThis.litPropertyMetadata.get(r);if(void 0===a&&globalThis.litPropertyMetadata.set(r,a=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),a.set(o.name,t),"accessor"===i){const{name:i}=o;return{set(o){const r=e.get.call(this);e.set.call(this,o),this.requestUpdate(i,r,t,!0,o)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=o;return function(o){const r=this[i];e.call(this,o),this.requestUpdate(i,r,t,!0,o)}}throw Error("Unsupported decorator location: "+i)};function ft(t){return(e,o)=>"object"==typeof o?vt(t,e,o):((t,e,o)=>{const i=e.hasOwnProperty(o);return e.constructor.createProperty(o,t),i?Object.getOwnPropertyDescriptor(e,o):void 0})(t,e,o)}function _t(t){return ft({...t,state:!0,attribute:!1})}const gt="019cf96b-44f0-73c4-81f2-e8827d5c1e65",mt="https://parqet-token-proxy.oliver-f26.workers.dev",yt=`${mt}/oauth2/token`,bt=mt,xt="https://mcp.parqet.com",$t="undefined"!=typeof window&&"localhost"===window.location.hostname?"http://localhost:3000/callback.html":"https://cubinet-code.github.io/parqet-homeassistant-companion/callback.html",wt=[{value:"1d",label:"1D"},{value:"1w",label:"1W"},{value:"mtd",label:"MTD"},{value:"1m",label:"1M"},{value:"3m",label:"3M"},{value:"6m",label:"6M"},{value:"1y",label:"1Y"},{value:"ytd",label:"YTD"},{value:"3y",label:"3Y"},{value:"5y",label:"5Y"},{value:"10y",label:"10Y"},{value:"max",label:"Max"}];function kt(t){return btoa(String.fromCharCode(...t)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"")}const Ct=new Uint32Array([1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298]);function At(t,e){return e>>>t|e<<32-t}async function St(t){const e=(new TextEncoder).encode(t);let o;return o="undefined"!=typeof crypto&&crypto.subtle?await crypto.subtle.digest("SHA-256",e):function(t){let e=1779033703,o=3144134277,i=1013904242,r=2773480762,a=1359893119,s=2600822924,n=528734635,l=1541459225;const c=8*t.length,d=64*Math.ceil((t.length+9)/64),p=new Uint8Array(d);p.set(t),p[t.length]=128;const h=new DataView(p.buffer);h.setUint32(d-4,c,!1);const u=new Uint32Array(64);for(let t=0;t<d;t+=64){for(let e=0;e<16;e++)u[e]=h.getUint32(t+4*e,!1);for(let t=16;t<64;t++){const e=At(7,u[t-15])^At(18,u[t-15])^u[t-15]>>>3,o=At(17,u[t-2])^At(19,u[t-2])^u[t-2]>>>10;u[t]=u[t-16]+e+u[t-7]+o|0}let c=e,d=o,p=i,v=r,f=a,_=s,g=n,m=l;for(let t=0;t<64;t++){const e=m+(At(6,f)^At(11,f)^At(25,f))+(f&_^~f&g)+Ct[t]+u[t]|0,o=c&d^c&p^d&p;m=g,g=_,_=f,f=v+e|0,v=p,p=d,d=c,c=e+((At(2,c)^At(13,c)^At(22,c))+o|0)|0}e=e+c|0,o=o+d|0,i=i+p|0,r=r+v|0,a=a+f|0,s=s+_|0,n=n+g|0,l=l+m|0}const v=new Uint8Array(32),f=new DataView(v.buffer);return f.setUint32(0,e,!1),f.setUint32(4,o,!1),f.setUint32(8,i,!1),f.setUint32(12,r,!1),f.setUint32(16,a,!1),f.setUint32(20,s,!1),f.setUint32(24,n,!1),f.setUint32(28,l,!1),v}(e),kt(new Uint8Array(o))}const Pt=new class{constructor(){this._messageListener=null,this._pendingCsrf=null,this._popup=null}_storageKey(t){return`parqet_card_auth_${null!=t?t:gt}`}getStoredToken(t){try{const e=localStorage.getItem(this._storageKey(t));return e?JSON.parse(e):null}catch(t){return null}}isTokenValid(t){const e=this.getStoredToken(t);return!!e&&e.expires_at>Date.now()+6e4}clearToken(t){localStorage.removeItem(this._storageKey(t))}async startAuth(t,e,o){const i=null!=t?t:gt,r=null!=e?e:$t,a=await async function(){const t=new Uint8Array(96);return crypto.getRandomValues(t),kt(t)}(),s=await St(a),n=function(){const t=new Uint8Array(16);return crypto.getRandomValues(t),kt(t)}();this._pendingCsrf=n;const l=function(t,e,o,i){const r=JSON.stringify({s:t,v:e,c:o,r:i});return btoa(r).replace(/\+/g,"-").replace(/\//g,"_").replace(/=/g,"")}(n,a,i,r),c=`https://connect.parqet.com/oauth2/authorize?${new URLSearchParams({response_type:"code",client_id:i,redirect_uri:r,scope:"portfolio:read portfolio:write",code_challenge:s,code_challenge_method:"S256",state:l})}`;let d;return o&&!o.closed?(o.location.href=c,d=o):d=window.open(c,"parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes"),this._popup=d,new Promise((t,e)=>{const o=setTimeout(()=>{this._cleanup(),null==d||d.close(),e(new Error("Authorization timed out. Please try again."))},12e4);this._messageListener=r=>{var a;if("parqet-oauth"!==(null===(a=r.data)||void 0===a?void 0:a.type))return;const s=r.data;if(s.state!==this._pendingCsrf)return this._cleanup(),clearTimeout(o),null==d||d.close(),void e(new Error("OAuth state mismatch — possible CSRF attack."));if(this._cleanup(),clearTimeout(o),null==d||d.close(),s.error)return void e(new Error(`Authorization failed: ${s.error}`));if(!s.token)return void e(new Error("No token received from authorization callback."));const n=this._normalizeToken(s.token);this._storeToken(n,i),t(n)},window.addEventListener("message",this._messageListener)})}async refreshToken(t){const e=null!=t?t:gt,o=this.getStoredToken(e);if(!(null==o?void 0:o.refresh_token))throw this.clearToken(e),new Error("No refresh token available. Please reconnect.");const i=await fetch(yt,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({grant_type:"refresh_token",refresh_token:o.refresh_token,client_id:e})});if(!i.ok)throw this.clearToken(e),new Error(`Token refresh failed (${i.status}). Please reconnect.`);const r=await i.json(),a=this._normalizeToken(r);return this._storeToken(a,e),a}async getValidToken(t){if(this.isTokenValid(t))return this.getStoredToken(t).access_token;return(await this.refreshToken(t)).access_token}_normalizeToken(t){var e,o;const i=null!==(e=t.expires_in)&&void 0!==e?e:3600;return{access_token:t.access_token,refresh_token:t.refresh_token,token_type:null!==(o=t.token_type)&&void 0!==o?o:"Bearer",expires_in:i,expires_at:Date.now()+1e3*i}}_storeToken(t,e){localStorage.setItem(this._storageKey(e),JSON.stringify(t))}_cleanup(){this._messageListener&&(window.removeEventListener("message",this._messageListener),this._messageListener=null),this._pendingCsrf=null,this._popup=null}};const Et=new class{configure(t){this.clientId=t}async _get(t){const e=await Pt.getValidToken(this.clientId),o=await fetch(`${bt}${t}`,{headers:{Authorization:`Bearer ${e}`}});if(!o.ok){const e=await o.text().catch(()=>"");throw new Error(`Parqet API error ${o.status} at ${t}: ${e}`)}return o.json()}async _post(t,e){const o=await Pt.getValidToken(this.clientId),i=await fetch(`${bt}${t}`,{method:"POST",headers:{Authorization:`Bearer ${o}`,"Content-Type":"application/json"},body:JSON.stringify(e)});if(!i.ok){const e=await i.text().catch(()=>"");throw new Error(`Parqet API error ${i.status} at ${t}: ${e}`)}return i.json()}async getUser(){return this._get("/user")}async listPortfolios(){return(await this._get("/portfolios")).items}async getPerformance(t,e){const o={portfolioIds:Array.isArray(t)?t:[t],interval:null!=e?e:{type:"relative",value:"max"}};return this._post("/performance",o)}async getActivities(t,e={}){const o=new URLSearchParams;if(e.activityType){(Array.isArray(e.activityType)?e.activityType:[e.activityType]).forEach(t=>o.append("activityType",t))}if(e.assetType){(Array.isArray(e.assetType)?e.assetType:[e.assetType]).forEach(t=>o.append("assetType",t))}if(e.holdingId){(Array.isArray(e.holdingId)?e.holdingId:[e.holdingId]).forEach(t=>o.append("holdingId",t))}null!=e.limit&&o.set("limit",String(e.limit)),e.cursor&&o.set("cursor",e.cursor);const i=o.toString();return this._get(`/portfolios/${t}/activities${i?`?${i}`:""}`)}};const It=new class{constructor(){this._reqId=0,this._initialized=!1}configure(t){this.clientId=t}async _send(t){var e;const o=await Pt.getValidToken(this.clientId),i=await fetch(`${xt}/mcp`,{method:"POST",headers:{Authorization:`Bearer ${o}`,"Content-Type":"application/json",Accept:"application/json, text/event-stream"},body:JSON.stringify(t)});if(!i.ok){const t=await i.text().catch(()=>"");throw new Error(`MCP server error ${i.status}: ${t}`)}return(null!==(e=i.headers.get("content-type"))&&void 0!==e?e:"").includes("text/event-stream")?this._parseSSE(await i.text()):i.json()}_parseSSE(t){for(const e of t.split("\n"))if(e.startsWith("data: "))try{return JSON.parse(e.slice(6))}catch(t){}throw new Error("No valid JSON found in MCP SSE response.")}async _initialize(){const t=await Pt.getValidToken(this.clientId);await fetch(`${xt}/mcp`,{method:"POST",headers:{Authorization:`Bearer ${t}`,"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:++this._reqId,method:"initialize",params:{protocolVersion:"2024-11-05",capabilities:{},clientInfo:{name:"parqet-ha-companion",version:"0.1.0"}}})}),this._initialized=!0}async _callTool(t,e={}){var o,i,r,a;this._initialized||await this._initialize();const s={jsonrpc:"2.0",id:++this._reqId,method:"tools/call",params:{name:t,arguments:e}},n=await this._send(s);if(n.error)throw new Error(`MCP tool error (${t}): ${n.error.message}`);if(null===(o=n.result)||void 0===o?void 0:o.isError)throw new Error(`MCP tool returned error for ${t}`);const l=null===(a=null===(r=null===(i=n.result)||void 0===i?void 0:i.content)||void 0===r?void 0:r[0])||void 0===a?void 0:a.text;if(!l)throw new Error(`Empty MCP response for tool ${t}`);return JSON.parse(l)}async getUser(){return this._callTool("parqet_get_user")}async listPortfolios(){return(await this._callTool("parqet_list_portfolios")).items}async getPerformance(t,e){const o=Array.isArray(t)?t:[t],i=await this._callTool("parqet_get_performance",Object.assign({portfolioIds:o},e?{intervalType:e.type,intervalValue:e.value}:{}));return"holdings"in i?i:{performance:i,holdings:[]}}async getActivities(t,e={}){return this._callTool("parqet_get_activities",Object.assign(Object.assign(Object.assign({portfolioId:t},null!=e.activityType?{activityType:e.activityType}:{}),null!=e.limit?{limit:e.limit}:{}),e.cursor?{cursor:e.cursor}:{}))}};let zt=class extends dt{constructor(){super(...arguments),this.portfolios=[],this.selected=null}_handleChange(t){const e=t.target;this.dispatchEvent(new CustomEvent("portfolio-change",{detail:{portfolioId:e.value},bubbles:!0,composed:!0}))}render(){return 0===this.portfolios.length?G``:G`
       <select
         class="selector"
         aria-label="Select portfolio"
         @change=${this._handleChange}
       >
-        ${this.portfolios.map(t=>F`
+        ${this.portfolios.map(t=>G`
             <option value=${t.id} ?selected=${t.id===this.selected}>${t.name}</option>
           `)}
       </select>
-    `}};Et.styles=n`
+    `}};zt.styles=n`
     .selector {
       background: var(--secondary-background-color, #f5f5f5);
       color: var(--primary-text-color);
@@ -24,11 +24,11 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       outline: 2px solid var(--primary-color);
       outline-offset: 1px;
     }
-  `,e([ut({type:Array})],Et.prototype,"portfolios",void 0),e([ut()],Et.prototype,"selected",void 0),Et=e([dt("parqet-portfolio-selector")],Et);let It=class extends lt{render(){return F`
+  `,e([ft({type:Array})],zt.prototype,"portfolios",void 0),e([ft()],zt.prototype,"selected",void 0),zt=e([ht("parqet-portfolio-selector")],zt);let Tt=class extends dt{render(){return G`
       <div class="container" role="status" aria-label="Loading">
         <div class="spinner"></div>
       </div>
-    `}};It.styles=n`
+    `}};Tt.styles=n`
     .container {
       display: flex;
       justify-content: center;
@@ -48,9 +48,9 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
         transform: rotate(360deg);
       }
     }
-  `,It=e([dt("parqet-loading-spinner")],It);let zt=class extends lt{constructor(){super(...arguments),this.selected="1y"}_select(t){this.selected=t,this.dispatchEvent(new CustomEvent("interval-change",{detail:{interval:t},bubbles:!0,composed:!0}))}render(){return F`
+  `,Tt=e([ht("parqet-loading-spinner")],Tt);let qt=class extends dt{constructor(){super(...arguments),this.selected="1y"}_select(t){this.selected=t,this.dispatchEvent(new CustomEvent("interval-change",{detail:{interval:t},bubbles:!0,composed:!0}))}render(){return G`
       <div class="intervals" role="group" aria-label="Time interval">
-        ${xt.map(({value:t,label:e})=>F`
+        ${wt.map(({value:t,label:e})=>G`
             <button
               class="btn ${this.selected===t?"active":""}"
               @click=${()=>this._select(t)}
@@ -60,7 +60,7 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
             </button>
           `)}
       </div>
-    `}};zt.styles=n`
+    `}};qt.styles=n`
     .intervals {
       display: flex;
       flex-wrap: wrap;
@@ -91,34 +91,85 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       outline: 2px solid var(--primary-color);
       outline-offset: 1px;
     }
-  `,e([ut()],zt.prototype,"selected",void 0),zt=e([dt("parqet-interval-selector")],zt);let Tt=class extends lt{constructor(){super(...arguments),this.portfolioId="",this._data=null,this._loading=!1,this._interval="1y",this._error=""}connectedCallback(){var t,e;super.connectedCallback(),this._interval=null!==(e=null===(t=this.config)||void 0===t?void 0:t.default_interval)&&void 0!==e?e:"1y",this._load()}updated(t){t.has("portfolioId")&&this.portfolioId&&this._load()}async _load(){if(this.portfolioId&&this.client){this._loading=!0,this._error="";try{const t=await this.client.getPerformance(this.portfolioId,{type:"relative",value:this._interval});this._data=t.performance}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1}}}async _onIntervalChange(t){this._interval=t.detail.interval,await this._load()}_sym(){var t,e;return null!==(e=null===(t=this.config)||void 0===t?void 0:t.currency_symbol)&&void 0!==e?e:"€"}_fmtCurrency(t){return null==t?"—":`${this._sym()}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_fmtPct(t){if(null==t)return"—";const e=100*t;return`${e>=0?"+":""}${e.toFixed(2)}%`}_kpiClass(t){return null==t?"":t>0?"positive":t<0?"negative":""}render(){var t,e,o,i,r,a,s,n,l,c,d,p,h,u,v,f,_,g,m,y,b,x,$,w,k;const C=this._data;return F`
-      ${!1!==(null===(t=this.config)||void 0===t?void 0:t.show_interval_selector)?F`<parqet-interval-selector
+  `,e([ft()],qt.prototype,"selected",void 0),qt=e([ht("parqet-interval-selector")],qt);const Ot=110;let Lt=class extends dt{constructor(){super(...arguments),this.segments=[],this.currencySymbol="€"}_fmtValue(t){return`${this.currencySymbol}${t.toLocaleString(void 0,{minimumFractionDigits:0,maximumFractionDigits:0})}`}render(){const t=this.segments.filter(t=>0!==t.value);if(0===t.length)return G`<div class="empty">No data</div>`;const e=Math.max(...t.map(t=>Math.abs(t.value))),o=24*t.length-4;return G`
+      <div class="chart-container">
+        <svg viewBox="0 0 ${390} ${o}" class="bars" role="img" aria-label="Performance breakdown chart">
+          ${t.map((t,o)=>{var i;const r=24*o,a=200*(e>0?Math.abs(t.value)/e:0),s=t.value>=0,n=null!==(i=t.color)&&void 0!==i?i:s?"var(--success-color, #4caf50)":"var(--error-color, #f44336)";return B`
+              <text x="${102}" y="${r+10}" text-anchor="end" dominant-baseline="central" class="bar-label">
+                ${t.label}
+              </text>
+              <rect x="${Ot}" y="${r+2}" width="${a}" height="${16}"
+                rx="3" fill="${n}" opacity="0.8">
+                <title>${t.label}: ${this._fmtValue(t.value)}</title>
+              </rect>
+              <text x="${318}" y="${r+10}" dominant-baseline="central"
+                class="bar-value ${s?"positive":"negative"}">
+                ${this._fmtValue(t.value)}
+              </text>
+            `})}
+        </svg>
+      </div>
+    `}};Lt.styles=n`
+    :host { display: block; }
+    .chart-container {
+      padding: 8px 16px 16px;
+      overflow-x: auto;
+    }
+    .bars {
+      width: 100%;
+      max-width: 400px;
+    }
+    .bar-label {
+      font-size: 10px;
+      fill: var(--secondary-text-color, #757575);
+    }
+    .bar-value {
+      font-size: 10px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    .bar-value.positive { fill: var(--success-color, #4caf50); }
+    .bar-value.negative { fill: var(--error-color, #f44336); }
+    .empty {
+      padding: 16px;
+      text-align: center;
+      color: var(--secondary-text-color);
+      font-size: 0.82rem;
+    }
+  `,e([ft({type:Array})],Lt.prototype,"segments",void 0),e([ft({type:String})],Lt.prototype,"currencySymbol",void 0),Lt=e([ht("parqet-bar-chart")],Lt);let Dt=class extends dt{constructor(){super(...arguments),this.portfolioId="",this._data=null,this._loading=!1,this._interval="1y",this._error=""}connectedCallback(){var t,e;super.connectedCallback(),this._interval=null!==(e=null===(t=this.config)||void 0===t?void 0:t.default_interval)&&void 0!==e?e:"1y",this._load()}updated(t){t.has("portfolioId")&&this.portfolioId&&this._load()}async _load(){if(this.portfolioId&&this.client){this._loading=!0,this._error="";try{const t=await this.client.getPerformance(this.portfolioId,{type:"relative",value:this._interval});this._data=t.performance}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1}}}async _onIntervalChange(t){this._interval=t.detail.interval,await this._load()}_sym(){var t,e;return null!==(e=null===(t=this.config)||void 0===t?void 0:t.currency_symbol)&&void 0!==e?e:"€"}_fmtCurrency(t){return null==t?"—":`${this._sym()}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_fmtPct(t){if(null==t)return"—";const e=100*t;return`${e>=0?"+":""}${e.toFixed(2)}%`}_kpiClass(t){return null==t?"":t>0?"positive":t<0?"negative":""}render(){var t,e,o,i,r,a,s,n,l,c,d,p,h,u,v,f,_,g,m,y,b,x,$,w,k,C;const A=this._data;return G`
+      ${!1!==(null===(t=this.config)||void 0===t?void 0:t.show_interval_selector)?G`<parqet-interval-selector
             .selected=${this._interval}
             @interval-change=${this._onIntervalChange}
           ></parqet-interval-selector>`:""}
 
-      ${this._error?F`<div class="error" role="alert">${this._error}</div>`:""}
-      ${this._loading?F`<parqet-loading-spinner></parqet-loading-spinner>`:""}
+      ${this._error?G`<div class="error" role="alert">${this._error}</div>`:""}
+      ${this._loading?G`<parqet-loading-spinner></parqet-loading-spinner>`:""}
 
-      ${C?F`
+      ${A?G`
             <div class="kpi-grid ${(null===(e=this.config)||void 0===e?void 0:e.compact)?"compact":""}">
-              ${this._renderKpi("Total Value",this._fmtCurrency(null===(o=C.valuation)||void 0===o?void 0:o.atIntervalEnd))}
-              ${this._renderKpi("XIRR",this._fmtPct(null===(r=null===(i=C.kpis)||void 0===i?void 0:i.inInterval)||void 0===r?void 0:r.xirr),null===(s=null===(a=C.kpis)||void 0===a?void 0:a.inInterval)||void 0===s?void 0:s.xirr)}
-              ${this._renderKpi("TTWROR",this._fmtPct(null===(l=null===(n=C.kpis)||void 0===n?void 0:n.inInterval)||void 0===l?void 0:l.ttwror),null===(d=null===(c=C.kpis)||void 0===c?void 0:c.inInterval)||void 0===d?void 0:d.ttwror)}
-              ${this._renderKpi("Unrealized Gain",this._fmtCurrency(null===(h=null===(p=C.unrealizedGains)||void 0===p?void 0:p.inInterval)||void 0===h?void 0:h.gainGross),null===(v=null===(u=C.unrealizedGains)||void 0===u?void 0:u.inInterval)||void 0===v?void 0:v.gainGross)}
-              ${(()=>{var t,e,o,i;const r=null!==(e=null===(t=C.valuation)||void 0===t?void 0:t.atIntervalStart)&&void 0!==e?e:0,a=null!==(i=null===(o=C.valuation)||void 0===o?void 0:o.atIntervalEnd)&&void 0!==i?i:0,s=r>0?(a-r)/r:null;return this._renderKpi("Period Return",this._fmtPct(s),s)})()}
-              ${this._renderKpi("Realized Gain",this._fmtCurrency(null===(_=null===(f=C.realizedGains)||void 0===f?void 0:f.inInterval)||void 0===_?void 0:_.gainGross),null===(m=null===(g=C.realizedGains)||void 0===g?void 0:g.inInterval)||void 0===m?void 0:m.gainGross)}
-              ${this._renderKpi("Dividends",this._fmtCurrency(null===(b=null===(y=C.dividends)||void 0===y?void 0:y.inInterval)||void 0===b?void 0:b.gainGross))}
-              ${this._renderKpi("Fees",this._fmtCurrency(null===($=null===(x=C.fees)||void 0===x?void 0:x.inInterval)||void 0===$?void 0:$.fees))}
-              ${this._renderKpi("Taxes",this._fmtCurrency(null===(k=null===(w=C.taxes)||void 0===w?void 0:w.inInterval)||void 0===k?void 0:k.taxes))}
+              ${this._renderKpi("Total Value",this._fmtCurrency(null===(o=A.valuation)||void 0===o?void 0:o.atIntervalEnd))}
+              ${this._renderKpi("XIRR",this._fmtPct(null===(r=null===(i=A.kpis)||void 0===i?void 0:i.inInterval)||void 0===r?void 0:r.xirr),null===(s=null===(a=A.kpis)||void 0===a?void 0:a.inInterval)||void 0===s?void 0:s.xirr)}
+              ${this._renderKpi("TTWROR",this._fmtPct(null===(l=null===(n=A.kpis)||void 0===n?void 0:n.inInterval)||void 0===l?void 0:l.ttwror),null===(d=null===(c=A.kpis)||void 0===c?void 0:c.inInterval)||void 0===d?void 0:d.ttwror)}
+              ${this._renderKpi("Unrealized Gain",this._fmtCurrency(null===(h=null===(p=A.unrealizedGains)||void 0===p?void 0:p.inInterval)||void 0===h?void 0:h.gainGross),null===(v=null===(u=A.unrealizedGains)||void 0===u?void 0:u.inInterval)||void 0===v?void 0:v.gainGross)}
+              ${(()=>{var t,e,o,i;const r=null!==(e=null===(t=A.valuation)||void 0===t?void 0:t.atIntervalStart)&&void 0!==e?e:0,a=null!==(i=null===(o=A.valuation)||void 0===o?void 0:o.atIntervalEnd)&&void 0!==i?i:0,s=r>0?(a-r)/r:null;return this._renderKpi("Period Return",this._fmtPct(s),s)})()}
+              ${this._renderKpi("Realized Gain",this._fmtCurrency(null===(_=null===(f=A.realizedGains)||void 0===f?void 0:f.inInterval)||void 0===_?void 0:_.gainGross),null===(m=null===(g=A.realizedGains)||void 0===g?void 0:g.inInterval)||void 0===m?void 0:m.gainGross)}
+              ${this._renderKpi("Dividends",this._fmtCurrency(null===(b=null===(y=A.dividends)||void 0===y?void 0:y.inInterval)||void 0===b?void 0:b.gainGross))}
+              ${this._renderKpi("Fees",this._fmtCurrency(null===($=null===(x=A.fees)||void 0===x?void 0:x.inInterval)||void 0===$?void 0:$.fees))}
+              ${this._renderKpi("Taxes",this._fmtCurrency(null===(k=null===(w=A.taxes)||void 0===w?void 0:w.inInterval)||void 0===k?void 0:k.taxes))}
             </div>
-          `:this._loading?"":F`<div class="empty">No data available.</div>`}
-    `}_renderKpi(t,e,o){return F`
+            ${!1!==(null===(C=this.config)||void 0===C?void 0:C.show_chart)?this._renderBreakdownChart(A):""}
+          `:this._loading?"":G`<div class="empty">No data available.</div>`}
+    `}_renderBreakdownChart(t){var e,o,i,r,a,s,n,l,c,d,p,h,u,v,f;const _=[{label:"Unrealized",value:null!==(i=null===(o=null===(e=t.unrealizedGains)||void 0===e?void 0:e.inInterval)||void 0===o?void 0:o.gainGross)&&void 0!==i?i:0},{label:"Realized",value:null!==(s=null===(a=null===(r=t.realizedGains)||void 0===r?void 0:r.inInterval)||void 0===a?void 0:a.gainGross)&&void 0!==s?s:0},{label:"Dividends",value:null!==(c=null===(l=null===(n=t.dividends)||void 0===n?void 0:n.inInterval)||void 0===l?void 0:l.gainGross)&&void 0!==c?c:0},{label:"Fees",value:-(null!==(h=null===(p=null===(d=t.fees)||void 0===d?void 0:d.inInterval)||void 0===p?void 0:p.fees)&&void 0!==h?h:0)},{label:"Taxes",value:-(null!==(f=null===(v=null===(u=t.taxes)||void 0===u?void 0:u.inInterval)||void 0===v?void 0:v.taxes)&&void 0!==f?f:0)}].filter(t=>0!==t.value);return 0===_.length?"":G`
+      <parqet-bar-chart
+        .segments=${_}
+        .currencySymbol=${this._sym()}
+      ></parqet-bar-chart>
+    `}_renderKpi(t,e,o){return G`
       <div class="kpi-tile">
         <div class="kpi-label">${t}</div>
         <div class="kpi-value ${this._kpiClass(o)}">${e}</div>
       </div>
-    `}};Tt.styles=n`
+    `}};Dt.styles=n`
     :host {
       display: block;
     }
@@ -181,15 +232,110 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       color: var(--secondary-text-color);
       font-size: 0.875rem;
     }
-  `,e([ut()],Tt.prototype,"portfolioId",void 0),e([ut({attribute:!1})],Tt.prototype,"client",void 0),e([ut({attribute:!1})],Tt.prototype,"config",void 0),e([vt()],Tt.prototype,"_data",void 0),e([vt()],Tt.prototype,"_loading",void 0),e([vt()],Tt.prototype,"_interval",void 0),e([vt()],Tt.prototype,"_error",void 0),Tt=e([dt("parqet-performance-view")],Tt);let qt=class extends lt{constructor(){super(...arguments),this.portfolioId="",this._holdings=[],this._loading=!1,this._error="",this._sortKey="value",this._sortAsc=!1,this._expandedId=null}connectedCallback(){super.connectedCallback(),this._load()}updated(t){t.has("portfolioId")&&this.portfolioId&&this._load()}async _load(){var t;if(this.portfolioId&&this.client){this._loading=!0,this._error="";try{const e=await this.client.getPerformance(this.portfolioId,{type:"relative",value:"max"});this._holdings=null!==(t=e.holdings)&&void 0!==t?t:[]}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1}}}_handleSort(t){this._sortKey===t?this._sortAsc=!this._sortAsc:(this._sortKey=t,this._sortAsc=!1)}_assetLabel(t){if(t.nickname)return t.nickname;const e=t.asset;return e.name?e.name:e.symbol?e.symbol:`…${t.id.slice(-8)}`}_sortHoldings(t){const e=t.reduce((t,e)=>t+e.position.currentValue,0);return[...t].sort((t,o)=>{let i,r;const a=t.position.currentValue-t.position.purchaseValue,s=o.position.currentValue-o.position.purchaseValue;switch(this._sortKey){case"name":return this._sortAsc?this._assetLabel(t).localeCompare(this._assetLabel(o)):this._assetLabel(o).localeCompare(this._assetLabel(t));case"value":i=t.position.currentValue,r=o.position.currentValue;break;case"pl":i=a,r=s;break;case"plPct":i=t.position.purchaseValue>0?a/t.position.purchaseValue:0,r=o.position.purchaseValue>0?s/o.position.purchaseValue:0;break;case"weight":i=e>0?t.position.currentValue/e:0,r=e>0?o.position.currentValue/e:0;break;default:return 0}return this._sortAsc?i-r:r-i})}_sym(){var t,e;return null!==(e=null===(t=this.config)||void 0===t?void 0:t.currency_symbol)&&void 0!==e?e:"€"}_fmtC(t){return null==t?"—":`${this._sym()}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_fmtNum(t,e=4){return null==t?"—":t.toLocaleString(void 0,{minimumFractionDigits:0,maximumFractionDigits:e})}_sortIcon(t){return this._sortKey!==t?" ↕":this._sortAsc?" ↑":" ↓"}render(){var t,e;if(this._loading&&0===this._holdings.length)return F`<parqet-loading-spinner></parqet-loading-spinner>`;const o=this._holdings.filter(t=>!t.position.isSold),i=this._sortHoldings(o),r=o.reduce((t,e)=>t+e.position.currentValue,0),a=!1!==(null===(t=this.config)||void 0===t?void 0:t.show_logo),s=!!(null===(e=this.config)||void 0===e?void 0:e.compact);return F`
-      ${this._error?F`<div class="error" role="alert">${this._error}</div>`:""}
-      ${this._loading?F`<parqet-loading-spinner></parqet-loading-spinner>`:""}
+  `,e([ft()],Dt.prototype,"portfolioId",void 0),e([ft({attribute:!1})],Dt.prototype,"client",void 0),e([ft({attribute:!1})],Dt.prototype,"config",void 0),e([_t()],Dt.prototype,"_data",void 0),e([_t()],Dt.prototype,"_loading",void 0),e([_t()],Dt.prototype,"_interval",void 0),e([_t()],Dt.prototype,"_error",void 0),Dt=e([ht("parqet-performance-view")],Dt);const Mt=["#4285f4","#ea4335","#fbbc04","#34a853","#ff6d01","#46bdc6","#7b1fa2","#e91e63","#00acc1","#8d6e63"];function Ut(t){return Mt[t%Mt.length]}const Vt=160,Rt=2*Math.PI*66;let jt=class extends dt{constructor(){super(...arguments),this.segments=[],this.centerLabel="",this.centerSub=""}render(){const t=this.segments.reduce((t,e)=>t+Math.abs(e.value),0);if(0===t||0===this.segments.length)return G`<div class="empty">No data</div>`;const e=80;let o=0;return G`
+      <div class="chart-container">
+        <svg viewBox="0 0 ${Vt} ${Vt}" class="donut" role="img" aria-label="Portfolio allocation chart">
+          ${this.segments.map(i=>{const r=Math.abs(i.value)/t,a=r*Rt,s=Rt-a,n=o/t*360-90;return o+=Math.abs(i.value),B`
+              <circle
+                cx="${e}" cy="${e}" r="${66}"
+                fill="none"
+                stroke="${i.color}"
+                stroke-width="${28}"
+                stroke-dasharray="${a} ${s}"
+                transform="rotate(${n} ${e} ${e})"
+                opacity="0.85"
+              >
+                <title>${i.label}: ${(100*r).toFixed(1)}%</title>
+              </circle>
+            `})}
+          ${this.centerLabel?B`
+                <text x="${e}" y="${e}" text-anchor="middle" dominant-baseline="central" class="center-text">
+                  <tspan x="${e}" dy="-0.3em" class="center-val">${this.centerLabel}</tspan>
+                  ${this.centerSub?B`<tspan x="${e}" dy="1.3em" class="center-sub">${this.centerSub}</tspan>`:""}
+                </text>
+              `:""}
+        </svg>
+        <div class="legend">
+          ${this.segments.map(e=>{const o=Math.abs(e.value)/t*100;return G`
+              <div class="legend-item">
+                <span class="legend-dot" style="background:${e.color}"></span>
+                <span class="legend-label">${e.label}</span>
+                <span class="legend-pct">${o.toFixed(1)}%</span>
+              </div>
+            `})}
+        </div>
+      </div>
+    `}};jt.styles=n`
+    :host { display: block; }
+    .chart-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 16px;
+    }
+    .donut {
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+    }
+    .center-text { pointer-events: none; }
+    .center-val {
+      font-size: 14px;
+      font-weight: 600;
+      fill: var(--primary-text-color, #333);
+    }
+    .center-sub {
+      font-size: 9px;
+      fill: var(--secondary-text-color, #757575);
+    }
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--primary-text-color);
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-label {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .legend-pct {
+      flex-shrink: 0;
+      color: var(--secondary-text-color);
+      font-variant-numeric: tabular-nums;
+    }
+    .empty {
+      padding: 16px;
+      text-align: center;
+      color: var(--secondary-text-color);
+      font-size: 0.82rem;
+    }
+  `,e([ft({type:Array})],jt.prototype,"segments",void 0),e([ft({type:String})],jt.prototype,"centerLabel",void 0),e([ft({type:String})],jt.prototype,"centerSub",void 0),jt=e([ht("parqet-donut-chart")],jt);let Nt=class extends dt{constructor(){super(...arguments),this.portfolioId="",this._holdings=[],this._loading=!1,this._error="",this._sortKey="value",this._sortAsc=!1,this._expandedId=null}connectedCallback(){super.connectedCallback(),this._load()}updated(t){t.has("portfolioId")&&this.portfolioId&&this._load()}async _load(){var t;if(this.portfolioId&&this.client){this._loading=!0,this._error="";try{const e=await this.client.getPerformance(this.portfolioId,{type:"relative",value:"max"});this._holdings=null!==(t=e.holdings)&&void 0!==t?t:[]}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1}}}_handleSort(t){this._sortKey===t?this._sortAsc=!this._sortAsc:(this._sortKey=t,this._sortAsc=!1)}_assetLabel(t){if(t.nickname)return t.nickname;const e=t.asset;return e.name?e.name:e.symbol?e.symbol:`…${t.id.slice(-8)}`}_sortHoldings(t){const e=t.reduce((t,e)=>t+e.position.currentValue,0);return[...t].sort((t,o)=>{let i,r;const a=t.position.currentValue-t.position.purchaseValue,s=o.position.currentValue-o.position.purchaseValue;switch(this._sortKey){case"name":return this._sortAsc?this._assetLabel(t).localeCompare(this._assetLabel(o)):this._assetLabel(o).localeCompare(this._assetLabel(t));case"value":i=t.position.currentValue,r=o.position.currentValue;break;case"pl":i=a,r=s;break;case"plPct":i=t.position.purchaseValue>0?a/t.position.purchaseValue:0,r=o.position.purchaseValue>0?s/o.position.purchaseValue:0;break;case"weight":i=e>0?t.position.currentValue/e:0,r=e>0?o.position.currentValue/e:0;break;default:return 0}return this._sortAsc?i-r:r-i})}_sym(){var t,e;return null!==(e=null===(t=this.config)||void 0===t?void 0:t.currency_symbol)&&void 0!==e?e:"€"}_fmtC(t){return null==t?"—":`${this._sym()}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_fmtNum(t,e=4){return null==t?"—":t.toLocaleString(void 0,{minimumFractionDigits:0,maximumFractionDigits:e})}_sortIcon(t){return this._sortKey!==t?" ↕":this._sortAsc?" ↑":" ↓"}render(){var t,e,o;if(this._loading&&0===this._holdings.length)return G`<parqet-loading-spinner></parqet-loading-spinner>`;const i=this._holdings.filter(t=>!t.position.isSold),r=this._sortHoldings(i),a=i.reduce((t,e)=>t+e.position.currentValue,0),s=!1!==(null===(t=this.config)||void 0===t?void 0:t.show_logo),n=!!(null===(e=this.config)||void 0===e?void 0:e.compact);return G`
+      ${this._error?G`<div class="error" role="alert">${this._error}</div>`:""}
+      ${this._loading?G`<parqet-loading-spinner></parqet-loading-spinner>`:""}
+
+      ${!1!==(null===(o=this.config)||void 0===o?void 0:o.show_chart)?this._renderDonut(i,a):""}
 
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              ${a?F`<th class="logo-col"></th>`:""}
+              ${s?G`<th class="logo-col"></th>`:""}
               <th @click=${()=>this._handleSort("name")}>Name${this._sortIcon("name")}</th>
               <th class="num" @click=${()=>this._handleSort("value")}>
                 Value${this._sortIcon("value")}
@@ -206,21 +352,21 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
             </tr>
           </thead>
           <tbody>
-            ${i.map(t=>{var e,o,i,n,l,c,d,p,h;const u=t.position.currentValue-t.position.purchaseValue,v=t.position.purchaseValue>0?u/t.position.purchaseValue:0,f=r>0?t.position.currentValue/r:0,_=u>0?"positive":u<0?"negative":"",g=this._expandedId===t.id,m=null!==(o=null!==(e=t.asset.isin)&&void 0!==e?e:t.asset.symbol)&&void 0!==o?o:"";return F`
+            ${r.map(t=>{var e,o,i,r,l,c,d,p,h;const u=t.position.currentValue-t.position.purchaseValue,v=t.position.purchaseValue>0?u/t.position.purchaseValue:0,f=a>0?t.position.currentValue/a:0,_=u>0?"positive":u<0?"negative":"",g=this._expandedId===t.id,m=null!==(o=null!==(e=t.asset.isin)&&void 0!==e?e:t.asset.symbol)&&void 0!==o?o:"";return G`
                 <tr
-                  class="row ${s?"compact":""}"
+                  class="row ${n?"compact":""}"
                   @click=${()=>this._expandedId=g?null:t.id}
                   role="button"
                   tabindex="0"
                   aria-expanded=${g}
                   @keydown=${e=>{"Enter"!==e.key&&" "!==e.key||(this._expandedId=g?null:t.id)}}
                 >
-                  ${a?F`<td class="logo-col">
-                        ${t.logo?F`<img class="logo" src=${t.logo} alt="" loading="lazy" />`:F`<div class="logo-placeholder"></div>`}
+                  ${s?G`<td class="logo-col">
+                        ${t.logo?G`<img class="logo" src=${t.logo} alt="" loading="lazy" />`:G`<div class="logo-placeholder"></div>`}
                       </td>`:""}
                   <td class="name-col">
                     <span class="holding-name">${this._assetLabel(t)}</span>
-                    ${m?F`<span class="ticker">${m}</span>`:""}
+                    ${m?G`<span class="ticker">${m}</span>`:""}
                   </td>
                   <td class="num">${this._fmtC(t.position.currentValue)}</td>
                   <td class="num ${_}">${this._fmtC(u)}</td>
@@ -229,22 +375,22 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
                   </td>
                   <td class="num">${(100*f).toFixed(1)}%</td>
                 </tr>
-                ${g?F`
+                ${g?G`
                       <tr class="expanded-row">
-                        <td colspan=${a?6:5}>
+                        <td colspan=${s?6:5}>
                           <div class="expanded">
                             <span>Shares: ${this._fmtNum(t.position.shares)}</span>
                             <span>Avg Price: ${this._fmtC(t.position.purchasePrice)}</span>
                             <span>Curr Price: ${this._fmtC(t.position.currentPrice)}</span>
                             <span>
                               XIRR:
-                              ${null!=(null===(n=null===(i=t.performance.kpis)||void 0===i?void 0:i.inInterval)||void 0===n?void 0:n.xirr)?`${(100*t.performance.kpis.inInterval.xirr).toFixed(2)}%`:"—"}
+                              ${null!=(null===(r=null===(i=t.performance.kpis)||void 0===i?void 0:i.inInterval)||void 0===r?void 0:r.xirr)?`${(100*t.performance.kpis.inInterval.xirr).toFixed(2)}%`:"—"}
                             </span>
                             <span>
                               Dividends: ${this._fmtC(null===(c=null===(l=t.performance.dividends)||void 0===l?void 0:l.inInterval)||void 0===c?void 0:c.gainGross)}
                             </span>
                             <span>Fees: ${this._fmtC(null===(p=null===(d=t.performance.fees)||void 0===d?void 0:d.inInterval)||void 0===p?void 0:p.fees)}</span>
-                            ${(null===(h=t.quote)||void 0===h?void 0:h.exchange)?F`<span>Exchange: ${t.quote.exchange}</span>`:""}
+                            ${(null===(h=t.quote)||void 0===h?void 0:h.exchange)?G`<span>Exchange: ${t.quote.exchange}</span>`:""}
                           </div>
                         </td>
                       </tr>
@@ -252,9 +398,15 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
               `})}
           </tbody>
         </table>
-        ${0!==i.length||this._loading?"":F`<div class="empty">No holdings found.</div>`}
+        ${0!==r.length||this._loading?"":G`<div class="empty">No holdings found.</div>`}
       </div>
-    `}};qt.styles=n`
+    `}_renderDonut(t,e){if(0===t.length)return"";const o=[...t].sort((t,e)=>e.position.currentValue-t.position.currentValue),i=[];let r=0;for(let t=0;t<o.length;t++)t<8?i.push({label:this._assetLabel(o[t]),value:o[t].position.currentValue,color:Ut(t)}):r+=o[t].position.currentValue;r>0&&i.push({label:"Other",value:r,color:"#9e9e9e"});const a=`${this._sym()}${e.toLocaleString(void 0,{maximumFractionDigits:0})}`;return G`
+      <parqet-donut-chart
+        .segments=${i}
+        .centerLabel=${a}
+        .centerSub=${"Total Value"}
+      ></parqet-donut-chart>
+    `}};Nt.styles=n`
     :host {
       display: block;
     }
@@ -385,10 +537,10 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       color: var(--secondary-text-color);
       font-size: 0.875rem;
     }
-  `,e([ut()],qt.prototype,"portfolioId",void 0),e([ut({attribute:!1})],qt.prototype,"client",void 0),e([ut({attribute:!1})],qt.prototype,"config",void 0),e([vt()],qt.prototype,"_holdings",void 0),e([vt()],qt.prototype,"_loading",void 0),e([vt()],qt.prototype,"_error",void 0),e([vt()],qt.prototype,"_sortKey",void 0),e([vt()],qt.prototype,"_sortAsc",void 0),e([vt()],qt.prototype,"_expandedId",void 0),qt=e([dt("parqet-holdings-view")],qt);const Ot=[{value:"all",label:"All",color:"var(--primary-color, #03a9f4)"},{value:"buy",label:"Buy",color:"#4caf50"},{value:"sell",label:"Sell",color:"#f44336"},{value:"dividend",label:"Dividend",color:"#2196f3"},{value:"interest",label:"Interest",color:"#00bcd4"},{value:"transfer_in",label:"Transfer In",color:"#9c27b0"},{value:"transfer_out",label:"Transfer Out",color:"#7b1fa2"},{value:"fees_taxes",label:"Fees/Taxes",color:"#ff9800"},{value:"deposit",label:"Deposit",color:"#009688"},{value:"withdrawal",label:"Withdrawal",color:"#795548"}],Ut=Object.fromEntries(Ot.map(t=>[t.value,t.color]));let Dt=class extends lt{constructor(){super(...arguments),this.portfolioId="",this._activities=[],this._cursor=null,this._loading=!1,this._loadingMore=!1,this._hasMore=!1,this._filter="all",this._error=""}connectedCallback(){var t,e;super.connectedCallback(),this._filter=null!==(e=null===(t=this.config)||void 0===t?void 0:t.default_activity_type)&&void 0!==e?e:"all",this._load(!0)}updated(t){t.has("portfolioId")&&this.portfolioId&&(this._reset(),this._load(!0))}_reset(){this._activities=[],this._cursor=null,this._hasMore=!1}async _load(t=!1){var e,o;if(this.portfolioId&&this.client){t&&this._reset(),t?this._loading=!0:this._loadingMore=!0,this._error="";try{const i=await this.client.getActivities(this.portfolioId,{activityType:"all"!==this._filter?this._filter:void 0,limit:Math.max(10,null!==(o=null===(e=this.config)||void 0===e?void 0:e.activities_limit)&&void 0!==o?o:10),cursor:t?null:this._cursor});this._activities=t?i.activities:[...this._activities,...i.activities],this._cursor=i.cursor,this._hasMore=!!i.cursor}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1,this._loadingMore=!1}}}async _setFilter(t){this._filter=t,await this._load(!0)}_fmtDate(t){return new Date(t).toLocaleDateString(void 0,{day:"2-digit",month:"2-digit",year:"numeric"})}_fmtC(t){var e,o;if(null==t)return"—";return`${null!==(o=null===(e=this.config)||void 0===e?void 0:e.currency_symbol)&&void 0!==o?o:"€"}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_typeLabel(t){return t.replace(/_/g," ").replace(/\b\w/g,t=>t.toUpperCase())}render(){var t,e,o;const i=!!(null===(t=this.config)||void 0===t?void 0:t.compact);return F`
+  `,e([ft()],Nt.prototype,"portfolioId",void 0),e([ft({attribute:!1})],Nt.prototype,"client",void 0),e([ft({attribute:!1})],Nt.prototype,"config",void 0),e([_t()],Nt.prototype,"_holdings",void 0),e([_t()],Nt.prototype,"_loading",void 0),e([_t()],Nt.prototype,"_error",void 0),e([_t()],Nt.prototype,"_sortKey",void 0),e([_t()],Nt.prototype,"_sortAsc",void 0),e([_t()],Nt.prototype,"_expandedId",void 0),Nt=e([ht("parqet-holdings-view")],Nt);const Ht=[{value:"all",label:"All",color:"var(--primary-color, #03a9f4)"},{value:"buy",label:"Buy",color:"#4caf50"},{value:"sell",label:"Sell",color:"#f44336"},{value:"dividend",label:"Dividend",color:"#2196f3"},{value:"interest",label:"Interest",color:"#00bcd4"},{value:"transfer_in",label:"Transfer In",color:"#9c27b0"},{value:"transfer_out",label:"Transfer Out",color:"#7b1fa2"},{value:"fees_taxes",label:"Fees/Taxes",color:"#ff9800"},{value:"deposit",label:"Deposit",color:"#009688"},{value:"withdrawal",label:"Withdrawal",color:"#795548"}],Ft=Object.fromEntries(Ht.map(t=>[t.value,t.color]));let Gt=class extends dt{constructor(){super(...arguments),this.portfolioId="",this._activities=[],this._cursor=null,this._loading=!1,this._loadingMore=!1,this._hasMore=!1,this._filter="all",this._error=""}connectedCallback(){var t,e;super.connectedCallback(),this._filter=null!==(e=null===(t=this.config)||void 0===t?void 0:t.default_activity_type)&&void 0!==e?e:"all",this._load(!0)}updated(t){t.has("portfolioId")&&this.portfolioId&&(this._reset(),this._load(!0))}_reset(){this._activities=[],this._cursor=null,this._hasMore=!1}async _load(t=!1){var e,o;if(this.portfolioId&&this.client){t&&this._reset(),t?this._loading=!0:this._loadingMore=!0,this._error="";try{const i=await this.client.getActivities(this.portfolioId,{activityType:"all"!==this._filter?this._filter:void 0,limit:Math.max(10,null!==(o=null===(e=this.config)||void 0===e?void 0:e.activities_limit)&&void 0!==o?o:10),cursor:t?null:this._cursor});this._activities=t?i.activities:[...this._activities,...i.activities],this._cursor=i.cursor,this._hasMore=!!i.cursor}catch(t){this._error=t instanceof Error?t.message:String(t)}finally{this._loading=!1,this._loadingMore=!1}}}async _setFilter(t){this._filter=t,await this._load(!0)}_fmtDate(t){return new Date(t).toLocaleDateString(void 0,{day:"2-digit",month:"2-digit",year:"numeric"})}_fmtC(t){var e,o;if(null==t)return"—";return`${null!==(o=null===(e=this.config)||void 0===e?void 0:e.currency_symbol)&&void 0!==o?o:"€"}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_typeLabel(t){return t.replace(/_/g," ").replace(/\b\w/g,t=>t.toUpperCase())}render(){var t,e,o;const i=!!(null===(t=this.config)||void 0===t?void 0:t.compact);return G`
       <!-- Filter chips -->
       <div class="filters" role="group" aria-label="Filter activities">
-        ${Ot.map(t=>F`
+        ${Ht.map(t=>G`
             <button
               class="chip ${this._filter===t.value?"active":""}"
               style="--chip-color: ${t.color}"
@@ -400,15 +552,15 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
           `)}
       </div>
 
-      ${this._error?F`<div class="error" role="alert">${this._error}</div>`:""}
-      ${this._loading?F`<parqet-loading-spinner></parqet-loading-spinner>`:""}
+      ${this._error?G`<div class="error" role="alert">${this._error}</div>`:""}
+      ${this._loading?G`<parqet-loading-spinner></parqet-loading-spinner>`:""}
 
       <div class="list">
         ${this._activities.slice(0,null!==(o=null===(e=this.config)||void 0===e?void 0:e.activities_limit)&&void 0!==o?o:10).map(t=>this._renderActivity(t,i))}
-        ${0!==this._activities.length||this._loading?"":F`<div class="empty">No activities found.</div>`}
+        ${0!==this._activities.length||this._loading?"":G`<div class="empty">No activities found.</div>`}
       </div>
 
-      ${this._hasMore?F`
+      ${this._hasMore?G`
             <div class="load-more">
               <button
                 class="load-more-btn"
@@ -419,24 +571,24 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
               </button>
             </div>
           `:""}
-    `}_assetLabel(t){var e,o,i;return(null===(e=t.asset)||void 0===e?void 0:e.name)?t.asset.name:(null===(o=t.asset)||void 0===o?void 0:o.symbol)?t.asset.symbol:(null===(i=t.asset)||void 0===i?void 0:i.isin)?t.asset.isin:`…${t.holdingId.slice(-8)}`}_renderActivity(t,e){var o;const i=null!==(o=Ut[t.type])&&void 0!==o?o:"#888",r=null!=t.tax&&0!==t.tax||null!=t.fee&&0!==t.fee;return F`
+    `}_assetLabel(t){var e,o,i;return(null===(e=t.asset)||void 0===e?void 0:e.name)?t.asset.name:(null===(o=t.asset)||void 0===o?void 0:o.symbol)?t.asset.symbol:(null===(i=t.asset)||void 0===i?void 0:i.isin)?t.asset.isin:`…${t.holdingId.slice(-8)}`}_renderActivity(t,e){var o;const i=null!==(o=Ft[t.type])&&void 0!==o?o:"#888",r=null!=t.tax&&0!==t.tax||null!=t.fee&&0!==t.fee;return G`
       <div class="activity ${e?"compact":""}">
         <span class="badge" style="background: ${i}">${this._typeLabel(t.type)}</span>
         <div class="info">
           <span class="asset">${this._assetLabel(t)}</span>
           <span class="date">
-            ${this._fmtDate(t.datetime)}${t.broker?F` · <span class="broker">${t.broker.replace(/_/g," ")}</span>`:""}
+            ${this._fmtDate(t.datetime)}${t.broker?G` · <span class="broker">${t.broker.replace(/_/g," ")}</span>`:""}
           </span>
-          ${r?F`<span class="taxfee">
+          ${r?G`<span class="taxfee">
                 ${t.tax?`Tax: ${this._fmtC(t.tax)}`:""}${t.tax&&t.fee?" · ":""}${t.fee?`Fee: ${this._fmtC(t.fee)}`:""}
               </span>`:""}
         </div>
         <div class="amounts">
-          ${null!=t.shares?F`<span class="shares">${t.shares.toLocaleString()} shares</span>`:""}
+          ${null!=t.shares?G`<span class="shares">${t.shares.toLocaleString()} shares</span>`:""}
           <span class="amount">${this._fmtC(t.amount)}</span>
         </div>
       </div>
-    `}};var Lt;Dt.styles=n`
+    `}};Gt.styles=n`
     :host {
       display: block;
     }
@@ -593,45 +745,70 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       opacity: 0.5;
       cursor: not-allowed;
     }
-  `,e([ut()],Dt.prototype,"portfolioId",void 0),e([ut({attribute:!1})],Dt.prototype,"client",void 0),e([ut({attribute:!1})],Dt.prototype,"config",void 0),e([vt()],Dt.prototype,"_activities",void 0),e([vt()],Dt.prototype,"_cursor",void 0),e([vt()],Dt.prototype,"_loading",void 0),e([vt()],Dt.prototype,"_loadingMore",void 0),e([vt()],Dt.prototype,"_hasMore",void 0),e([vt()],Dt.prototype,"_filter",void 0),e([vt()],Dt.prototype,"_error",void 0),Dt=e([dt("parqet-activities-view")],Dt);const Mt=[{value:"total_value",label:"Total Value"},{value:"period_return",label:"Period Return"},{value:"xirr",label:"XIRR"},{value:"ttwror",label:"TTWROR"},{value:"unrealized_gain",label:"Unrealized Gain"},{value:"realized_gain",label:"Realized Gain"},{value:"dividends",label:"Dividends"},{value:"fees",label:"Fees"},{value:"taxes",label:"Taxes"}];let Vt=class extends lt{constructor(){super(...arguments),this._authenticated=!1,this._portfolioId=null,this._data=null,this._loading=!1,this._interval="1y",this._error=""}setConfig(t){var e;const o=Object.assign({kpi:"total_value",default_interval:"1y",currency_symbol:"€",show_interval_selector:!0,layout:"vertical"},t);o.secondary_kpi&&!(null===(e=o.secondary_kpis)||void 0===e?void 0:e.length)&&(o.secondary_kpis=[o.secondary_kpi]),delete o.secondary_kpi,o.secondary_kpis&&(o.secondary_kpis=[...new Set(o.secondary_kpis)]),this._config=o,this._interval=this._config.default_interval,St.configure(this._config.client_id),Pt.configure(this._config.client_id)}getCardSize(){return 2}static getConfigElement(){return document.createElement("parqet-kpi-card-editor")}static getStubConfig(){return{kpi:"total_value",default_interval:"1y",currency_symbol:"€"}}connectedCallback(){var t;super.connectedCallback(),this._authenticated=At.isTokenValid(null===(t=this._config)||void 0===t?void 0:t.client_id),this._authenticated&&this._loadData()}updated(t){var e;t.has("hass")&&!this._authenticated&&At.isTokenValid(null===(e=this._config)||void 0===e?void 0:e.client_id)&&(this._authenticated=!0,this._loadData())}get _client(){var t;return"mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?Pt:St}async _loadData(){var t,e,o;this._loading=!0,this._error="";try{if(this._config.portfolio_id)this._portfolioId=this._config.portfolio_id;else{const o=await this._client.listPortfolios();this._portfolioId=null!==(e=null===(t=o[0])||void 0===t?void 0:t.id)&&void 0!==e?e:null}if(!this._portfolioId)return void(this._error="No portfolio found.");const o=await this._client.getPerformance(this._portfolioId,{type:"relative",value:this._interval});this._data=o.performance}catch(t){this._error=t instanceof Error?t.message:String(t),String(t).includes("401")&&(At.clearToken(null===(o=this._config)||void 0===o?void 0:o.client_id),this._authenticated=!1)}finally{this._loading=!1}}async _onIntervalChange(t){this._interval=t.detail.interval,await this._loadData()}_extract(t,e){var o,i,r,a,s,n,l,c,d,p,h,u,v,f,_,g,m,y,b,x,$,w,k,C,A,S,P;switch(e){case"total_value":return null!==(i=null===(o=t.valuation)||void 0===o?void 0:o.atIntervalEnd)&&void 0!==i?i:null;case"period_return":{const e=null!==(a=null===(r=t.valuation)||void 0===r?void 0:r.atIntervalStart)&&void 0!==a?a:0,o=null!==(n=null===(s=t.valuation)||void 0===s?void 0:s.atIntervalEnd)&&void 0!==n?n:0;return e>0?(o-e)/e:null}case"xirr":return null!==(d=null===(c=null===(l=t.kpis)||void 0===l?void 0:l.inInterval)||void 0===c?void 0:c.xirr)&&void 0!==d?d:null;case"ttwror":return null!==(u=null===(h=null===(p=t.kpis)||void 0===p?void 0:p.inInterval)||void 0===h?void 0:h.ttwror)&&void 0!==u?u:null;case"unrealized_gain":return null!==(_=null===(f=null===(v=t.unrealizedGains)||void 0===v?void 0:v.inInterval)||void 0===f?void 0:f.gainGross)&&void 0!==_?_:null;case"realized_gain":return null!==(y=null===(m=null===(g=t.realizedGains)||void 0===g?void 0:g.inInterval)||void 0===m?void 0:m.gainGross)&&void 0!==y?y:null;case"dividends":return null!==($=null===(x=null===(b=t.dividends)||void 0===b?void 0:b.inInterval)||void 0===x?void 0:x.gainGross)&&void 0!==$?$:null;case"fees":return null!==(C=null===(k=null===(w=t.fees)||void 0===w?void 0:w.inInterval)||void 0===k?void 0:k.fees)&&void 0!==C?C:null;case"taxes":return null!==(P=null===(S=null===(A=t.taxes)||void 0===A?void 0:A.inInterval)||void 0===S?void 0:S.taxes)&&void 0!==P?P:null;default:return null}}_isPercent(t){return["period_return","xirr","ttwror"].includes(t)}_label(t){var e,o;return null!==(o=null===(e=Mt.find(e=>e.value===t))||void 0===e?void 0:e.label)&&void 0!==o?o:t}_format(t,e){var o,i;if(null==t)return"—";const r=null!==(i=null===(o=this._config)||void 0===o?void 0:o.currency_symbol)&&void 0!==i?i:"€";if(this._isPercent(e)){const e=100*t;return`${e>=0?"+":""}${e.toFixed(2)}%`}return`${r}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_colorClass(t,e){return null==t||"total_value"===e?"":t>0?"positive":t<0?"negative":""}render(){var t,e,o;if(!this._authenticated)return F`
+  `,e([ft()],Gt.prototype,"portfolioId",void 0),e([ft({attribute:!1})],Gt.prototype,"client",void 0),e([ft({attribute:!1})],Gt.prototype,"config",void 0),e([_t()],Gt.prototype,"_activities",void 0),e([_t()],Gt.prototype,"_cursor",void 0),e([_t()],Gt.prototype,"_loading",void 0),e([_t()],Gt.prototype,"_loadingMore",void 0),e([_t()],Gt.prototype,"_hasMore",void 0),e([_t()],Gt.prototype,"_filter",void 0),e([_t()],Gt.prototype,"_error",void 0),Gt=e([ht("parqet-activities-view")],Gt);let Bt=class extends dt{constructor(){super(...arguments),this.values=[]}render(){if(this.values.length<2)return G``;const t=this.values,e=Math.min(...t),o=Math.max(...t)-e||1,i=t.map((i,r)=>{const a=2+r/(t.length-1)*44,s=18-(i-e)/o*16;return`${a.toFixed(1)},${s.toFixed(1)}`}).join(" "),r=t[t.length-1]>=t[0];return G`
+      <svg viewBox="0 0 ${48} ${20}" class="spark" role="img" aria-label="Trend sparkline">
+        ${B`
+          <polyline
+            points="${i}"
+            fill="none"
+            stroke="${r?"var(--success-color, #4caf50)":"var(--error-color, #f44336)"}"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        `}
+      </svg>
+    `}};var Kt;Bt.styles=n`
+    :host { display: inline-block; vertical-align: middle; }
+    .spark {
+      width: 48px;
+      height: 20px;
+    }
+  `,e([ft({type:Array})],Bt.prototype,"values",void 0),Bt=e([ht("parqet-sparkline")],Bt);const Wt=[{value:"total_value",label:"Total Value"},{value:"period_return",label:"Period Return"},{value:"xirr",label:"XIRR"},{value:"ttwror",label:"TTWROR"},{value:"unrealized_gain",label:"Unrealized Gain"},{value:"realized_gain",label:"Realized Gain"},{value:"dividends",label:"Dividends"},{value:"fees",label:"Fees"},{value:"taxes",label:"Taxes"}];let Yt=class extends dt{constructor(){super(...arguments),this._authenticated=!1,this._portfolioId=null,this._data=null,this._loading=!1,this._interval="1y",this._error=""}setConfig(t){var e;const o=Object.assign({kpi:"total_value",default_interval:"1y",currency_symbol:"€",show_interval_selector:!0,layout:"vertical"},t);o.secondary_kpi&&!(null===(e=o.secondary_kpis)||void 0===e?void 0:e.length)&&(o.secondary_kpis=[o.secondary_kpi]),delete o.secondary_kpi,o.secondary_kpis&&(o.secondary_kpis=[...new Set(o.secondary_kpis)]),this._config=o,this._interval=this._config.default_interval,Et.configure(this._config.client_id),It.configure(this._config.client_id)}getCardSize(){return 2}static getConfigElement(){return document.createElement("parqet-kpi-card-editor")}static getStubConfig(){return{kpi:"total_value",default_interval:"1y",currency_symbol:"€"}}connectedCallback(){var t;super.connectedCallback(),this._authenticated=Pt.isTokenValid(null===(t=this._config)||void 0===t?void 0:t.client_id),this._authenticated&&this._loadData()}updated(t){var e;t.has("hass")&&!this._authenticated&&Pt.isTokenValid(null===(e=this._config)||void 0===e?void 0:e.client_id)&&(this._authenticated=!0,this._loadData())}get _client(){var t;return"mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?It:Et}async _loadData(){var t,e,o;this._loading=!0,this._error="";try{if(this._config.portfolio_id)this._portfolioId=this._config.portfolio_id;else{const o=await this._client.listPortfolios();this._portfolioId=null!==(e=null===(t=o[0])||void 0===t?void 0:t.id)&&void 0!==e?e:null}if(!this._portfolioId)return void(this._error="No portfolio found.");const o=await this._client.getPerformance(this._portfolioId,{type:"relative",value:this._interval});this._data=o.performance}catch(t){this._error=t instanceof Error?t.message:String(t),String(t).includes("401")&&(Pt.clearToken(null===(o=this._config)||void 0===o?void 0:o.client_id),this._authenticated=!1)}finally{this._loading=!1}}async _onIntervalChange(t){this._interval=t.detail.interval,await this._loadData()}_extract(t,e){var o,i,r,a,s,n,l,c,d,p,h,u,v,f,_,g,m,y,b,x,$,w,k,C,A,S,P;switch(e){case"total_value":return null!==(i=null===(o=t.valuation)||void 0===o?void 0:o.atIntervalEnd)&&void 0!==i?i:null;case"period_return":{const e=null!==(a=null===(r=t.valuation)||void 0===r?void 0:r.atIntervalStart)&&void 0!==a?a:0,o=null!==(n=null===(s=t.valuation)||void 0===s?void 0:s.atIntervalEnd)&&void 0!==n?n:0;return e>0?(o-e)/e:null}case"xirr":return null!==(d=null===(c=null===(l=t.kpis)||void 0===l?void 0:l.inInterval)||void 0===c?void 0:c.xirr)&&void 0!==d?d:null;case"ttwror":return null!==(u=null===(h=null===(p=t.kpis)||void 0===p?void 0:p.inInterval)||void 0===h?void 0:h.ttwror)&&void 0!==u?u:null;case"unrealized_gain":return null!==(_=null===(f=null===(v=t.unrealizedGains)||void 0===v?void 0:v.inInterval)||void 0===f?void 0:f.gainGross)&&void 0!==_?_:null;case"realized_gain":return null!==(y=null===(m=null===(g=t.realizedGains)||void 0===g?void 0:g.inInterval)||void 0===m?void 0:m.gainGross)&&void 0!==y?y:null;case"dividends":return null!==($=null===(x=null===(b=t.dividends)||void 0===b?void 0:b.inInterval)||void 0===x?void 0:x.gainGross)&&void 0!==$?$:null;case"fees":return null!==(C=null===(k=null===(w=t.fees)||void 0===w?void 0:w.inInterval)||void 0===k?void 0:k.fees)&&void 0!==C?C:null;case"taxes":return null!==(P=null===(S=null===(A=t.taxes)||void 0===A?void 0:A.inInterval)||void 0===S?void 0:S.taxes)&&void 0!==P?P:null;default:return null}}_isPercent(t){return["period_return","xirr","ttwror"].includes(t)}_label(t){var e,o;return null!==(o=null===(e=Wt.find(e=>e.value===t))||void 0===e?void 0:e.label)&&void 0!==o?o:t}_format(t,e){var o,i;if(null==t)return"—";const r=null!==(i=null===(o=this._config)||void 0===o?void 0:o.currency_symbol)&&void 0!==i?i:"€";if(this._isPercent(e)){const e=100*t;return`${e>=0?"+":""}${e.toFixed(2)}%`}return`${r}${t.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`}_colorClass(t,e){return null==t||"total_value"===e?"":t>0?"positive":t<0?"negative":""}render(){var t,e,o;if(!this._authenticated)return G`
         <ha-card>
           <div class="not-connected">
             <span>Not connected to Parqet</span>
             <span class="hint">Open the card editor to connect</span>
           </div>
         </ha-card>
-      `;const i=null!==(t=this._config.kpi)&&void 0!==t?t:"total_value",r=null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],a=null!==(o=this._config.layout)&&void 0!==o?o:"vertical",s=this._data?this._extract(this._data,i):null,n=this._data?this._format(s,i):"—",l=this._colorClass(s,i),c=r.map(t=>{const e=this._data?this._extract(this._data,t):null;return{kpi:t,val:this._data?this._format(e,t):null,cls:this._colorClass(e,t)}});return F`
+      `;const i=null!==(t=this._config.kpi)&&void 0!==t?t:"total_value",r=null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],a=null!==(o=this._config.layout)&&void 0!==o?o:"vertical",s=this._data?this._extract(this._data,i):null,n=this._data?this._format(s,i):"—",l=this._colorClass(s,i),c=r.map(t=>{const e=this._data?this._extract(this._data,t):null;return{kpi:t,val:this._data?this._format(e,t):null,cls:this._colorClass(e,t)}});return G`
       <ha-card>
-        ${!1!==this._config.show_interval_selector?F`<parqet-interval-selector
+        ${!1!==this._config.show_interval_selector?G`<parqet-interval-selector
               .selected=${this._interval}
               @interval-change=${this._onIntervalChange}
             ></parqet-interval-selector>`:""}
 
-        ${this._error?F`<div class="error">${this._error}</div>`:""}
+        ${this._error?G`<div class="error">${this._error}</div>`:""}
 
         <div class="body ${a}">
           ${"horizontal"===a?this._renderHorizontal(i,n,l,c):this._renderVertical(i,n,l,c)}
         </div>
       </ha-card>
-    `}_renderVertical(t,e,o,i){return F`
+    `}get _sparklineValues(){var t,e,o,i;if(!this._data)return[];return[null!==(e=null===(t=this._data.valuation)||void 0===t?void 0:t.atIntervalStart)&&void 0!==e?e:0,null!==(i=null===(o=this._data.valuation)||void 0===o?void 0:o.atIntervalEnd)&&void 0!==i?i:0]}_renderVertical(t,e,o,i){return G`
       <div class="primary-block">
         <div class="label">${this._label(t)}</div>
-        ${this._loading?F`<parqet-loading-spinner></parqet-loading-spinner>`:F`<div class="value ${o}">${e}</div>`}
+        ${this._loading?G`<parqet-loading-spinner></parqet-loading-spinner>`:G`<div class="value-row">
+              <div class="value ${o}">${e}</div>
+              ${this._config.show_sparkline?G`<parqet-sparkline .values=${this._sparklineValues}></parqet-sparkline>`:""}
+            </div>`}
       </div>
-      ${i.map(t=>null!=t.val?F`<div class="secondary-block">
+      ${i.map(t=>null!=t.val?G`<div class="secondary-block">
               <span class="secondary-label">${this._label(t.kpi)}</span>
               <span class="secondary-value ${t.cls}">${t.val}</span>
             </div>`:"")}
-    `}_renderHorizontal(t,e,o,i){return F`
+    `}_renderHorizontal(t,e,o,i){return G`
       <div class="h-labels">
         <div class="label">${this._label(t)}</div>
-        ${i.map(t=>F`<div class="secondary-label">${this._label(t.kpi)}</div>`)}
+        ${i.map(t=>G`<div class="secondary-label">${this._label(t.kpi)}</div>`)}
       </div>
       <div class="h-values">
-        ${this._loading?F`<parqet-loading-spinner></parqet-loading-spinner>`:F`<div class="value ${o}">${e}</div>`}
-        ${i.map(t=>null!=t.val?F`<div class="secondary-value ${t.cls}">${t.val}</div>`:"")}
+        ${this._loading?G`<parqet-loading-spinner></parqet-loading-spinner>`:G`<div class="value-row">
+              <div class="value ${o}">${e}</div>
+              ${this._config.show_sparkline?G`<parqet-sparkline .values=${this._sparklineValues}></parqet-sparkline>`:""}
+            </div>`}
+        ${i.map(t=>null!=t.val?G`<div class="secondary-value ${t.cls}">${t.val}</div>`:"")}
       </div>
-    `}};Vt.styles=n`
+    `}};Yt.styles=n`
     :host { display: block; }
     ha-card { overflow: hidden; }
     .not-connected {
@@ -698,6 +875,11 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       letter-spacing: 0.06em;
       color: var(--secondary-text-color);
     }
+    .value-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .value {
       font-size: 1.8rem;
       font-weight: 700;
@@ -721,34 +903,34 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
     }
     .secondary-value.positive { color: var(--success-color, #4caf50); }
     .secondary-value.negative { color: var(--error-color, #f44336); }
-  `,e([ut({attribute:!1})],Vt.prototype,"hass",void 0),e([vt()],Vt.prototype,"_config",void 0),e([vt()],Vt.prototype,"_authenticated",void 0),e([vt()],Vt.prototype,"_portfolioId",void 0),e([vt()],Vt.prototype,"_data",void 0),e([vt()],Vt.prototype,"_loading",void 0),e([vt()],Vt.prototype,"_interval",void 0),e([vt()],Vt.prototype,"_error",void 0),Vt=e([dt("parqet-kpi-card")],Vt);let Rt=Lt=class extends lt{constructor(){super(...arguments),this._connected=!1,this._authLoading=!1,this._portfolios=[],this._loadingPortfolios=!1,this._authError="",this._addingSecondary=!1}setConfig(t){var e;const o=Object.assign({},t);o.secondary_kpi&&!(null===(e=o.secondary_kpis)||void 0===e?void 0:e.length)&&(o.secondary_kpis=[o.secondary_kpi]),delete o.secondary_kpi,o.secondary_kpis&&(o.secondary_kpis=[...new Set(o.secondary_kpis)]),this._config=o,this._connected=At.isTokenValid(o.client_id),this._connected&&0===this._portfolios.length&&this._fetchPortfolios()}async _fetchPortfolios(){var t;this._loadingPortfolios=!0;try{const e="mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?Pt:St;this._portfolios=await e.listPortfolios()}catch(t){}finally{this._loadingPortfolios=!1}}async _handleConnect(){var t,e;this._authLoading=!0,this._authError="";const o=window.open("","parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes");try{await At.startAuth(null===(t=this._config)||void 0===t?void 0:t.client_id,null===(e=this._config)||void 0===e?void 0:e.redirect_uri,o),this._connected=!0,this._fetchPortfolios()}catch(t){this._authError=t instanceof Error?t.message:String(t)}finally{this._authLoading=!1}}_handleDisconnect(){var t;At.clearToken(null===(t=this._config)||void 0===t?void 0:t.client_id),this._connected=!1,this._portfolios=[]}static getConfigForm(){return[{name:"default_interval",label:"Time Interval",selector:{select:{options:[{value:"1d",label:"1 Day"},{value:"1w",label:"1 Week"},{value:"mtd",label:"Month to Date"},{value:"1m",label:"1 Month"},{value:"3m",label:"3 Months"},{value:"6m",label:"6 Months"},{value:"1y",label:"1 Year"},{value:"ytd",label:"Year to Date"},{value:"3y",label:"3 Years"},{value:"5y",label:"5 Years"},{value:"10y",label:"10 Years"},{value:"max",label:"All Time"}]}}},{name:"show_interval_selector",label:"Show interval selector on card",selector:{boolean:{}}},{name:"data_source",label:"Data Source",selector:{select:{options:[{value:"rest",label:"Connect REST API (recommended)"},{value:"mcp",label:"MCP Server — unavailable (Parqet API limitation)",disabled:!0}]}}},{type:"expandable",title:"Display",flatten:!0,schema:[{name:"currency_symbol",label:"Currency Symbol",selector:{text:{}}}]},{type:"expandable",title:"Advanced",flatten:!0,schema:[{name:"client_id",label:"Parqet Connect Client ID (leave blank to use shared default)",selector:{text:{}}},{name:"redirect_uri",label:"OAuth Redirect URI (required when using your own Client ID)",selector:{text:{}}}]}]}render(){var t,e,o;if(!this._config||!this.hass)return F``;const i=null!==(t=this._config.kpi)&&void 0!==t?t:"total_value",r=null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],a=null!==(o=this._config.layout)&&void 0!==o?o:"vertical",s=new Set([i,...r]),n=Mt.filter(t=>!s.has(t.value));return F`
+  `,e([ft({attribute:!1})],Yt.prototype,"hass",void 0),e([_t()],Yt.prototype,"_config",void 0),e([_t()],Yt.prototype,"_authenticated",void 0),e([_t()],Yt.prototype,"_portfolioId",void 0),e([_t()],Yt.prototype,"_data",void 0),e([_t()],Yt.prototype,"_loading",void 0),e([_t()],Yt.prototype,"_interval",void 0),e([_t()],Yt.prototype,"_error",void 0),Yt=e([ht("parqet-kpi-card")],Yt);let Jt=Kt=class extends dt{constructor(){super(...arguments),this._connected=!1,this._authLoading=!1,this._portfolios=[],this._loadingPortfolios=!1,this._authError="",this._addingSecondary=!1}setConfig(t){var e;const o=Object.assign({},t);o.secondary_kpi&&!(null===(e=o.secondary_kpis)||void 0===e?void 0:e.length)&&(o.secondary_kpis=[o.secondary_kpi]),delete o.secondary_kpi,o.secondary_kpis&&(o.secondary_kpis=[...new Set(o.secondary_kpis)]),this._config=o,this._connected=Pt.isTokenValid(o.client_id),this._connected&&0===this._portfolios.length&&this._fetchPortfolios()}async _fetchPortfolios(){var t;this._loadingPortfolios=!0;try{const e="mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?It:Et;this._portfolios=await e.listPortfolios()}catch(t){}finally{this._loadingPortfolios=!1}}async _handleConnect(){var t,e;this._authLoading=!0,this._authError="";const o=window.open("","parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes");try{await Pt.startAuth(null===(t=this._config)||void 0===t?void 0:t.client_id,null===(e=this._config)||void 0===e?void 0:e.redirect_uri,o),this._connected=!0,this._fetchPortfolios()}catch(t){this._authError=t instanceof Error?t.message:String(t)}finally{this._authLoading=!1}}_handleDisconnect(){var t;Pt.clearToken(null===(t=this._config)||void 0===t?void 0:t.client_id),this._connected=!1,this._portfolios=[]}static getConfigForm(){return[{name:"default_interval",label:"Time Interval",selector:{select:{options:[{value:"1d",label:"1 Day"},{value:"1w",label:"1 Week"},{value:"mtd",label:"Month to Date"},{value:"1m",label:"1 Month"},{value:"3m",label:"3 Months"},{value:"6m",label:"6 Months"},{value:"1y",label:"1 Year"},{value:"ytd",label:"Year to Date"},{value:"3y",label:"3 Years"},{value:"5y",label:"5 Years"},{value:"10y",label:"10 Years"},{value:"max",label:"All Time"}]}}},{name:"show_interval_selector",label:"Show interval selector on card",selector:{boolean:{}}},{name:"data_source",label:"Data Source",selector:{select:{options:[{value:"rest",label:"Connect REST API (recommended)"},{value:"mcp",label:"MCP Server — unavailable (Parqet API limitation)",disabled:!0}]}}},{type:"expandable",title:"Display",flatten:!0,schema:[{name:"currency_symbol",label:"Currency Symbol",selector:{text:{}}},{name:"show_sparkline",label:"Show sparkline trend",selector:{boolean:{}}}]},{type:"expandable",title:"Advanced",flatten:!0,schema:[{name:"client_id",label:"Parqet Connect Client ID (leave blank to use shared default)",selector:{text:{}}},{name:"redirect_uri",label:"OAuth Redirect URI (required when using your own Client ID)",selector:{text:{}}}]}]}render(){var t,e,o;if(!this._config||!this.hass)return G``;const i=null!==(t=this._config.kpi)&&void 0!==t?t:"total_value",r=null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],a=null!==(o=this._config.layout)&&void 0!==o?o:"vertical",s=new Set([i,...r]),n=Wt.filter(t=>!s.has(t.value));return G`
       <!-- Auth row -->
       <div class="auth-row">
         <div class="auth-status">
           <span class="auth-dot ${this._connected?"connected":"disconnected"}"></span>
           ${this._connected?"Connected to Parqet":"Not connected to Parqet"}
         </div>
-        ${this._connected?F`<button class="auth-btn disconnect" @click=${this._handleDisconnect}>Disconnect</button>`:F`<button class="auth-btn connect" @click=${this._handleConnect} ?disabled=${this._authLoading}>
+        ${this._connected?G`<button class="auth-btn disconnect" @click=${this._handleDisconnect}>Disconnect</button>`:G`<button class="auth-btn connect" @click=${this._handleConnect} ?disabled=${this._authLoading}>
               ${this._authLoading?"Connecting…":"Connect"}
             </button>`}
       </div>
-      ${this._authError?F`<div class="auth-error">${this._authError}</div>`:""}
+      ${this._authError?G`<div class="auth-error">${this._authError}</div>`:""}
 
       <!-- Portfolio picker -->
       <div class="section-row">
         <label class="section-label">Portfolio</label>
-        ${this._loadingPortfolios?F`<div class="hint-text">Loading portfolios…</div>`:this._portfolios.length>0?F`
+        ${this._loadingPortfolios?G`<div class="hint-text">Loading portfolios…</div>`:this._portfolios.length>0?G`
                 <select class="portfolio-select" @change=${this._portfolioChanged}>
                   <option value="" ?selected=${!this._config.portfolio_id}>
                     Use first portfolio automatically
                   </option>
-                  ${this._portfolios.map(t=>{var e;return F`
+                  ${this._portfolios.map(t=>{var e;return G`
                       <option value=${t.id} ?selected=${(null===(e=this._config)||void 0===e?void 0:e.portfolio_id)===t.id}>
                         ${t.name}
                       </option>
                     `})}
                 </select>
-              `:F`<div class="hint-text">
+              `:G`<div class="hint-text">
                 ${this._connected?"No portfolios found":"Connect to load portfolios"}
               </div>`}
       </div>
@@ -764,31 +946,31 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
               class="chip-select"
               @change=${this._primaryChanged}
             >
-              ${Mt.map(t=>F`<option value=${t.value} ?selected=${t.value===i}>${t.label}</option>`)}
+              ${Wt.map(t=>G`<option value=${t.value} ?selected=${t.value===i}>${t.label}</option>`)}
             </select>
           </div>
 
           <!-- Secondary metric chips -->
-          ${r.map((t,e)=>F`
+          ${r.map((t,e)=>G`
             <div class="chip secondary-chip">
               <span class="chip-icon">≡</span>
               <select class="chip-select" @change=${t=>this._secondaryChanged(t,e)}>
-                ${Mt.filter(e=>e.value===t||!s.has(e.value)).map(e=>F`<option value=${e.value} ?selected=${e.value===t}>${e.label}</option>`)}
+                ${Wt.filter(e=>e.value===t||!s.has(e.value)).map(e=>G`<option value=${e.value} ?selected=${e.value===t}>${e.label}</option>`)}
               </select>
               <button class="chip-remove" @click=${()=>this._removeSecondary(e)} aria-label="Remove">×</button>
             </div>
           `)}
 
           <!-- Add button -->
-          ${this._addingSecondary?F`
+          ${this._addingSecondary?G`
                 <div class="chip secondary-chip adding">
                   <select class="chip-select" @change=${this._pickSecondary} @blur=${this._cancelAddSecondary}>
                     <option value="">— pick a metric —</option>
-                    ${n.map(t=>F`<option value=${t.value}>${t.label}</option>`)}
+                    ${n.map(t=>G`<option value=${t.value}>${t.label}</option>`)}
                   </select>
                   <button class="chip-remove" @click=${this._cancelAddSecondary} aria-label="Cancel">×</button>
                 </div>
-              `:n.length>0?F`<button class="add-chip" @click=${()=>this._addingSecondary=!0}>+ Add</button>`:""}
+              `:n.length>0?G`<button class="add-chip" @click=${()=>this._addingSecondary=!0}>+ Add</button>`:""}
         </div>
       </div>
 
@@ -826,11 +1008,11 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
-        .schema=${Lt.getConfigForm()}
+        .schema=${Kt.getConfigForm()}
         .computeLabel=${t=>{var e;return null!==(e=t.label)&&void 0!==e?e:""}}
         @value-changed=${this._valueChanged}
       ></ha-form>
-    `}_primaryChanged(t){var e;const o=t.target.value,i=Object.assign(Object.assign({},this._config),{kpi:o});i.secondary_kpis=(null!==(e=i.secondary_kpis)&&void 0!==e?e:[]).filter(t=>t!==o),this._fire(i)}_secondaryChanged(t,e){var o;const i=t.target.value,r=[...null!==(o=this._config.secondary_kpis)&&void 0!==o?o:[]];r[e]=i,this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:r}))}_removeSecondary(t){var e;const o=[...null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[]];o.splice(t,1),this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:o}))}_pickSecondary(t){var e;const o=t.target.value;if(!o)return;this._addingSecondary=!1;const i=[...null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],o];this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:i}))}_cancelAddSecondary(){setTimeout(()=>{this._addingSecondary=!1},150)}_setLayout(t){this._fire(Object.assign(Object.assign({},this._config),{layout:t}))}_portfolioChanged(t){const e=t.target.value,o=Object.assign({},this._config);e?o.portfolio_id=e:delete o.portfolio_id,this._fire(o)}_valueChanged(t){this._fire(t.detail.value)}_fire(t){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:t},bubbles:!0,composed:!0}))}};Rt.styles=n`
+    `}_primaryChanged(t){var e;const o=t.target.value,i=Object.assign(Object.assign({},this._config),{kpi:o});i.secondary_kpis=(null!==(e=i.secondary_kpis)&&void 0!==e?e:[]).filter(t=>t!==o),this._fire(i)}_secondaryChanged(t,e){var o;const i=t.target.value,r=[...null!==(o=this._config.secondary_kpis)&&void 0!==o?o:[]];r[e]=i,this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:r}))}_removeSecondary(t){var e;const o=[...null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[]];o.splice(t,1),this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:o}))}_pickSecondary(t){var e;const o=t.target.value;if(!o)return;this._addingSecondary=!1;const i=[...null!==(e=this._config.secondary_kpis)&&void 0!==e?e:[],o];this._fire(Object.assign(Object.assign({},this._config),{secondary_kpis:i}))}_cancelAddSecondary(){setTimeout(()=>{this._addingSecondary=!1},150)}_setLayout(t){this._fire(Object.assign(Object.assign({},this._config),{layout:t}))}_portfolioChanged(t){const e=t.target.value,o=Object.assign({},this._config);e?o.portfolio_id=e:delete o.portfolio_id,this._fire(o)}_valueChanged(t){this._fire(t.detail.value)}_fire(t){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:t},bubbles:!0,composed:!0}))}};Jt.styles=n`
     /* ── Auth row ── */
     .auth-row {
       display: flex;
@@ -983,36 +1165,36 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
     .horizontal-thumb { display: flex; align-items: center; justify-content: space-between; }
     .lt-left { display: flex; flex-direction: column; gap: 4px; }
     .lt-value-right { height: 10px; width: 36%; border-radius: 2px; background: var(--primary-text-color, #333); opacity: 0.6; }
-  `,e([ut({attribute:!1})],Rt.prototype,"hass",void 0),e([vt()],Rt.prototype,"_config",void 0),e([vt()],Rt.prototype,"_connected",void 0),e([vt()],Rt.prototype,"_authLoading",void 0),e([vt()],Rt.prototype,"_portfolios",void 0),e([vt()],Rt.prototype,"_loadingPortfolios",void 0),e([vt()],Rt.prototype,"_authError",void 0),e([vt()],Rt.prototype,"_addingSecondary",void 0),Rt=Lt=e([dt("parqet-kpi-card-editor")],Rt);const jt=window;jt.customCards=jt.customCards||[],jt.customCards.push({type:"parqet-companion-card",name:"Parqet Home Assistant Companion",description:"Display your Parqet portfolio data — performance, holdings and activities.",preview:!0,documentationURL:"https://github.com/cubinet-code/parqet-homeassistant-companion"}),jt.customCards.push({type:"parqet-kpi-card",name:"Parqet KPI Card",description:"Show a single Parqet portfolio metric — total value, XIRR, returns, dividends and more.",preview:!0,documentationURL:"https://github.com/cubinet-code/parqet-homeassistant-companion"}),t.ParqetCompanionCard=class extends lt{constructor(){super(...arguments),this._authenticated=!1,this._portfolios=[],this._portfolioId=null,this._activeView="performance",this._loading=!1,this._error=""}connectedCallback(){var t;super.connectedCallback(),this._authenticated=At.isTokenValid(null===(t=this._config)||void 0===t?void 0:t.client_id),this._authenticated&&this._loadPortfolios()}updated(t){var e;t.has("hass")&&!this._authenticated&&At.isTokenValid(null===(e=this._config)||void 0===e?void 0:e.client_id)&&(this._authenticated=!0,this._loadPortfolios())}setConfig(t){this._config=Object.assign({data_source:"rest",view_layout:"tabs",default_view:"performance",default_interval:"1y",show_interval_selector:!0,show_chart:!0,show_logo:!0,compact:!1,currency_symbol:"€",activities_limit:25},t),this._activeView=this._config.default_view,St.configure(this._config.client_id),Pt.configure(this._config.client_id)}getCardSize(){return 6}getGridOptions(){return{columns:12,rows:6,min_columns:6,min_rows:4}}static getConfigElement(){return document.createElement("parqet-companion-card-editor")}static getStubConfig(){return{data_source:"rest",default_view:"performance",default_interval:"1y",show_chart:!0,show_logo:!0,compact:!1,currency_symbol:"€"}}static getConfigForm(){return[{name:"data_source",label:"Data Source",selector:{select:{options:[{value:"rest",label:"Connect REST API (recommended)"},{value:"mcp",label:"MCP Server — unavailable (Parqet API limitation)",disabled:!0}]}}},{type:"expandable",title:"Layout",flatten:!0,schema:[{name:"view_layout",label:"View Layout",selector:{select:{options:[{value:"tabs",label:"Tabs (all views)"},{value:"single",label:"Single view only"}]}}},{name:"default_view",label:"Default View",selector:{select:{options:[{value:"performance",label:"Performance"},{value:"holdings",label:"Holdings"},{value:"activities",label:"Activities"}]}}},{name:"compact",label:"Compact mode",selector:{boolean:{}}},{name:"hide_header",label:"Hide portfolio header (useful when portfolio is locked)",selector:{boolean:{}}}]},{type:"expandable",title:"Performance",flatten:!0,schema:[{name:"show_interval_selector",label:"Show interval selector on card",selector:{boolean:{}}},{name:"default_interval",label:"Default Time Interval",selector:{select:{options:[{value:"1d",label:"1 Day"},{value:"1w",label:"1 Week"},{value:"mtd",label:"Month to Date"},{value:"1m",label:"1 Month"},{value:"3m",label:"3 Months"},{value:"6m",label:"6 Months"},{value:"1y",label:"1 Year"},{value:"ytd",label:"Year to Date"},{value:"3y",label:"3 Years"},{value:"5y",label:"5 Years"},{value:"10y",label:"10 Years"},{value:"max",label:"All Time"}]}}}]},{type:"expandable",title:"Holdings",flatten:!0,schema:[{name:"show_logo",label:"Show holding logos",selector:{boolean:{}}}]},{type:"expandable",title:"Activities",flatten:!0,schema:[{name:"activities_limit",label:"Activities to show (1–25)",selector:{number:{min:1,max:25,step:1,mode:"box"}}},{name:"default_activity_type",label:"Default activity filter",selector:{select:{options:[{value:"all",label:"All"},{value:"buy",label:"Buy"},{value:"sell",label:"Sell"},{value:"dividend",label:"Dividend"},{value:"interest",label:"Interest"},{value:"transfer_in",label:"Transfer In"},{value:"transfer_out",label:"Transfer Out"},{value:"fees_taxes",label:"Fees / Taxes"},{value:"deposit",label:"Deposit"},{value:"withdrawal",label:"Withdrawal"}]}}}]},{type:"expandable",title:"Display",flatten:!0,schema:[{name:"currency_symbol",label:"Currency Symbol",selector:{text:{}}}]},{type:"expandable",title:"Advanced",flatten:!0,schema:[{name:"client_id",label:"Parqet Connect Client ID (optional — leave blank to use shared default)",selector:{text:{}}},{name:"redirect_uri",label:"OAuth Redirect URI (optional — required when using your own Client ID)",selector:{text:{}}}]}]}get _client(){var t;return"mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?Pt:St}async _loadPortfolios(){var t,e,o,i,r;this._loading=!0,this._error="";try{this._portfolios=await this._client.listPortfolios(),this._portfolioId=null!==(i=null!==(e=null===(t=this._config)||void 0===t?void 0:t.portfolio_id)&&void 0!==e?e:null===(o=this._portfolios[0])||void 0===o?void 0:o.id)&&void 0!==i?i:null}catch(t){this._error=t instanceof Error?t.message:String(t),String(t).includes("401")&&(At.clearToken(null===(r=this._config)||void 0===r?void 0:r.client_id),this._authenticated=!1)}finally{this._loading=!1}}_handlePortfolioChange(t){this._portfolioId=t.detail.portfolioId}render(){var t,e,o,i;if(!this._authenticated)return F`
+  `,e([ft({attribute:!1})],Jt.prototype,"hass",void 0),e([_t()],Jt.prototype,"_config",void 0),e([_t()],Jt.prototype,"_connected",void 0),e([_t()],Jt.prototype,"_authLoading",void 0),e([_t()],Jt.prototype,"_portfolios",void 0),e([_t()],Jt.prototype,"_loadingPortfolios",void 0),e([_t()],Jt.prototype,"_authError",void 0),e([_t()],Jt.prototype,"_addingSecondary",void 0),Jt=Kt=e([ht("parqet-kpi-card-editor")],Jt);const Xt=window;Xt.customCards=Xt.customCards||[],Xt.customCards.push({type:"parqet-companion-card",name:"Parqet Home Assistant Companion",description:"Display your Parqet portfolio data — performance, holdings and activities.",preview:!0,documentationURL:"https://github.com/cubinet-code/parqet-homeassistant-companion"}),Xt.customCards.push({type:"parqet-kpi-card",name:"Parqet KPI Card",description:"Show a single Parqet portfolio metric — total value, XIRR, returns, dividends and more.",preview:!0,documentationURL:"https://github.com/cubinet-code/parqet-homeassistant-companion"}),t.ParqetCompanionCard=class extends dt{constructor(){super(...arguments),this._authenticated=!1,this._portfolios=[],this._portfolioId=null,this._activeView="performance",this._loading=!1,this._error=""}connectedCallback(){var t;super.connectedCallback(),this._authenticated=Pt.isTokenValid(null===(t=this._config)||void 0===t?void 0:t.client_id),this._authenticated&&this._loadPortfolios()}updated(t){var e;t.has("hass")&&!this._authenticated&&Pt.isTokenValid(null===(e=this._config)||void 0===e?void 0:e.client_id)&&(this._authenticated=!0,this._loadPortfolios())}setConfig(t){this._config=Object.assign({data_source:"rest",view_layout:"tabs",default_view:"performance",default_interval:"1y",show_interval_selector:!0,show_chart:!0,show_logo:!0,compact:!1,currency_symbol:"€",activities_limit:25},t),this._activeView=this._config.default_view,Et.configure(this._config.client_id),It.configure(this._config.client_id)}getCardSize(){return 6}getGridOptions(){return{columns:12,rows:6,min_columns:6,min_rows:4}}static getConfigElement(){return document.createElement("parqet-companion-card-editor")}static getStubConfig(){return{data_source:"rest",default_view:"performance",default_interval:"1y",show_chart:!0,show_logo:!0,compact:!1,currency_symbol:"€"}}static getConfigForm(){return[{name:"data_source",label:"Data Source",selector:{select:{options:[{value:"rest",label:"Connect REST API (recommended)"},{value:"mcp",label:"MCP Server — unavailable (Parqet API limitation)",disabled:!0}]}}},{type:"expandable",title:"Layout",flatten:!0,schema:[{name:"view_layout",label:"View Layout",selector:{select:{options:[{value:"tabs",label:"Tabs (all views)"},{value:"single",label:"Single view only"}]}}},{name:"default_view",label:"Default View",selector:{select:{options:[{value:"performance",label:"Performance"},{value:"holdings",label:"Holdings"},{value:"activities",label:"Activities"}]}}},{name:"compact",label:"Compact mode",selector:{boolean:{}}},{name:"hide_header",label:"Hide portfolio header (useful when portfolio is locked)",selector:{boolean:{}}}]},{type:"expandable",title:"Performance",flatten:!0,schema:[{name:"show_chart",label:"Show charts",selector:{boolean:{}}},{name:"show_interval_selector",label:"Show interval selector on card",selector:{boolean:{}}},{name:"default_interval",label:"Default Time Interval",selector:{select:{options:[{value:"1d",label:"1 Day"},{value:"1w",label:"1 Week"},{value:"mtd",label:"Month to Date"},{value:"1m",label:"1 Month"},{value:"3m",label:"3 Months"},{value:"6m",label:"6 Months"},{value:"1y",label:"1 Year"},{value:"ytd",label:"Year to Date"},{value:"3y",label:"3 Years"},{value:"5y",label:"5 Years"},{value:"10y",label:"10 Years"},{value:"max",label:"All Time"}]}}}]},{type:"expandable",title:"Holdings",flatten:!0,schema:[{name:"show_logo",label:"Show holding logos",selector:{boolean:{}}}]},{type:"expandable",title:"Activities",flatten:!0,schema:[{name:"activities_limit",label:"Activities to show (1–25)",selector:{number:{min:1,max:25,step:1,mode:"box"}}},{name:"default_activity_type",label:"Default activity filter",selector:{select:{options:[{value:"all",label:"All"},{value:"buy",label:"Buy"},{value:"sell",label:"Sell"},{value:"dividend",label:"Dividend"},{value:"interest",label:"Interest"},{value:"transfer_in",label:"Transfer In"},{value:"transfer_out",label:"Transfer Out"},{value:"fees_taxes",label:"Fees / Taxes"},{value:"deposit",label:"Deposit"},{value:"withdrawal",label:"Withdrawal"}]}}}]},{type:"expandable",title:"Display",flatten:!0,schema:[{name:"currency_symbol",label:"Currency Symbol",selector:{text:{}}}]},{type:"expandable",title:"Advanced",flatten:!0,schema:[{name:"client_id",label:"Parqet Connect Client ID (optional — leave blank to use shared default)",selector:{text:{}}},{name:"redirect_uri",label:"OAuth Redirect URI (optional — required when using your own Client ID)",selector:{text:{}}}]}]}get _client(){var t;return"mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?It:Et}async _loadPortfolios(){var t,e,o,i,r;this._loading=!0,this._error="";try{this._portfolios=await this._client.listPortfolios(),this._portfolioId=null!==(i=null!==(e=null===(t=this._config)||void 0===t?void 0:t.portfolio_id)&&void 0!==e?e:null===(o=this._portfolios[0])||void 0===o?void 0:o.id)&&void 0!==i?i:null}catch(t){this._error=t instanceof Error?t.message:String(t),String(t).includes("401")&&(Pt.clearToken(null===(r=this._config)||void 0===r?void 0:r.client_id),this._authenticated=!1)}finally{this._loading=!1}}_handlePortfolioChange(t){this._portfolioId=t.detail.portfolioId}render(){var t,e,o,i;if(!this._authenticated)return G`
         <ha-card>
           <div class="not-connected">
             <span>Not connected to Parqet</span>
             <span class="hint">Open the card editor to connect</span>
           </div>
         </ha-card>
-      `;if(this._loading&&0===this._portfolios.length)return F`
+      `;if(this._loading&&0===this._portfolios.length)return G`
         <ha-card>
           <parqet-loading-spinner></parqet-loading-spinner>
         </ha-card>
-      `;const r="single"!==(null===(t=this._config)||void 0===t?void 0:t.view_layout);return F`
+      `;const r="single"!==(null===(t=this._config)||void 0===t?void 0:t.view_layout);return G`
       <ha-card>
         <!-- Header row -->
-        ${(null===(e=this._config)||void 0===e?void 0:e.hide_header)?"":F`
+        ${(null===(e=this._config)||void 0===e?void 0:e.hide_header)?"":G`
               <div class="card-header">
-                ${this._portfolios.length>1?F`
+                ${this._portfolios.length>1?G`
                       <parqet-portfolio-selector
                         .portfolios=${this._portfolios}
                         .selected=${this._portfolioId}
                         @portfolio-change=${this._handlePortfolioChange}
                       ></parqet-portfolio-selector>
-                    `:F`<span class="portfolio-name">${null!==(i=null===(o=this._portfolios[0])||void 0===o?void 0:o.name)&&void 0!==i?i:""}</span>`}
+                    `:G`<span class="portfolio-name">${null!==(i=null===(o=this._portfolios[0])||void 0===o?void 0:o.name)&&void 0!==i?i:""}</span>`}
               </div>
             `}
 
         <!-- Tabs -->
-        ${r?F`
+        ${r?G`
               <div class="tabs" role="tablist">
-                ${["performance","holdings","activities"].map(t=>F`
+                ${["performance","holdings","activities"].map(t=>G`
                     <button
                       class="tab ${this._activeView===t?"active":""}"
                       role="tab"
@@ -1025,26 +1207,26 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
               </div>
             `:""}
 
-        ${this._error?F`<div class="card-error">${this._error}</div>`:""}
+        ${this._error?G`<div class="card-error">${this._error}</div>`:""}
 
         <!-- View content -->
         <div class="view-content" role="tabpanel">
-          ${this._portfolioId?this._renderView():F`<div class="empty">No portfolio selected.</div>`}
+          ${this._portfolioId?this._renderView():G`<div class="empty">No portfolio selected.</div>`}
         </div>
       </ha-card>
-    `}_renderView(){const t=this._portfolioId,e=this._activeView;return"performance"===e?F`
+    `}_renderView(){const t=this._portfolioId,e=this._activeView;return"performance"===e?G`
         <parqet-performance-view
           .portfolioId=${t}
           .client=${this._client}
           .config=${this._config}
         ></parqet-performance-view>
-      `:"holdings"===e?F`
+      `:"holdings"===e?G`
         <parqet-holdings-view
           .portfolioId=${t}
           .client=${this._client}
           .config=${this._config}
         ></parqet-holdings-view>
-      `:F`
+      `:G`
       <parqet-activities-view
         .portfolioId=${t}
         .client=${this._client}
@@ -1128,27 +1310,27 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       font-size: 0.75rem;
       opacity: 0.7;
     }
-  `,e([ut({attribute:!1})],t.ParqetCompanionCard.prototype,"hass",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_config",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_authenticated",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_portfolios",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_portfolioId",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_activeView",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_loading",void 0),e([vt()],t.ParqetCompanionCard.prototype,"_error",void 0),t.ParqetCompanionCard=e([dt("parqet-companion-card")],t.ParqetCompanionCard);let Nt=class extends lt{constructor(){super(...arguments),this._connected=!1,this._authLoading=!1,this._authError="",this._portfolios=[],this._loadingPortfolios=!1}setConfig(t){this._config=t,this._connected=At.isTokenValid(t.client_id),this._connected&&0===this._portfolios.length&&this._fetchPortfolios()}async _fetchPortfolios(){var t;this._loadingPortfolios=!0;try{const e="mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?Pt:St;this._portfolios=await e.listPortfolios()}catch(t){}finally{this._loadingPortfolios=!1}}async _handleConnect(){var t,e;this._authLoading=!0,this._authError="";const o=window.open("","parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes");try{await At.startAuth(null===(t=this._config)||void 0===t?void 0:t.client_id,null===(e=this._config)||void 0===e?void 0:e.redirect_uri,o),this._connected=!0,this._fetchPortfolios()}catch(t){this._authError=t instanceof Error?t.message:String(t)}finally{this._authLoading=!1}}render(){return this._config&&this.hass?F`
+  `,e([ft({attribute:!1})],t.ParqetCompanionCard.prototype,"hass",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_config",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_authenticated",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_portfolios",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_portfolioId",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_activeView",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_loading",void 0),e([_t()],t.ParqetCompanionCard.prototype,"_error",void 0),t.ParqetCompanionCard=e([ht("parqet-companion-card")],t.ParqetCompanionCard);let Zt=class extends dt{constructor(){super(...arguments),this._connected=!1,this._authLoading=!1,this._authError="",this._portfolios=[],this._loadingPortfolios=!1}setConfig(t){this._config=t,this._connected=Pt.isTokenValid(t.client_id),this._connected&&0===this._portfolios.length&&this._fetchPortfolios()}async _fetchPortfolios(){var t;this._loadingPortfolios=!0;try{const e="mcp"===(null===(t=this._config)||void 0===t?void 0:t.data_source)?It:Et;this._portfolios=await e.listPortfolios()}catch(t){}finally{this._loadingPortfolios=!1}}async _handleConnect(){var t,e;this._authLoading=!0,this._authError="";const o=window.open("","parqet-auth","width=520,height=720,scrollbars=yes,resizable=yes");try{await Pt.startAuth(null===(t=this._config)||void 0===t?void 0:t.client_id,null===(e=this._config)||void 0===e?void 0:e.redirect_uri,o),this._connected=!0,this._fetchPortfolios()}catch(t){this._authError=t instanceof Error?t.message:String(t)}finally{this._authLoading=!1}}render(){return this._config&&this.hass?G`
       <div class="auth-row">
         <div class="auth-status">
           <span class="auth-dot ${this._connected?"connected":"disconnected"}"></span>
           ${this._connected?"Connected to Parqet":"Not connected to Parqet"}
         </div>
-        ${this._connected?F`<button class="auth-btn disconnect" @click=${this._handleDisconnect}>Disconnect</button>`:F`<button class="auth-btn connect" @click=${this._handleConnect} ?disabled=${this._authLoading}>
+        ${this._connected?G`<button class="auth-btn disconnect" @click=${this._handleDisconnect}>Disconnect</button>`:G`<button class="auth-btn connect" @click=${this._handleConnect} ?disabled=${this._authLoading}>
               ${this._authLoading?"Connecting…":"Connect"}
             </button>`}
       </div>
-      ${this._authError?F`<div class="auth-error">${this._authError}</div>`:""}
+      ${this._authError?G`<div class="auth-error">${this._authError}</div>`:""}
 
       <!-- Portfolio picker -->
       <div class="portfolio-row">
         <label class="portfolio-label">Portfolio</label>
-        ${this._loadingPortfolios?F`<div class="portfolio-hint">Loading portfolios…</div>`:this._portfolios.length>0?F`
+        ${this._loadingPortfolios?G`<div class="portfolio-hint">Loading portfolios…</div>`:this._portfolios.length>0?G`
                 <select class="portfolio-select" @change=${this._portfolioChanged}>
                   <option value="" ?selected=${!this._config.portfolio_id}>
                     Show portfolio picker in card
                   </option>
-                  ${this._portfolios.map(t=>{var e;return F`
+                  ${this._portfolios.map(t=>{var e;return G`
                       <option
                         value=${t.id}
                         ?selected=${(null===(e=this._config)||void 0===e?void 0:e.portfolio_id)===t.id}
@@ -1157,7 +1339,7 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
                       </option>
                     `})}
                 </select>
-              `:F`<div class="portfolio-hint">
+              `:G`<div class="portfolio-hint">
                 ${this._connected?"No portfolios found":"Connect to Parqet first, then re-open the editor"}
               </div>`}
       </div>
@@ -1169,7 +1351,7 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
         .computeLabel=${t=>{var e;return null!==(e=t.label)&&void 0!==e?e:""}}
         @value-changed=${this._valueChanged}
       ></ha-form>
-    `:F``}_portfolioChanged(t){const e=t.target.value,o=Object.assign({},this._config);e?o.portfolio_id=e:delete o.portfolio_id,this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:o},bubbles:!0,composed:!0}))}_handleDisconnect(){var t;At.clearToken(null===(t=this._config)||void 0===t?void 0:t.client_id),this._connected=!1}_valueChanged(t){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:t.detail.value},bubbles:!0,composed:!0}))}};return Nt.styles=n`
+    `:G``}_portfolioChanged(t){const e=t.target.value,o=Object.assign({},this._config);e?o.portfolio_id=e:delete o.portfolio_id,this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:o},bubbles:!0,composed:!0}))}_handleDisconnect(){var t;Pt.clearToken(null===(t=this._config)||void 0===t?void 0:t.client_id),this._connected=!1}_valueChanged(t){this.dispatchEvent(new CustomEvent("config-changed",{detail:{config:t.detail.value},bubbles:!0,composed:!0}))}};return Zt.styles=n`
     .auth-row {
       display: flex;
       align-items: center;
@@ -1253,4 +1435,4 @@ var ParqetCard=function(t){"use strict";function e(t,e,o,i){var r,a=arguments.le
       color: var(--secondary-text-color);
       font-style: italic;
     }
-  `,e([ut({attribute:!1})],Nt.prototype,"hass",void 0),e([vt()],Nt.prototype,"_config",void 0),e([vt()],Nt.prototype,"_connected",void 0),e([vt()],Nt.prototype,"_authLoading",void 0),e([vt()],Nt.prototype,"_authError",void 0),e([vt()],Nt.prototype,"_portfolios",void 0),e([vt()],Nt.prototype,"_loadingPortfolios",void 0),Nt=e([dt("parqet-companion-card-editor")],Nt),t}({});
+  `,e([ft({attribute:!1})],Zt.prototype,"hass",void 0),e([_t()],Zt.prototype,"_config",void 0),e([_t()],Zt.prototype,"_connected",void 0),e([_t()],Zt.prototype,"_authLoading",void 0),e([_t()],Zt.prototype,"_authError",void 0),e([_t()],Zt.prototype,"_portfolios",void 0),e([_t()],Zt.prototype,"_loadingPortfolios",void 0),Zt=e([ht("parqet-companion-card-editor")],Zt),t}({});

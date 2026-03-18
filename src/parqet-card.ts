@@ -176,6 +176,7 @@ export class ParqetCompanionCard extends LitElement {
         title: 'Performance',
         flatten: true,
         schema: [
+          { name: 'show_chart', label: 'Show charts', selector: { boolean: {} } },
           { name: 'show_interval_selector', label: 'Show interval selector on card', selector: { boolean: {} } },
           {
             name: 'default_interval',

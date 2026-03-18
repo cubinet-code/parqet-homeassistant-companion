@@ -3,9 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { ConnectClient } from '../api/connect-client';
 import type { MCPClient } from '../api/mcp-client';
 import type { ParqetCardConfig, PortfolioPerformance } from '../types';
+import type { BarSegment } from '../components/bar-chart';
 import type { IntervalValue } from '../const';
 import '../components/interval-selector';
 import '../components/loading-spinner';
+import '../components/bar-chart';
 
 type AnyClient = ConnectClient | MCPClient;
 
@@ -130,10 +132,30 @@ export class ParqetPerformanceView extends LitElement {
               ${this._renderKpi('Fees', this._fmtCurrency(d.fees?.inInterval?.fees))}
               ${this._renderKpi('Taxes', this._fmtCurrency(d.taxes?.inInterval?.taxes))}
             </div>
+            ${this.config?.show_chart !== false ? this._renderBreakdownChart(d) : ''}
           `
         : !this._loading
           ? html`<div class="empty">No data available.</div>`
           : ''}
+    `;
+  }
+
+  private _renderBreakdownChart(d: PortfolioPerformance) {
+    const segments: BarSegment[] = [
+      { label: 'Unrealized', value: d.unrealizedGains?.inInterval?.gainGross ?? 0 },
+      { label: 'Realized', value: d.realizedGains?.inInterval?.gainGross ?? 0 },
+      { label: 'Dividends', value: d.dividends?.inInterval?.gainGross ?? 0 },
+      { label: 'Fees', value: -(d.fees?.inInterval?.fees ?? 0) },
+      { label: 'Taxes', value: -(d.taxes?.inInterval?.taxes ?? 0) },
+    ].filter((s) => s.value !== 0);
+
+    if (segments.length === 0) return '';
+
+    return html`
+      <parqet-bar-chart
+        .segments=${segments}
+        .currencySymbol=${this._sym()}
+      ></parqet-bar-chart>
     `;
   }
 

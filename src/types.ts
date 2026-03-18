@@ -217,6 +217,8 @@ export type KpiMetric =
   | 'fees'
   | 'taxes';
 
+export type ChartType = 'allocation_donut' | 'holdings_pl_bar' | 'performance_breakdown';
+
 export interface ParqetCardConfig {
   type: string;
   data_source?: DataSource;
@@ -226,6 +228,7 @@ export interface ParqetCardConfig {
   default_interval?: IntervalValue;
   show_interval_selector?: boolean;
   show_chart?: boolean;
+  chart_type?: ChartType;
   activities_limit?: number;
   default_activity_type?: ActivityType | null;
   currency_symbol?: string;
@@ -251,6 +254,7 @@ export interface KpiCardConfig {
   layout?: KpiLayout;
   default_interval?: IntervalValue;
   show_interval_selector?: boolean;
+  show_sparkline?: boolean;
   currency_symbol?: string;
   client_id?: string;
   redirect_uri?: string;
