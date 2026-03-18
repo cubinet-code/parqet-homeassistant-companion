@@ -35,7 +35,7 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 - **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals
 - **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, and per-holding detail expansion
 - **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters, broker info, and pagination
-- **KPI tile** — Single-metric card with optional secondary metric and vertical/horizontal layout, suitable for grid/sidebar dashboards
+- **KPI tile** — Single-metric card with optional secondary metrics (multiple supported) and vertical/horizontal layout, suitable for grid/sidebar dashboards
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
 - **REST API** — Connects via the [Parqet Connect API](https://developer.parqet.com) (MCP server currently unavailable due to Parqet API limitation)
@@ -211,7 +211,7 @@ A compact tile that shows one or two metrics from your portfolio with vertical o
 
 ### Setup
 
-Open the card editor after adding the card — use the **Connect** button to authorize Parqet (same shared token as the companion card). Then pick a portfolio, primary metric, and optionally a secondary metric and layout.
+Open the card editor after adding the card — use the **Connect** button to authorize Parqet (same shared token as the companion card). Then pick a portfolio, primary metric, and optionally one or more secondary metrics and a layout.
 
 > **Note:** When you connect via either card editor (Companion or KPI), both cards share the same token — you only need to connect once.
 
@@ -241,7 +241,8 @@ portfolio_id: "your-portfolio-id"
 kpi: "total_value"
 
 # Optional — add a second metric below/beside the primary
-# secondary_kpi: "xirr"
+# secondary_kpis:          # optional list of additional metrics
+#   - "xirr"
 
 # Layout: "vertical" (default) stacks metrics, "horizontal" places them side-by-side
 layout: "vertical"       # "vertical" (default) | "horizontal"
@@ -290,7 +291,8 @@ currency_symbol: "€"
 ```yaml
 type: custom:parqet-kpi-card
 kpi: total_value
-secondary_kpi: xirr
+secondary_kpis:
+  - xirr
 layout: horizontal
 default_interval: ytd
 currency_symbol: "€"
