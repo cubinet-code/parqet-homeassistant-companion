@@ -1,6 +1,6 @@
 {
   "name": "parqet-homeassistant-companion",
-  "version": "0.3.11",
+  "version": "0.3.12-beta.1",
   "description": "Home Assistant custom card for Parqet portfolio tracking",
   "keywords": [
     "home-assistant",
