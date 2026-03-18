@@ -32,10 +32,10 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 
 ## Features
 
-- **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals
-- **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, and per-holding detail expansion
+- **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals and optional P&L breakdown chart
+- **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, per-holding detail expansion, and optional allocation donut chart
 - **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters, broker info, and pagination
-- **KPI tile** — Single-metric card with optional secondary metrics (multiple supported) and vertical/horizontal layout, suitable for grid/sidebar dashboards
+- **KPI tile** — Single-metric card with optional secondary metrics (multiple supported), vertical/horizontal layout, and optional sparkline trend indicator
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
 - **REST API** — Connects via the [Parqet Connect API](https://developer.parqet.com) (MCP server currently unavailable due to Parqet API limitation)
@@ -113,7 +113,7 @@ The card includes a built-in visual editor — no YAML required for basic setup.
 |---|---|
 | *(top level)* | **Portfolio** (dropdown of your portfolios), Data Source |
 | **Layout** | View Layout, Default View, Compact mode, Hide portfolio header |
-| **Performance** | Show interval selector, Default Time Interval |
+| **Performance** | Show charts, Show interval selector, Default Time Interval |
 | **Holdings** | Show holding logos |
 | **Activities** | Activities per page, Default activity filter |
 | **Display** | Currency Symbol |
@@ -141,6 +141,7 @@ compact: false               # denser row layout
 hide_header: false           # hide portfolio name/picker (useful when portfolio is locked)
 
 # Performance view
+show_chart: true             # show charts (allocation donut in Holdings, P&L breakdown in Performance)
 show_interval_selector: true # show interval picker on the card
 default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
 
@@ -253,6 +254,7 @@ show_interval_selector: true  # show interval picker on the card
 
 # Display
 currency_symbol: "€"
+show_sparkline: false    # show a mini trend sparkline next to the primary value
 data_source: "rest"      # "rest" (default) — MCP currently unavailable
 
 # Advanced (optional — leave blank to use shared defaults)
