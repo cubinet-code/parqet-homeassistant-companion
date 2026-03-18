@@ -38,7 +38,7 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 - **KPI tile** — Single-metric card with optional secondary metric and vertical/horizontal layout, suitable for grid/sidebar dashboards
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
-- **Dual data source** — Connect REST API (default) or Parqet MCP server
+- **REST API** — Connects via the [Parqet Connect API](https://developer.parqet.com) (MCP server currently unavailable due to Parqet API limitation)
 
 ---
 
@@ -132,7 +132,7 @@ type: custom:parqet-companion-card
 portfolio_id: "your-portfolio-id"
 
 # Optional — data source
-data_source: "rest"          # "rest" (default) | "mcp"
+data_source: "rest"          # "rest" (default) — MCP currently unavailable
 
 # Layout
 view_layout: "tabs"          # "tabs" (default) | "single"
@@ -252,7 +252,7 @@ show_interval_selector: true  # show interval picker on the card
 
 # Display
 currency_symbol: "€"
-data_source: "rest"      # "rest" (default) | "mcp"
+data_source: "rest"      # "rest" (default) — MCP currently unavailable
 
 # Advanced (optional — leave blank to use shared defaults)
 # client_id: "your-client-id"
@@ -298,14 +298,9 @@ currency_symbol: "€"
 
 ---
 
-## Data Sources
+## Data Source
 
-| Source | Description |
-|---|---|
-| `rest` (default) | Calls the [Parqet Connect API](https://developer.parqet.com) directly |
-| `mcp` | Calls the [Parqet MCP server](https://mcp.parqet.com) — same data, different transport |
-
-Both sources expose identical portfolio data. The REST API is recommended for most users.
+The card uses the [Parqet Connect API](https://developer.parqet.com) (`rest`) to fetch portfolio data. The MCP server option (`mcp`) is currently unavailable due to a Parqet API limitation.
 
 ---
 
@@ -315,7 +310,7 @@ Both sources expose identical portfolio data. The REST API is recommended for mo
 - Authentication uses **OAuth 2.0 with PKCE** — no client secret is involved
 - Your access token is stored in your browser's `localStorage` and never sent anywhere except to Parqet's API
 - You can revoke access at any time in your [Parqet account settings](https://app.parqet.com)
-- The card communicates only with `connect.parqet.com` (via a CORS proxy at `parqet-token-proxy.oliver-f26.workers.dev`) and optionally `mcp.parqet.com`
+- The card communicates only with `connect.parqet.com` (via a CORS proxy at `parqet-token-proxy.oliver-f26.workers.dev`)
 
 ---
 
