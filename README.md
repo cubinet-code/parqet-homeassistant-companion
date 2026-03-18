@@ -38,7 +38,7 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 - **KPI tile** — Single-metric card with optional secondary metric and vertical/horizontal layout, suitable for grid/sidebar dashboards
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
-- **REST API** — Connects via the [Parqet Connect API](https://developer.parqet.com) (MCP server currently unavailable due to Parqet API limitation)
+- **REST API** — Connects via the [Parqet Connect API](https://developer.parqet.com) (MCP server support is experimental)
 
 ---
 
@@ -132,7 +132,7 @@ type: custom:parqet-companion-card
 portfolio_id: "your-portfolio-id"
 
 # Optional — data source
-data_source: "rest"          # "rest" (default) — MCP currently unavailable
+data_source: "rest"          # "rest" (default) — MCP is experimental
 
 # Layout
 view_layout: "tabs"          # "tabs" (default) | "single"
@@ -252,7 +252,7 @@ show_interval_selector: true  # show interval picker on the card
 
 # Display
 currency_symbol: "€"
-data_source: "rest"      # "rest" (default) — MCP currently unavailable
+data_source: "rest"      # "rest" (default) — MCP is experimental
 
 # Advanced (optional — leave blank to use shared defaults)
 # client_id: "your-client-id"
@@ -300,7 +300,7 @@ currency_symbol: "€"
 
 ## Data Source
 
-The card uses the [Parqet Connect API](https://developer.parqet.com) (`rest`) to fetch portfolio data. The MCP server option (`mcp`) is currently unavailable due to a Parqet API limitation.
+The card uses the [Parqet Connect API](https://developer.parqet.com) (`rest`) to fetch portfolio data. The MCP server option (`mcp`) is experimental — it uses a separate OAuth flow with Parqet's MCP client ID.
 
 ---
 
