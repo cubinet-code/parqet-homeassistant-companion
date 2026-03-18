@@ -35,7 +35,7 @@ A [Home Assistant](https://www.home-assistant.io/) Lovelace custom card that con
 - **Performance view** — Total value, XIRR, TTWROR, unrealized/realized gains, dividends, fees & taxes with configurable time intervals
 - **Holdings view** — Current positions with market value, P&L (absolute and %), portfolio weight, exchange info, and per-holding detail expansion
 - **Activities view** — Full transaction history (buy, sell, dividend, interest, transfer, fees) with type filters, broker info, and pagination
-- **KPI tile** — Single-metric card for any portfolio metric, suitable for grid/sidebar dashboards
+- **KPI tile** — Single-metric card with optional secondary metric and vertical/horizontal layout, suitable for grid/sidebar dashboards
 - **Multi-portfolio** — Switch between portfolios via an in-card selector
 - **Theme-aware** — Adapts to your Home Assistant light/dark theme automatically
 - **Dual data source** — Connect REST API (default) or Parqet MCP server
@@ -112,8 +112,8 @@ The card includes a built-in visual editor — no YAML required for basic setup.
 | Section | Settings |
 |---|---|
 | *(top level)* | **Portfolio** (dropdown of your portfolios), Data Source |
-| **Layout** | View Layout, Default View, Compact mode |
-| **Performance** | Default Time Interval |
+| **Layout** | View Layout, Default View, Compact mode, Hide portfolio header |
+| **Performance** | Show interval selector, Default Time Interval |
 | **Holdings** | Show holding logos |
 | **Activities** | Activities per page, Default activity filter |
 | **Display** | Currency Symbol |
@@ -138,8 +138,10 @@ data_source: "rest"          # "rest" (default) | "mcp"
 view_layout: "tabs"          # "tabs" (default) | "single"
 default_view: "performance"  # "performance" | "holdings" | "activities"
 compact: false               # denser row layout
+hide_header: false           # hide portfolio name/picker (useful when portfolio is locked)
 
 # Performance view
+show_interval_selector: true # show interval picker on the card
 default_interval: "1y"       # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
 
 # Holdings view
@@ -205,11 +207,11 @@ compact: true
 
 ![KPI card](screenshots/kpi-card.png)
 
-A compact tile that shows a **single metric** from your portfolio. Great for placing multiple KPIs side-by-side on a grid dashboard.
+A compact tile that shows one or two metrics from your portfolio with vertical or horizontal layout. Great for placing multiple KPIs side-by-side on a grid dashboard.
 
 ### Setup
 
-Open the card editor after adding the card — use the **Connect** button to authorize Parqet (same shared token as the companion card). Then pick a portfolio and metric.
+Open the card editor after adding the card — use the **Connect** button to authorize Parqet (same shared token as the companion card). Then pick a portfolio, primary metric, and optionally a secondary metric and layout.
 
 > **Note:** When you connect via either card editor (Companion or KPI), both cards share the same token — you only need to connect once.
 
@@ -238,8 +240,15 @@ portfolio_id: "your-portfolio-id"
 # Which metric to display (default: total_value)
 kpi: "total_value"
 
+# Optional — add a second metric below/beside the primary
+# secondary_kpi: "xirr"
+
+# Layout: "vertical" (default) stacks metrics, "horizontal" places them side-by-side
+layout: "vertical"       # "vertical" (default) | "horizontal"
+
 # Default time interval shown when card loads
 default_interval: "1y"   # 1d | 1w | mtd | 1m | 3m | 6m | 1y | ytd | 3y | 5y | 10y | max
+show_interval_selector: true  # show interval picker on the card
 
 # Display
 currency_symbol: "€"
@@ -277,6 +286,16 @@ default_interval: ytd
 currency_symbol: "€"
 ```
 
+**Total value with XIRR, horizontal layout:**
+```yaml
+type: custom:parqet-kpi-card
+kpi: total_value
+secondary_kpi: xirr
+layout: horizontal
+default_interval: ytd
+currency_symbol: "€"
+```
+
 ---
 
 ## Data Sources
@@ -292,6 +311,7 @@ Both sources expose identical portfolio data. The REST API is recommended for mo
 
 ## Privacy & Security
 
+- Works on both **HTTP and HTTPS** Home Assistant setups (pure-JS SHA-256 fallback for non-secure contexts)
 - Authentication uses **OAuth 2.0 with PKCE** — no client secret is involved
 - Your access token is stored in your browser's `localStorage` and never sent anywhere except to Parqet's API
 - You can revoke access at any time in your [Parqet account settings](https://app.parqet.com)

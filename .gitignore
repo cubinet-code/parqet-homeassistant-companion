@@ -13,3 +13,7 @@ parqet-connect-openapi.json
 
 # HACS default repo (separate git repo)
 default/
+
+# Claude Code (local dev tooling)
+.claude/
+CLAUDE.md
